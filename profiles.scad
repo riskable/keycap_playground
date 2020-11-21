@@ -17,6 +17,7 @@ KEY_UNIT = 19.05; // Standard spacing between keys
         DSA = DIN-compliant Spherical All-rows
         DSS = DIN-compliant Spherical Sculptured
         DCS = DIN-compliant Cylindrical Sculptured
+    * Riskeycap profile is one I developed specifically for ease of 3D printing.  It's similar to DSA but has flat sides that make it easier to print on keycaps on their side (so the layer lines run like this: |||) and come off the printer nice and smooth with no sanding required (except maybe to get rid of first layer squish/elephant's foot on the top right and bottom right corners).
 */
 
 // NOTE: Measured dish_depth in multiple DSA keycaps came out to ~.8
@@ -395,7 +396,7 @@ module KAM_stem(stem_type="box_cherry", key_height=9.05, key_length=18.3, key_wi
     * Sides are flat so that it can be easily printed on its side.  This ensures that stems end up strong and the top will feel smooth right off the printer (no sanding required).
     * Stem is not inset so it can be printed flat if needed.
 */
-module riskeycap(row=1, length=18.41, height_extra=0, wall_thickness=1.8, dish_thickness=0.75, dish_fn=64, dish_depth=1, dish_invert=false, top_difference=5.25, key_rotation=[0,0,0], corner_radius=1.15, corner_radius_curve=1.5, legends=[""], legend_font_sizes=[6], legend_fonts=["Roboto"], legend_trans=[[0,0,0]], legend_trans2=[[0,0,0]], legend_rotation=[[0,0,0]], legend_rotation2=[[0,0,0]], legend_scale=[[0,0,0]],legend_underset=[[0,0,0]], homing_dot_length=0, homing_dot_width=0, homing_dot_x=0, homing_dot_y=0, homing_dot_z=0, polygon_layers=10, visualize_legends=false, debug=false) {
+module riskeycap(row=1, length=18.25, width=18.25, height_extra=0, wall_thickness=1.8, dish_thickness=0.75, dish_fn=64, dish_depth=1.5, dish_invert=false, top_difference=6, key_rotation=[0,0,0], corner_radius=1.25, corner_radius_curve=1.5, legends=[""], legend_font_sizes=[6], legend_fonts=["Roboto"], legend_trans=[[0,0,0]], legend_trans2=[[0,0,0]], legend_rotation=[[0,0,0]], legend_rotation2=[[0,0,0]], legend_scale=[[0,0,0]],legend_underset=[[0,0,0]], homing_dot_length=0, homing_dot_width=0, homing_dot_x=0, homing_dot_y=0, homing_dot_z=0, polygon_layers=10, visualize_legends=false, debug=false) {
     row_height = dish_invert ? 6.8+height_extra : 7.8+height_extra; // One less if we're generating a spacebar
     if (row < 1) {
         warning("We only support rows 1 for Riskeycap profile caps!");
@@ -403,8 +404,7 @@ module riskeycap(row=1, length=18.41, height_extra=0, wall_thickness=1.8, dish_t
     if (row > 1) {
         warning("We only support row 1 for Riskeycap profile caps!");
     }
-    width = 18.41; // 0.725 inches (same as DSA)
-    dish_type = "inv_pyramid";
+    dish_type = "sphere";
     dish_z = 0;
     top_y = 0;
     poly_keycap(
@@ -424,7 +424,7 @@ module riskeycap(row=1, length=18.41, height_extra=0, wall_thickness=1.8, dish_t
 }
 
 // Riskeycap stems are very straightforward (nothing special required; mostly defaults)
-module riskeystem(stem_type="box_cherry", key_height=7.8, key_length=18.41, key_width=18.41, height_extra=0, dish_depth=1, dish_thickness=0.75, depth=4, top_difference=5.25, wall_thickness=1.8, key_corner_radius=1.15, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=0, top_thickness=0.6, side_support_thickness=0.8, side_supports=[0,0,0,0], flat_support=true, locations=[[0,0,0]], key_rotation=[0,0,0]) {
+module riskeystem(stem_type="box_cherry", key_height=7.8, key_length=18.41, key_width=18.41, height_extra=0, dish_depth=1.5, dish_thickness=0.75, depth=4, top_difference=5.25, wall_thickness=1.8, key_corner_radius=1.15, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=0, top_thickness=0.6, side_support_thickness=0.8, side_supports=[0,0,0,0], flat_support=true, locations=[[0,0,0]], key_rotation=[0,0,0]) {
     if (stem_type == "box_cherry") {
         stem_box_cherry(
             key_height=key_height+height_extra,

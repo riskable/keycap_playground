@@ -1,5 +1,8 @@
 // Riskable's Keycap Playground -- Use this tool to try out all your cool keycap ideas.
 
+// AUTHOR: Riskable <riskable@youknowwhat.com>
+// VERSION: 1.1 (Changelog is at the bottom)
+
 /* NOTES
     * Want to understand how to use this file? See: https://youtu.be/WDlRZMvisA4
     * Removable supports are colored GREEN (in preview mode).
@@ -13,7 +16,7 @@
 
 // TODO: Make presets for things like, "spacebar6.25", "shift2.25", "tab1.5" etc
 // TODO: Add support for adding a bevel/rounded edge to the top of keycaps.
-// TODO: Finish whole-keyboard geration support.
+// TODO: Finish whole-keyboard generation support.
 
 use <keycaps.scad>
 use <stems.scad>
@@ -23,12 +26,13 @@ use <profiles.scad>
 
 // Pick what you want to render (you can put a '%' in front of the name to make it transparent)
 RENDER = ["keycap", "stem"]; // Supported values: keycap, stem, legends, row, row_stems, row_legends, custom
-//RENDER = ["%keycap", "stem"]; // Useful for visualizing the stem inside the keycap
+//RENDER = ["%keycap", "stem"]; // Can be useful for visualizing the stem inside the keycap
 //RENDER = ["keycap"];
 //RENDER = ["legends"];
 //RENDER = ["legends", "stem"];
 //RENDER = ["stem"];
 //RENDER = ["underset_mask"]; // A thin layer under the top of they keycap meant to be darkened for underset legends
+// Want to render a whole row of keycaps/stems/legends at a time?  You can do that here:
 //RENDER = ["row", "row_stems"]; // For making whole keyboards at a time (with whole-keyboard inlaid art!)
 //RENDER = ["row"];
 //RENDER = ["row_legends"];
@@ -38,22 +42,27 @@ RENDER = ["keycap", "stem"]; // Supported values: keycap, stem, legends, row, ro
 KEY_UNIT = 19.05; // Square that makes up the entire space of a key
 BETWEENSPACE = 1.05; // The Betweenspace:  The void between realms...  And keycaps (for an 18mm keycap)
 
-// KEYCAP PARAMETERS
+// BASIC KEYCAP PARAMETERS
 // If you want to make a keycap using a common profile set this to one of: dcs, dsa, kat, kam, riskeycap:
-KEY_PROFILE = ""; // Any value other than a supported profile (e.g. "dsa") will use the globals specified below...
+KEY_PROFILE = "riskeycap"; // Any value other than a supported profile (e.g. "dsa") will use the globals specified below.  In other words, an empty KEY_PROFILE means "just use the values specified here in this file."
 KEY_ROW = 1; // NOTE: For a spacebar make sure you also set DISH_INVERT=true
 // Some settings override profile settings but most will be ignored (if using a profile)
-KEY_HEIGHT = 9; // The Z (NOTE: Dishes may reduce this a bit)
+KEY_HEIGHT = 9; // The Z (NOTE: Dish values may reduce this a bit as they carve themselves out)
 KEY_HEIGHT_EXTRA = 0.0; // If you're planning on sanding the keycap you can use this to make up for lost material (normally this is only useful when using a profile e.g. DSA)
-KEY_LENGTH = KEY_UNIT-BETWEENSPACE; // The X (NOTE: Increase DISH_FN if you make this >1U!)
-KEY_WIDTH = KEY_UNIT-BETWEENSPACE; // The Y (NOTE: If using POLYGON_EGDES>4 this will be ignored)
+// NOTE: You *can* just set KEY_LENGTH/KEY_WIDTH to something simple e.g. 18
+KEY_LENGTH = (KEY_UNIT-BETWEENSPACE); // The X (NOTE: Increase DISH_FN if you make this >1U!)
+KEY_WIDTH = (KEY_UNIT-BETWEENSPACE); // The Y (NOTE: If using POLYGON_EGDES>4 this will be ignored)
 // NOTE: Spacebars don't seem to use BETWEENSPACE (for whatever reason).  So to make a spacebar just use "KEY_UNIT*<spacebar unit length>" and omit the "-BETWEENSPACE" part.  Or just be precise and give it a value like 119.0625 (19.05*6.25)
-KEY_ROTATION = [0,0,0]; // I *highly* recommend 3D printing keycaps on their front/back/sides!
-//KEY_ROTATION = [0,108.6,0]; // An example of how you'd rotate a keycap on its side.  Make sure to zoom in on the bottom to make sure it's *actually* going to print flat!
+// NOTE: When making longer keycaps you may need to increase KEY_HEIGHT slightly in order for the height to be accurate.  I recommend giving it an extra 0.3mm per extra unit of length so 2U would be +0.3, 3U would be +0.6, etc BUT DOUBLE CHECK IT.  Do a side profile view and look at the ruler or render it and double-check the height in your slicer.
+KEY_ROTATION = [0,0,0]; // I *highly* recommend 3D printing keycaps on their front/back/sides! Try this:
+//KEY_ROTATION = [0,111.05,0]; // An example of how you'd rotate a keycap on its side.  Make sure to zoom in on the bottom to make sure it's *actually* going to print flat! This should be the correct rotation for riskeycap profile.
+// NOTE: If you rotate a keycap to print on its side don't forget to add a built-in support via STEM_SIDE_SUPPORTS! [0,1,0,0] is what you want if you rotated to print on the right side.
 KEY_TOP_DIFFERENCE = 5; // How much skinnier the key is at the top VS the bottom [x,y]
 KEY_TOP_X = 0; // Move the keycap's top on the X axis (controls skew left/right)
 KEY_TOP_Y = 0; // Move the keycap's top on the Y axis (controls skew forward/backward)
-WALL_THICKNESS = 0.45*4; // Default: 0.45 extrusion width * 4 (nice and thick==feels/sounds good)
+WALL_THICKNESS = 0.45*3; // Default: 0.45 extrusion width * 3 (nice and thick; feels/sounds good)
+
+// DO THE DISHES!
 DISH_X = 0; // Move the dish left/right
 DISH_Y = 0; // Move the dish forward/backward
 DISH_Z = 0; // Controls how deep into the top of the keycap the dish goes (e.g. -0.25)
@@ -61,14 +70,15 @@ DISH_TYPE = "cylinder"; // "inv_pyramid", "cylinder", "sphere" (aka "domed"), an
 // NOTE: inv_pyramid doesn't work for making spacbars (kinda, "duh")
 DISH_DEPTH = 1; // Distance between the top sides and the bottommost point in the dish (set to 0 for flat top)
 // NOTE: When DISH_INVERT is true DISH_DEPTH becomes more like, "how far dish protrudes upwards"
-DISH_THICKNESS = 1.5; // Amount of material that will be placed under the bottommost part of the dish
+DISH_THICKNESS = 2.0; // Amount of material that will be placed under the bottommost part of the dish
 // NOTE: If you make DISH_THICKNESS too small legends might not print properly--even with a tiny nozzle.  In other words, a thick keycap top makes for nice clean (3D printed) legends.
 DISH_TILT = -6; // How to rotate() the dish of the key (on the Y axis)
 DISH_TILT_CURVE = true; // If you want a more organic ("tentacle"!) shape set this to true
 DISH_INVERT = false; // Set to true for things like spacebars
 DISH_FN = 128; // If you want to increase or decrease the resolution of the shapes used to make the dish (Tip: Don't go <64 for "sphere" dish types and don't go <128 for "cylinder")
 // NOTE: DISH_FN does not apply if DISH_INVERT==true (because it would be too much; inverted dish doesn't need as much resolution)
-// Polygon manipulation
+
+// POLYGON/SHAPE MANIPULATION
 POLYGON_LAYERS = 10; // Number of layers we're going to extrude (set to 1 to get a boring keycap)
 POLYGON_LAYER_ROTATION = 0; // How much to rotate per layer (set to 0 for boring keycap). Try messing with this!  It's fun!
 POLYGON_EDGES = 4; // How many sides the keycap will have (normal keycap is 4). Try messing with this too!
@@ -77,6 +87,7 @@ POLYGON_ROTATION = false; // If you want the top of the key to be rotated
 POLYGON_CURVE = 0; // If you want a "bowed" keycap (e.g. like DSA), increase this value
 CORNER_RADIUS = 1; // Radius of the outside corners of the keycap
 CORNER_RADIUS_CURVE = 1.5; // If you want the corner radius to get bigger as it goes up (WARNING: Set this too high and you'll end up with missing bits of your keycap! Check the height when messing with this)
+
 // STEM STUFF
 STEM_TYPE = "box_cherry"; // "box_cherry" (default), "round_cherry" (harder to print... strong)
 STEM_HEIGHT = 4; // How far into the keycap's stem the switch's stem can go (4 is "normal keycap")
@@ -90,28 +101,32 @@ STEM_INSET = 0; // How far to inset the stem (set to 0 to have the stem rest on 
 STEM_FLAT_SUPPORT = true; // Add built-in support for the stem when printing flat (if inset)
 STEM_SIDE_SUPPORT_THICKNESS = 0.8; // 0.8 works well for most things
 // This controls which sides get (internal, under-the-top) stem supports (for printing on the side):
-STEM_SIDE_SUPPORTS = [0,1,0,0]; // Left, right, front, back
+STEM_SIDE_SUPPORTS = [0,0,0,0]; // Left, right, front, back
 // NOTE: You can only enable left/right supports *or* front/back supports.  Not both at the same time. (TODO: Fix that...  Maybe?  Why would you ever need *both* say, a left support *and* a top support at the same time?)
+STEM_SUPPORT_DISTANCE = 0.2; // Controls the air gap between the stem and its support
 STEM_LOCATIONS = [ // Where to place stems/stabilizers
-    [0,0,0], // Dead center
-    // Examples:
-//    [12,0,0], [-12,0,0], // Standard 2.25U shift
+    [0,0,0], // Dead center (don't comment this out when uncommenting below)
+    // Standard examples (uncomment to use them):
+//    [12,0,0], [-12,0,0], // Standard 2U, 2.25U, and 2.5U shift key
+//    [0,12,0], [0,-12,0], // Standard 2U Numpad + or Enter
 //    [50,0,0], [-50,0,0], // Cherry style 6.25U spacebar (most common)
 //    [57,0,0], [-57,0,0], // Cherry style 7U spacebar
 ];
+
 // If you want "homing dots" for home row keys:
 HOMING_DOT_LENGTH = 0; // Set to something like "3" for a good, easy-to-feel "dot"
 HOMING_DOT_WIDTH = 1; // Default: 1
 HOMING_DOT_X = 0; // 0 == Center
 HOMING_DOT_Y = -KEY_WIDTH/4; // Default: Move it down towards the front a bit
-HOMING_DOT_Z = 0.5; // 0 == Right at KEY_HEIGHT (dish type makes a big difference here)
+HOMING_DOT_Z = -0.35; // 0 == Right at KEY_HEIGHT (dish type makes a big difference here)
 // NOTE: ADA specifies 0.5mm as the ideal braille dot height so that's what I recommend for homing dots too!  Though, 0.3mm seems to be reasonably "feelable" in my testing.  Experiment!
 
 // LEGENDARY!
 LEGENDS = [ // As many legends as you want
-//    "1", "!", // Just an example of multiple legends
-//    "☺", // Unicode characters work too!
+//    "1", "!", // Just an example of multiple legends (uncomment to try it!)
+    "☺", // Unicode characters work too!
 ];
+// NOTE: Legends might not look quite right until final render (F6)
 LEGEND_FONTS = [ // Each legend can use its own font. If not specified the first font definition will be used
     "Arial:style=Bold", // Position/index must match the index in LEGENDS
 //    "Franklin Gothic Medium:style=Regular" // Normal-ish keycap legend font
@@ -243,6 +258,7 @@ module stem_using_globals() {
             flat_support=STEM_FLAT_SUPPORT,
             side_support_thickness=STEM_SIDE_SUPPORT_THICKNESS,
             side_supports=STEM_SIDE_SUPPORTS,
+            support_distance=STEM_SUPPORT_DISTANCE,
             locations=STEM_LOCATIONS,
             key_rotation=KEY_ROTATION);
     } else if (STEM_TYPE == "round_cherry") {
@@ -264,6 +280,7 @@ module stem_using_globals() {
             flat_support=STEM_FLAT_SUPPORT,
             side_support_thickness=STEM_SIDE_SUPPORT_THICKNESS,
             side_supports=STEM_SIDE_SUPPORTS,
+            support_distance=STEM_SUPPORT_DISTANCE,
             locations=STEM_LOCATIONS,
             key_rotation=KEY_ROTATION);
     }
@@ -589,12 +606,19 @@ module handle_render(what, legends) {
 
 for (what_to_render=RENDER) {
     if (what_to_render=="row") { // For rendering a whole row of keys (use ROW variable)
+        note("HAVE PATIENCE! Rendering all keycaps in ROW variable...");
         for (i=[0:1:len(ROW)-1]) {
             translate([ROW_SPACING*i,0,0]) handle_render("keycap", legends=ROW[i]);
         }
     } else if (what_to_render=="row_stems") { // For rendering a whole row of stems
+        note("HAVE PATIENCE! Rendering all stems in ROW variable...");
         for (i=[0:1:len(ROW)-1]) {
             translate([ROW_SPACING*i,0,0]) handle_render("stem", legends=ROW[i]);
+        }
+    } else if (what_to_render=="row_legends") { // For rendering a whole row of legends
+        note("HAVE PATIENCE! Rendering all legends in ROW variable...");
+        for (i=[0:1:len(ROW)-1]) {
+            translate([ROW_SPACING*i,0,0]) handle_render("legends", legends=ROW[i]);
         }
     } else if (what_to_render=="custom") { // This is a work-in-progress.  You can ignore it for now.
 //        difference() {
@@ -625,7 +649,15 @@ for (what_to_render=RENDER) {
         //    }
 //        }
     } else {
-        echo("handling render");
         handle_render(what_to_render, legends=LEGENDS); // Normal rendering of a single keycap
     }
 }
+
+/* CHANGELOG:
+    1.1:
+        * Built-in supports for extra stems now work for vertically-long keycaps like numpad enter keys.
+        * Added some more helpful comments.
+        * Riskeycap profile has been updated to the latest version (5.0).  This is the result of much typing and experimentation.
+    1.0:
+        * Initial release of the Keycap Playgound.
+*/

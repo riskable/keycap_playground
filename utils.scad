@@ -82,6 +82,7 @@ module squarish_rpoly(xy=[0,0], h=0, xy1=[0,0], xy2=[0,0], r=1, xy2_offset=[0,0]
     }
 }
 
+module note(text) echo(str("<span style='color:yellow'><b>NOTE: </b>", text, "</span>"));
 module warning(text) echo(str("<span style='color:orange'><b>WARNING: </b>", text, "</span>"));
 
 // FUNCTIONS

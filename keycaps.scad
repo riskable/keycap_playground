@@ -290,15 +290,19 @@ module _poly_keycap(height=9.0, length=18, width=18,
             } else if (dish_type == "cylinder") {
                 // Cylindrical cutout option:
                 adjusted_key_length = length - top_difference;
-                chord_length = (pow(adjusted_key_length,2) - 4 * pow(dish_depth,2)) / (8 * dish_depth);
-                rad = (pow(adjusted_key_length, 2) + 4 * pow(dish_depth, 2)) / (8 * dish_depth);
+                adjusted_key_width = width - top_difference;
+                adjusted_dimension = length > width ? adjusted_key_length : adjusted_key_width;
+                chord_length = (pow(adjusted_dimension,2) - 4 * pow(dish_depth,2)) / (8 * dish_depth);
+                rad = (pow(adjusted_dimension, 2) + 4 * pow(dish_depth, 2)) / (8 * dish_depth);
                 rotate([tilt_above_curved,0,0])
                     translate([dish_x+top_x,dish_y+top_y,chord_length+height+dish_z-z_adjust]) 
                         rotate([tilt_above_straight,0,0])
                             rotate([90, 0, 0]) cylinder(h=length*3, r=rad, center=true, $fn=dish_fn);
             } else if (dish_type == "sphere") {
                 adjusted_key_length = length - top_difference;
-                rad = (pow(adjusted_key_length, 2) + 4 * pow(dish_depth, 2)) / (8 * dish_depth);
+                adjusted_key_width = width - top_difference;
+                adjusted_dimension = length > width ? adjusted_key_length : adjusted_key_width;
+                rad = (pow(adjusted_dimension, 2) + 4 * pow(dish_depth, 2)) / (8 * dish_depth);
                 rotate([tilt_above_curved,0,0])
                     translate([dish_x+top_x,dish_y+top_y,rad*2+height-dish_depth+dish_z-z_adjust])
                         rotate([tilt_above_straight,0,0])
