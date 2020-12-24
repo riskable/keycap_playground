@@ -203,6 +203,110 @@ module DCS_stem(row=2, stem_type="box_cherry", key_length=18.15, height_extra=0,
     }
 }
 
+module DSS_keycap(row=1, length=18.24, height_extra=0, wall_thickness=1.35, dish_thickness=1.8, dish_fn=128, dish_invert=false, top_difference=5.54, key_rotation=[0,0,0], corner_radius=0.75, corner_radius_curve=1.5, legends=[""], legend_font_sizes=[6], legend_fonts=["Roboto"], legend_trans=[[0,0,0]], legend_trans2=[[0,0,0]], legend_rotation=[[0,0,0]], legend_rotation2=[[0,0,0]], legend_scale=[[0,0,0]], polygon_layers=20, legend_underset=[[0,0,0]], homing_dot_length=0, homing_dot_width=0, homing_dot_x=0, homing_dot_y=0, homing_dot_z=0, visualize_legends=false, debug=false) {
+    // NOTE: The 0-index values are ignored (there's no row 0 in DSS)
+    row_height = [
+        0, 10.4, 8.7, 8.5, 10.6
+    ];
+    adjusted_row_height = dish_invert ? row_height[row]+height_extra-1 : row_height[row]+height_extra; // One less if we're generating a spacebar (which is always row 3 with DSS)
+    dish_tilt = [
+        0, -1, 3, 8, 16
+    ];
+    dish_y = [ // Dish needs to cut into the top a unique amount depending on the height and angle
+        0, 1.2, -2.5, -5.7, -11.4
+    ];
+    dish_z = [ // Dish needs to cut into the top a unique amount depending on the height and angle
+        0, 0, 0, 0, -1.1
+    ];
+    dish_thicknesses = [
+        0, 2.5, 2.5, 2.5, 3.5
+    ];
+    if (row < 1) {
+        warning("We only support rows 1-4 for DSS profile caps!");
+    }
+    row = row < 5 ? row : 4; // We only support rows 1-4 (4 total rows)
+    width = 18.24;
+    dish_type = "sphere";
+    dish_depth = 1;
+    top_y = 0;
+    poly_keycap(
+        height=adjusted_row_height, length=length, width=width, wall_thickness=wall_thickness,
+        top_difference=top_difference, dish_tilt=dish_tilt[row], dish_z=dish_z[row], dish_y=dish_y[row],
+        top_y=top_y, dish_depth=dish_depth, dish_type=dish_type,
+        dish_thickness=dish_thicknesses[row], dish_fn=dish_fn, dish_invert=dish_invert,
+        legends=legends, legend_font_sizes=legend_font_sizes, legend_fonts=legend_fonts,
+        legend_trans=legend_trans, legend_trans2=legend_trans2, legend_scale=legend_scale,
+        legend_rotation=legend_rotation, legend_rotation2=legend_rotation2,
+        corner_radius=corner_radius, corner_radius_curve=corner_radius_curve,
+        polygon_layers=polygon_layers, polygon_layer_rotation=0, polygon_edges=4,
+        polygon_curve=4,
+        homing_dot_length=homing_dot_length, homing_dot_width=homing_dot_width,
+        homing_dot_x=homing_dot_x, homing_dot_y=homing_dot_y, homing_dot_z=homing_dot_z,
+        key_rotation=key_rotation, debug=debug);
+}
+
+module DSS_stem(row=2, stem_type="box_cherry", key_length=18.24, height_extra=0, depth=4, top_difference=5.54, wall_thickness=1.35, key_corner_radius=0.5, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=0, dish_thickness=0.6, top_thickness=0.6, side_support_thickness=0.8, side_supports=[0,0,0,0], flat_support=true, locations=[[0,0,0]], key_rotation=[0,0,0]) {
+    row_height = [
+        0, 10.4, 8.7, 8.5, 10.6
+    ];
+    dish_tilt = [
+        0, -1, 3, 8, 16
+    ];
+    dish_thicknesses = [
+        0, 2.5, 2.5, 2.5, 3.5
+    ];
+    if (row < 1) {
+        warning("We only support rows 1-5 for DCS profile caps!");
+    }
+    row = row < 6 ? row : 5; // We only support rows 0-4 (5 total rows)
+    key_width = 18.24;
+    dish_depth = 1;
+    if (stem_type == "box_cherry") {
+        stem_box_cherry(
+            key_height=row_height[row]+height_extra,
+            key_length=key_length,
+            key_width=key_width,
+            dish_depth=dish_depth,
+            dish_thickness=dish_thicknesses[row],
+            top_difference=top_difference,
+            depth=depth, dish_tilt=dish_tilt[row],
+            top_thickness=top_thickness,
+            key_corner_radius=key_corner_radius,
+            wall_thickness=wall_thickness,
+            top_x=top_x, top_y=top_y,
+            outside_tolerance_x=outside_tolerance_x,
+            outside_tolerance_y=outside_tolerance_y,
+            inside_tolerance=inside_tolerance,
+            inset=inset,
+            flat_support=flat_support,
+            locations=locations,
+            key_rotation=key_rotation,
+            side_support_thickness=side_support_thickness,
+            side_supports=side_supports);
+    } else if (stem_type == "round_cherry") {
+        stem_round_cherry(
+            key_height=row_height[row]+height_extra,
+            key_length=key_length,
+            key_width=key_width,
+            dish_depth=dish_depth,
+            dish_thickness=dish_thicknesses[row],
+            top_difference=top_difference,
+            depth=depth, dish_tilt=dish_tilt[row],
+            top_thickness=top_thickness,
+            key_corner_radius=key_corner_radius,
+            wall_thickness=wall_thickness,
+            top_x=top_x, top_y=top_y,
+            outside_tolerance=outside_tolerance_x,
+            inside_tolerance=inside_tolerance,
+            inset=inset,
+            flat_support=flat_support,
+            locations=locations,
+            key_rotation=key_rotation,
+            side_support_thickness=side_support_thickness,
+            side_supports=side_supports);
+    }
+}
+
 /* NOTES
 So here's the deal with the KAT profile:  The *dishes* are accurately-placed but the curve that goes up the side of the keycap (front and back) isn't *quite* right because whoever modeled the KAT profile probably started with DSA and then extruded/moved things up/down and forwards/backwards a bit until they had what they wanted.  This makes generating these keycaps via an algorithm difficult.  Having said that the curve is quite close to the original and you'd have to look *very* closely to be able to tell the difference in real life.  As long as the dishes are in the right place that's what matters most.
 */

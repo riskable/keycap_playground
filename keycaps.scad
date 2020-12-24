@@ -313,7 +313,7 @@ module _poly_keycap(height=9.0, length=18, width=18,
 }
 
 // TODO: Document all these arguments
-// If polygon_curve or corner_radius_curve are 0 they will be ignored (respectively)
+// NOTE: If polygon_curve or corner_radius_curve are 0 they will be ignored (respectively)
 module poly_keycap(height=9.0, length=18, width=18,
   wall_thickness=1.25, top_difference=6, top_x=0, top_y=-2,
   dish_tilt=-4, dish_tilt_curve=false, dish_depth=1, dish_x=0, dish_y=0,
@@ -394,6 +394,7 @@ module poly_keycap(height=9.0, length=18, width=18,
                 }
             }
             // Trapezoidal interior cutout (i.e. make room inside the keycap)
+            // TODO: Add an option to have the interior cutout match the exterior so we can have uniform wall thickness (and make it easier to deal with odd-shaped keycaps e.g. hexagonal)
             difference() {
                 translate([0,0,-0.01]) difference() {
                     squarish_rpoly(

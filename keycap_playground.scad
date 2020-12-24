@@ -1,17 +1,19 @@
 // Riskable's Keycap Playground -- Use this tool to try out all your cool keycap ideas.
 
 // AUTHOR: Riskable <riskable@youknowwhat.com>
-// VERSION: 1.1 (Changelog is at the bottom)
+// VERSION: 1.2 (Changelog is at the bottom)
 
 /* NOTES
     * Want to understand how to use this file? See: https://youtu.be/WDlRZMvisA4
-    * Removable supports are colored GREEN (in preview mode).
-    * The part of the stem that goes under the top (STEM_TOP_THICKNESS) is colored purple so you can easily see where the keycap ends and the stem begins.
-    * The default rendering mode (["keycap", "stem"]) will include inset (non-multi-material) legends automatically.
-    * To make a multi-material print just render and export "keycap", "stem", and "legends" as separate .stl files.  To save time you can render ["keycap", "stem"] and then just ["legends"].  Rendering stems separately is really for special situations like say, you want a transparent stem material (to let light through) but a semi-transparent legend material.
-    * Tip: Want to make a keycap that works with backlit/RGB LED keyboards?  Print the stem and legends in a transparent material (clear PETG is a very effective light pipe!).  You can also render the stem and legends as a single file: ["stem", "legends"] which will save time importing into your slicer later.
+    * TIP: If preview is slow/laggy try setting VISUALIZE_LEGENDS=1
+    * TIP: PRINT KEYCAPS ON THEIR SIDE!  They'll turn out nice and smooth right off the printer!  Use the KEY_ROTATION feature to take care of it BUT DON'T FORGET the STEM_SIDE_SUPPORTS feature to enable built-in supports for the stem(s).  BUILT-IN SUPPORTS MUST BE CUT OFF AFTER PRINTING.  Cut off the support where it meets the interior wall of the keycap (with flush cutters) and it should easily break away from the side that supports the stem.
+    * The default rendering mode (["keycap", "stem"]) will include inset (non-multi-material) legends automatically.  Adding "legends" to RENDER is something you only want to do if you're making multi-material keycaps...
+    * To make a multi-material print just render and export "keycap", "stem", and "legends" as separate .stl files.  To save time you can render ["keycap", "stem"] and then just ["legends"].
+    * TIP: Want to make a keycap that works (looks cool) with backlit/RGB LED keyboards?  Print the stem and legends in a transparent material (clear PETG is a very effective light pipe!).  You can also render the stem and legends as a single file: ["stem", "legends"] which will save time importing into your slicer later.
     * Have a lot of different legends/keycaps to render?  You can add all your legends to the ROW variable and then render ["row", "row_stems"] and ["row_legends"].
     * Having trouble lining up your legends?  Try setting VISUALIZE_LEGENDS=1!  It'll show you where they all are, their angles, etc.
+    * The part of the stem that goes under the top (STEM_TOP_THICKNESS) is colored purple so you can easily see where the keycap ends and the stem begins.
+    * Removable supports are colored GREEN (in preview mode).
 */
 
 // TODO: Make presets for things like, "spacebar6.25", "shift2.25", "tab1.5" etc
@@ -43,19 +45,20 @@ KEY_UNIT = 19.05; // Square that makes up the entire space of a key
 BETWEENSPACE = 1.05; // The Betweenspace:  The void between realms...  And keycaps (for an 18mm keycap)
 
 // BASIC KEYCAP PARAMETERS
-// If you want to make a keycap using a common profile set this to one of: dcs, dsa, kat, kam, riskeycap:
+// If you want to make a keycap using a common profile set this to one of: dcs, dss, dsa, kat, kam, riskeycap:
 KEY_PROFILE = "riskeycap"; // Any value other than a supported profile (e.g. "dsa") will use the globals specified below.  In other words, an empty KEY_PROFILE means "just use the values specified here in this file."
 KEY_ROW = 1; // NOTE: For a spacebar make sure you also set DISH_INVERT=true
 // Some settings override profile settings but most will be ignored (if using a profile)
 KEY_HEIGHT = 9; // The Z (NOTE: Dish values may reduce this a bit as they carve themselves out)
 KEY_HEIGHT_EXTRA = 0.0; // If you're planning on sanding the keycap you can use this to make up for lost material (normally this is only useful when using a profile e.g. DSA)
 // NOTE: You *can* just set KEY_LENGTH/KEY_WIDTH to something simple e.g. 18
-KEY_LENGTH = (KEY_UNIT-BETWEENSPACE); // The X (NOTE: Increase DISH_FN if you make this >1U!)
+KEY_LENGTH = 18.24; // The X (NOTE: Increase DISH_FN if you make this >1U!)
+// NOTE: If using a profile make sure KEY_LENGTH matches the profile's KEY_WIDTH for 1U keycaps!
 KEY_WIDTH = (KEY_UNIT-BETWEENSPACE); // The Y (NOTE: If using POLYGON_EGDES>4 this will be ignored)
 // NOTE: Spacebars don't seem to use BETWEENSPACE (for whatever reason).  So to make a spacebar just use "KEY_UNIT*<spacebar unit length>" and omit the "-BETWEENSPACE" part.  Or just be precise and give it a value like 119.0625 (19.05*6.25)
 // NOTE: When making longer keycaps you may need to increase KEY_HEIGHT slightly in order for the height to be accurate.  I recommend giving it an extra 0.3mm per extra unit of length so 2U would be +0.3, 3U would be +0.6, etc BUT DOUBLE CHECK IT.  Do a side profile view and look at the ruler or render it and double-check the height in your slicer.
-KEY_ROTATION = [0,0,0]; // I *highly* recommend 3D printing keycaps on their front/back/sides! Try this:
-//KEY_ROTATION = [0,111.05,0]; // An example of how you'd rotate a keycap on its side.  Make sure to zoom in on the bottom to make sure it's *actually* going to print flat! This should be the correct rotation for riskeycap profile.
+//KEY_ROTATION = [0,0,0]; // I *highly* recommend 3D printing keycaps on their front/back/sides! Try this:
+KEY_ROTATION = [0,111.05,0]; // An example of how you'd rotate a keycap on its side.  Make sure to zoom in on the bottom to make sure it's *actually* going to print flat! This should be the correct rotation for riskeycap profile.
 // NOTE: If you rotate a keycap to print on its side don't forget to add a built-in support via STEM_SIDE_SUPPORTS! [0,1,0,0] is what you want if you rotated to print on the right side.
 KEY_TOP_DIFFERENCE = 5; // How much skinnier the key is at the top VS the bottom [x,y]
 KEY_TOP_X = 0; // Move the keycap's top on the X axis (controls skew left/right)
@@ -70,10 +73,10 @@ DISH_TYPE = "cylinder"; // "inv_pyramid", "cylinder", "sphere" (aka "domed"), an
 // NOTE: inv_pyramid doesn't work for making spacbars (kinda, "duh")
 DISH_DEPTH = 1; // Distance between the top sides and the bottommost point in the dish (set to 0 for flat top)
 // NOTE: When DISH_INVERT is true DISH_DEPTH becomes more like, "how far dish protrudes upwards"
-DISH_THICKNESS = 2.0; // Amount of material that will be placed under the bottommost part of the dish
+DISH_THICKNESS = 1.5; // Amount of material that will be placed under the bottommost part of the dish
 // NOTE: If you make DISH_THICKNESS too small legends might not print properly--even with a tiny nozzle.  In other words, a thick keycap top makes for nice clean (3D printed) legends.
 DISH_TILT = -6; // How to rotate() the dish of the key (on the Y axis)
-DISH_TILT_CURVE = true; // If you want a more organic ("tentacle"!) shape set this to true
+DISH_TILT_CURVE = false; // If you want a more organic ("tentacle"!) shape set this to true
 DISH_INVERT = false; // Set to true for things like spacebars
 DISH_FN = 128; // If you want to increase or decrease the resolution of the shapes used to make the dish (Tip: Don't go <64 for "sphere" dish types and don't go <128 for "cylinder")
 // NOTE: DISH_FN does not apply if DISH_INVERT==true (because it would be too much; inverted dish doesn't need as much resolution)
@@ -101,7 +104,7 @@ STEM_INSET = 0; // How far to inset the stem (set to 0 to have the stem rest on 
 STEM_FLAT_SUPPORT = true; // Add built-in support for the stem when printing flat (if inset)
 STEM_SIDE_SUPPORT_THICKNESS = 0.8; // 0.8 works well for most things
 // This controls which sides get (internal, under-the-top) stem supports (for printing on the side):
-STEM_SIDE_SUPPORTS = [0,0,0,0]; // Left, right, front, back
+STEM_SIDE_SUPPORTS = [0,1,0,0]; // Left, right, front, back
 // NOTE: You can only enable left/right supports *or* front/back supports.  Not both at the same time. (TODO: Fix that...  Maybe?  Why would you ever need *both* say, a left support *and* a top support at the same time?)
 STEM_SUPPORT_DISTANCE = 0.2; // Controls the air gap between the stem and its support
 STEM_LOCATIONS = [ // Where to place stems/stabilizers
@@ -124,17 +127,17 @@ HOMING_DOT_Z = -0.35; // 0 == Right at KEY_HEIGHT (dish type makes a big differe
 // LEGENDARY!
 LEGENDS = [ // As many legends as you want
 //    "1", "!", // Just an example of multiple legends (uncomment to try it!)
-    "☺", // Unicode characters work too!
+//    "☺", // Unicode characters work too!
 ];
 // NOTE: Legends might not look quite right until final render (F6)
 LEGEND_FONTS = [ // Each legend can use its own font. If not specified the first font definition will be used
-    "Arial:style=Bold", // Position/index must match the index in LEGENDS
+    "Arial Black:style=Regular", // Position/index must match the index in LEGENDS
 //    "Franklin Gothic Medium:style=Regular" // Normal-ish keycap legend font
     // Favorite fonts for legends: Roboto, Aharoni, Ubuntu, Cabin, Noto, Code2000, Franklin Gothic Medium
 ]; // Tip: "Noto" and "Code2000" have nearly every emoji/special/funky unicode chars
 LEGEND_FONT_SIZES = [ // Each legend can have its own font size
-    7, // Position/index must match the index in LEGENDS (this is the first legend)
-    4.5, // Second legend...  etc
+    5.5, // Position/index must match the index in LEGENDS (this is the first legend)
+    4, // Second legend...  etc
 ];
 /* NOTES ABOUT LEGEND TRANSLATION AND ROTATION
     * Legends are translated and rotated in the following order:
@@ -143,7 +146,8 @@ LEGEND_FONT_SIZES = [ // Each legend can have its own font size
     * LEGEND_TRANS2 is probably unnecessary but may make a few folks lives easier by not having to think as much :)
 */
 LEGEND_TRANS = [ // You can translate() legends around however you like.
-    [-0.15,KEY_TOP_Y,0], // A good default (FYI: -0.15mm works around OpenSCAD's broken font centering)
+    [-0.15,KEY_TOP_Y,0], // A good default (FYI: -0.15mm works around OpenSCAD's often-broken font centering)
+    [4.15,3,1],
     [4.40,KEY_TOP_Y+2.25,0], // Top right (mostly)
 ];
 LEGEND_ROTATION = [ // How to rotate each legend. If not specified defaults to [0,0,0]
@@ -160,7 +164,7 @@ LEGEND_SCALE = [ // Want to shrink/stretch your legends on a particular axis?  D
     [1,1,1],
 ];
 LEGEND_UNDERSET = [ // This is a *very* special thing; see long note about it below...
-    [0,0,0], // Really only want to adjust the Z axis (3rd item) if you're using this feature
+    [0,0,0], // Normally only want to adjust the Z axis (3rd item) if you're using this feature
 ];
 /* All about underset legends:
 
@@ -182,7 +186,7 @@ RIBS = [ // Useful for injection molding
 /* Example: ROW=[["Q"],["W"],["E"],["R"],["T"],["Y"],["U"],["I"],["O"],["P"]];
    (It's an array of legend arrays like ROW=[LEGENDS1,LEGENDS2,LEGENDS3,...])
 */
-ROW=[["`","~"],["Q"],["W"],["E"],["R"],["T"],["Y"],["U"],["I"],["O"],["P"],["-","_"],["=","+"]];
+ROW=[["`","~"],["1","!"],["2","@"],["3","#"],["4","$"],["5","%"],["6","^"],["7","&"],["8","*"],["9","("],["0",")"],["-","_"],["=","+"]];
 ROW_SPACING = KEY_UNIT; // You can change this to something like "KEY_HEIGHT+3" if printing keycaps on their side...
 //ROW_SPACING = KEY_HEIGHT+3;
 
@@ -312,7 +316,7 @@ module handle_render(what, legends) {
                         key_rotation=KEY_ROTATION, dish_invert=DISH_INVERT, debug=DEBUG);
         } else if (KEY_PROFILE == "dcs") {
             just_legends(height=KEY_HEIGHT+KEY_HEIGHT_EXTRA,
-                dish_tilt=DISH_TILT, dish_tilt_curve=DISH_TILT_CURVE, 
+                dish_tilt=DISH_TILT, dish_tilt_curve=false, 
                 polygon_layers=POLYGON_LAYERS, legends=legends,
                 legend_font_sizes=LEGEND_FONT_SIZES, legend_fonts=LEGEND_FONTS,
                 legend_trans=LEGEND_TRANS, legend_trans2=LEGEND_TRANS2, legend_scale=LEGEND_SCALE,
@@ -327,7 +331,7 @@ module handle_render(what, legends) {
                         key_rotation=KEY_ROTATION, dish_invert=DISH_INVERT, debug=DEBUG);
         } else if (KEY_PROFILE == "kat") {
             just_legends(height=KEY_HEIGHT+KEY_HEIGHT_EXTRA,
-                dish_tilt=DISH_TILT, dish_tilt_curve=DISH_TILT_CURVE, 
+                dish_tilt=DISH_TILT, dish_tilt_curve=false, 
                 polygon_layers=POLYGON_LAYERS, legends=legends,
                 legend_font_sizes=LEGEND_FONT_SIZES, legend_fonts=LEGEND_FONTS,
                 legend_trans=LEGEND_TRANS, legend_trans2=LEGEND_TRANS2, legend_scale=LEGEND_SCALE,
@@ -342,7 +346,7 @@ module handle_render(what, legends) {
                         key_rotation=KEY_ROTATION, dish_invert=DISH_INVERT, debug=DEBUG);
         } else if (KEY_PROFILE == "kam") {
             just_legends(height=KEY_HEIGHT+KEY_HEIGHT_EXTRA,
-                dish_tilt=DISH_TILT, dish_tilt_curve=DISH_TILT_CURVE, 
+                dish_tilt=DISH_TILT, dish_tilt_curve=false, 
                 polygon_layers=POLYGON_LAYERS, legends=legends,
                 legend_font_sizes=LEGEND_FONT_SIZES, legend_fonts=LEGEND_FONTS,
                 legend_trans=LEGEND_TRANS, legend_trans2=LEGEND_TRANS2, legend_scale=LEGEND_SCALE,
@@ -356,7 +360,7 @@ module handle_render(what, legends) {
                         key_rotation=KEY_ROTATION, dish_invert=DISH_INVERT, debug=DEBUG);
         } else if (KEY_PROFILE == "riskeycap") {
             just_legends(height=KEY_HEIGHT+KEY_HEIGHT_EXTRA,
-                dish_tilt=DISH_TILT, dish_tilt_curve=DISH_TILT_CURVE, 
+                dish_tilt=DISH_TILT, dish_tilt_curve=false, 
                 polygon_layers=POLYGON_LAYERS, legends=legends,
                 legend_font_sizes=LEGEND_FONT_SIZES, legend_fonts=LEGEND_FONTS,
                 legend_trans=LEGEND_TRANS, legend_trans2=LEGEND_TRANS2, legend_scale=LEGEND_SCALE,
@@ -403,6 +407,18 @@ module handle_render(what, legends) {
                 key_rotation=KEY_ROTATION, dish_invert=DISH_INVERT, debug=DEBUG);
         } else if (KEY_PROFILE == "dcs") {
             DCS_keycap(row=KEY_ROW, length=KEY_LENGTH, height_extra=KEY_HEIGHT_EXTRA,
+                wall_thickness=WALL_THICKNESS,
+                legends=legends, legend_font_sizes=LEGEND_FONT_SIZES, legend_fonts=LEGEND_FONTS,
+                legend_trans=LEGEND_TRANS, legend_trans2=LEGEND_TRANS2, legend_scale=LEGEND_SCALE,
+                legend_rotation=LEGEND_ROTATION, legend_rotation2=LEGEND_ROTATION2,
+                corner_radius=CORNER_RADIUS, polygon_layers=POLYGON_LAYERS,
+                dish_fn=DISH_FN, dish_thickness=DISH_THICKNESS,
+                visualize_legends=VISUALIZE_LEGENDS, legend_underset=LEGEND_UNDERSET,
+                homing_dot_length=HOMING_DOT_LENGTH, homing_dot_width=HOMING_DOT_WIDTH,
+                homing_dot_x=HOMING_DOT_X, homing_dot_y=HOMING_DOT_Y, homing_dot_z=HOMING_DOT_Z,
+                key_rotation=KEY_ROTATION, dish_invert=DISH_INVERT, debug=DEBUG);
+        } else if (KEY_PROFILE == "dss") {
+            DSS_keycap(row=KEY_ROW, length=KEY_LENGTH, height_extra=KEY_HEIGHT_EXTRA,
                 wall_thickness=WALL_THICKNESS,
                 legends=legends, legend_font_sizes=LEGEND_FONT_SIZES, legend_fonts=LEGEND_FONTS,
                 legend_trans=LEGEND_TRANS, legend_trans2=LEGEND_TRANS2, legend_scale=LEGEND_SCALE,
@@ -476,6 +492,18 @@ module handle_render(what, legends) {
                 homing_dot_length=HOMING_DOT_LENGTH, homing_dot_width=HOMING_DOT_WIDTH,
                 homing_dot_x=HOMING_DOT_X, homing_dot_y=HOMING_DOT_Y, homing_dot_z=HOMING_DOT_Z,
                 key_rotation=KEY_ROTATION, dish_invert=DISH_INVERT, debug=DEBUG);
+        } else if (KEY_PROFILE == "dss") {
+            %DSS_keycap(row=KEY_ROW, length=KEY_LENGTH, height_extra=KEY_HEIGHT_EXTRA,
+                wall_thickness=WALL_THICKNESS,
+                legends=legends, legend_font_sizes=LEGEND_FONT_SIZES, legend_fonts=LEGEND_FONTS,
+                legend_trans=LEGEND_TRANS, legend_trans2=LEGEND_TRANS2, legend_scale=LEGEND_SCALE,
+                legend_rotation=LEGEND_ROTATION, legend_rotation2=LEGEND_ROTATION2,
+                corner_radius=CORNER_RADIUS, polygon_layers=POLYGON_LAYERS,
+                dish_fn=DISH_FN, dish_thickness=DISH_THICKNESS,
+                visualize_legends=VISUALIZE_LEGENDS, legend_underset=LEGEND_UNDERSET,
+                homing_dot_length=HOMING_DOT_LENGTH, homing_dot_width=HOMING_DOT_WIDTH,
+                homing_dot_x=HOMING_DOT_X, homing_dot_y=HOMING_DOT_Y, homing_dot_z=HOMING_DOT_Z,
+                key_rotation=KEY_ROTATION, dish_invert=DISH_INVERT, debug=DEBUG);
         } else if (KEY_PROFILE == "kat") {
             %KAT_keycap(row=KEY_ROW, length=KEY_LENGTH, height_extra=KEY_HEIGHT_EXTRA,
                 wall_thickness=WALL_THICKNESS,
@@ -534,6 +562,23 @@ module handle_render(what, legends) {
                 key_rotation=KEY_ROTATION);
         } else if (KEY_PROFILE == "dcs") {
             DCS_stem(
+                row=KEY_ROW,
+                stem_type=STEM_TYPE,
+                key_length=KEY_LENGTH,
+                height_extra=KEY_HEIGHT_EXTRA,
+                wall_thickness=WALL_THICKNESS,
+                inset=STEM_INSET,
+                dish_thickness=DISH_THICKNESS,
+                flat_support=STEM_FLAT_SUPPORT,
+                side_support_thickness=STEM_SIDE_SUPPORT_THICKNESS,
+                side_supports=STEM_SIDE_SUPPORTS,
+                outside_tolerance_x=STEM_OUTSIDE_TOLERANCE_X,
+                outside_tolerance_y=STEM_OUTSIDE_TOLERANCE_Y,
+                inside_tolerance=STEM_INSIDE_TOLERANCE,
+                locations=STEM_LOCATIONS,
+                key_rotation=KEY_ROTATION);
+        } else if (KEY_PROFILE == "dss") {
+            DSS_stem(
                 row=KEY_ROW,
                 stem_type=STEM_TYPE,
                 key_length=KEY_LENGTH,
@@ -654,6 +699,12 @@ for (what_to_render=RENDER) {
 }
 
 /* CHANGELOG:
+    1.2:
+        * Fixed a bug where legends weren't being rotated correctly if you were using a profile with DISH_TILT_CURVE set to true.
+        * Added DSS keycap profile.
+        * The default is now riskeycap profile rotated on its side with the correct side support enabled.  Seems like it's best to have a good 3D-printable example as the default =)
+        * Modified a few default values to be more "normal".
+        * Added/modified helpful comments.
     1.1:
         * Built-in supports for extra stems now work for vertically-long keycaps like numpad enter keys.
         * Added some more helpful comments.

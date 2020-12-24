@@ -68,6 +68,7 @@ module stem_box_cherry(key_height, key_length, key_width, dish_depth, dish_thick
     right_support = side_supports[1];
     front_support = side_supports[2];
     back_support = side_supports[3];
+    // TODO: Make this generate an interior cutout that better matches the exterior of the keycap.
     // Generate a top layer that spans the entire width of the keycap so we have something legends can print on
     // NOTE: We generate it similarly to poly_keycap()'s trapezoidal interior cutout so we have a precise fit
     // Give the "undershelf" a distinct color so you know it's there and not the same as the keycap:
