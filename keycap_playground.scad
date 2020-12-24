@@ -1,7 +1,7 @@
 // Riskable's Keycap Playground -- Use this tool to try out all your cool keycap ideas.
 
 // AUTHOR: Riskable <riskable@youknowwhat.com>
-// VERSION: 1.2 (Changelog is at the bottom)
+// VERSION: 1.3 (Changelog is at the bottom)
 
 /* NOTES
     * Want to understand how to use this file? See: https://youtu.be/WDlRZMvisA4
@@ -699,6 +699,8 @@ for (what_to_render=RENDER) {
 }
 
 /* CHANGELOG:
+    1.3:
+        * Fixed a bug where underset legends weren't working with keycap profiles.
     1.2:
         * Fixed a bug where legends weren't being rotated correctly if you were using a profile with DISH_TILT_CURVE set to true.
         * Added DSS keycap profile.

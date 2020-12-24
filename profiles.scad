@@ -22,7 +22,7 @@ KEY_UNIT = 19.05; // Standard spacing between keys
 
 // NOTE: Measured dish_depth in multiple DSA keycaps came out to ~.8
 // NOTE: Spec says wall_thickness should be 1mm but the default here is 1.35 since this script will mostly be used in 3D printing.  Make sure to set it to 1mm if making an injection mold.
-module DSA_keycap(row=1, length=18.41, height_extra=0, wall_thickness=1.35, dish_thickness=1, dish_fn=128, dish_depth=.8, dish_invert=false, top_difference=6.08, key_rotation=[0,0,0], corner_radius=0.5, corner_radius_curve=2, legends=[""], legend_font_sizes=[6], legend_fonts=["Roboto"], legend_trans=[[0,0,0]], legend_trans2=[[0,0,0]], legend_rotation=[[0,0,0]], legend_rotation2=[[0,0,0]], legend_scale=[[0,0,0]],legend_underset=[[0,0,0]], homing_dot_length=0, homing_dot_width=0, homing_dot_x=0, homing_dot_y=0, homing_dot_z=0, polygon_layers=10, visualize_legends=false, debug=false) {
+module DSA_keycap(row=1, length=18.41, height_extra=0, wall_thickness=1.35, dish_thickness=1, dish_fn=128, dish_depth=.8, dish_invert=false, top_difference=6.08, key_rotation=[0,0,0], corner_radius=0.5, corner_radius_curve=2, legends=[""], legend_font_sizes=[6], legend_fonts=["Roboto"], legend_trans=[[0,0,0]], legend_trans2=[[0,0,0]], legend_rotation=[[0,0,0]], legend_rotation2=[[0,0,0]], legend_scale=[[0,0,0]], legend_underset=[[0,0,0]], homing_dot_length=0, homing_dot_width=0, homing_dot_x=0, homing_dot_y=0, homing_dot_z=0, polygon_layers=10, visualize_legends=false, debug=false) {
     // NOTE: The 0-index values are ignored (there's no row 0 in DSA)
     row_height = dish_invert ? 6.3914+height_extra : 7.3914+height_extra; // One less if we're generating a spacebar
     // NOTE: 7.3914 is from the Signature Plastics DSA spec which has .291 inches
@@ -45,6 +45,7 @@ module DSA_keycap(row=1, length=18.41, height_extra=0, wall_thickness=1.35, dish
         legends=legends, legend_font_sizes=legend_font_sizes, legend_fonts=legend_fonts,
         legend_trans=legend_trans, legend_trans2=legend_trans2, legend_scale=legend_scale,
         legend_rotation=legend_rotation, legend_rotation2=legend_rotation2,
+        legend_underset=legend_underset,
         polygon_layers=polygon_layers, polygon_layer_rotation=0, polygon_edges=4, polygon_curve=4.5,
         key_rotation=key_rotation,
         homing_dot_length=homing_dot_length, homing_dot_width=homing_dot_width,
@@ -132,6 +133,7 @@ module DCS_keycap(row=2, length=18.15, height_extra=0, wall_thickness=1.35, dish
         legends=legends, legend_font_sizes=legend_font_sizes, legend_fonts=legend_fonts,
         legend_trans=legend_trans, legend_trans2=legend_trans2, legend_scale=legend_scale,
         legend_rotation=legend_rotation, legend_rotation2=legend_rotation2,
+        legend_underset=legend_underset,
         corner_radius=corner_radius, corner_radius_curve=corner_radius_curve,
         polygon_layers=polygon_layers, polygon_layer_rotation=0, polygon_edges=4,
         homing_dot_length=homing_dot_length, homing_dot_width=homing_dot_width,
@@ -237,6 +239,7 @@ module DSS_keycap(row=1, length=18.24, height_extra=0, wall_thickness=1.35, dish
         legends=legends, legend_font_sizes=legend_font_sizes, legend_fonts=legend_fonts,
         legend_trans=legend_trans, legend_trans2=legend_trans2, legend_scale=legend_scale,
         legend_rotation=legend_rotation, legend_rotation2=legend_rotation2,
+        legend_underset=legend_underset,
         corner_radius=corner_radius, corner_radius_curve=corner_radius_curve,
         polygon_layers=polygon_layers, polygon_layer_rotation=0, polygon_edges=4,
         polygon_curve=4,
@@ -348,6 +351,7 @@ module KAT_keycap(row=1, length=18.2, height_extra=0, wall_thickness=1.658, dish
         legends=legends, legend_font_sizes=legend_font_sizes, legend_fonts=legend_fonts,
         legend_trans=legend_trans, legend_trans2=legend_trans2, legend_scale=legend_scale,
         legend_rotation=legend_rotation, legend_rotation2=legend_rotation2,
+        legend_underset=legend_underset,
         polygon_layers=polygon_layers, polygon_layer_rotation=0, polygon_edges=4, polygon_curve=7,
         key_rotation=key_rotation,
         homing_dot_length=homing_dot_length, homing_dot_width=homing_dot_width,
@@ -416,7 +420,7 @@ module KAT_stem(row=1, stem_type="box_cherry", key_height=9.15, key_length=18.2,
     }
 }
 
-module KAM_keycap(row=1, length=18.3, height_extra=0, wall_thickness=1.65, dish_thickness=1, dish_fn=128, dish_depth=1, dish_invert=false, top_difference=6.35, key_rotation=[0,0,0], corner_radius=0.5, corner_radius_curve=1.5, legends=[""], legend_font_sizes=[6], legend_fonts=["Roboto"], legend_trans=[[0,0,0]], legend_trans2=[[0,0,0]], legend_rotation=[[0,0,0]], legend_rotation2=[[0,0,0]], legend_scale=[[0,0,0]],legend_underset=[[0,0,0]], homing_dot_length=0, homing_dot_width=0, homing_dot_x=0, homing_dot_y=0, homing_dot_z=0, polygon_layers=10, visualize_legends=false, debug=false) {
+module KAM_keycap(row=1, length=18.3, height_extra=0, wall_thickness=1.65, dish_thickness=1, dish_fn=128, dish_depth=1, dish_invert=false, top_difference=6.35, key_rotation=[0,0,0], corner_radius=0.5, corner_radius_curve=1.5, legends=[""], legend_font_sizes=[6], legend_fonts=["Roboto"], legend_trans=[[0,0,0]], legend_trans2=[[0,0,0]], legend_rotation=[[0,0,0]], legend_rotation2=[[0,0,0]], legend_scale=[[0,0,0]], legend_underset=[[0,0,0]], homing_dot_length=0, homing_dot_width=0, homing_dot_x=0, homing_dot_y=0, homing_dot_z=0, polygon_layers=10, visualize_legends=false, debug=false) {
     row_height = dish_invert ? 8.05 : 9.05; // One less if we're generating a spacebar
     if (row < 1) {
         warning("We only support rows 1 for DSA profile caps!");
@@ -437,6 +441,7 @@ module KAM_keycap(row=1, length=18.3, height_extra=0, wall_thickness=1.65, dish_
         legends=legends, legend_font_sizes=legend_font_sizes, legend_fonts=legend_fonts,
         legend_trans=legend_trans, legend_trans2=legend_trans2, legend_scale=legend_scale,
         legend_rotation=legend_rotation, legend_rotation2=legend_rotation2,
+        legend_underset=legend_underset,
         polygon_layers=polygon_layers, polygon_layer_rotation=0, polygon_edges=4, polygon_curve=4.5,
         homing_dot_length=homing_dot_length, homing_dot_width=homing_dot_width,
         homing_dot_x=homing_dot_x, homing_dot_y=homing_dot_y, homing_dot_z=homing_dot_z,
@@ -500,7 +505,7 @@ module KAM_stem(stem_type="box_cherry", key_height=9.05, key_length=18.3, key_wi
     * Sides are flat so that it can be easily printed on its side.  This ensures that stems end up strong and the top will feel smooth right off the printer (no sanding required).
     * Stem is not inset so it can be printed flat if needed.
 */
-module riskeycap(row=1, length=18.25, width=18.25, height_extra=0, wall_thickness=1.8, dish_thickness=0.75, dish_fn=64, dish_depth=1.5, dish_invert=false, top_difference=6, key_rotation=[0,0,0], corner_radius=1.25, corner_radius_curve=1.5, legends=[""], legend_font_sizes=[6], legend_fonts=["Roboto"], legend_trans=[[0,0,0]], legend_trans2=[[0,0,0]], legend_rotation=[[0,0,0]], legend_rotation2=[[0,0,0]], legend_scale=[[0,0,0]],legend_underset=[[0,0,0]], homing_dot_length=0, homing_dot_width=0, homing_dot_x=0, homing_dot_y=0, homing_dot_z=0, polygon_layers=10, visualize_legends=false, debug=false) {
+module riskeycap(row=1, length=18.25, width=18.25, height_extra=0, wall_thickness=1.8, dish_thickness=0.75, dish_fn=64, dish_depth=1.5, dish_invert=false, top_difference=6, key_rotation=[0,0,0], corner_radius=1.25, corner_radius_curve=1.5, legends=[""], legend_font_sizes=[6], legend_fonts=["Roboto"], legend_trans=[[0,0,0]], legend_trans2=[[0,0,0]], legend_rotation=[[0,0,0]], legend_rotation2=[[0,0,0]], legend_scale=[[0,0,0]], legend_underset=[[0,0,0]], homing_dot_length=0, homing_dot_width=0, homing_dot_x=0, homing_dot_y=0, homing_dot_z=0, polygon_layers=10, visualize_legends=false, debug=false) {
     row_height = dish_invert ? 6.8+height_extra : 7.8+height_extra; // One less if we're generating a spacebar
     if (row < 1) {
         warning("We only support rows 1 for Riskeycap profile caps!");
@@ -520,6 +525,7 @@ module riskeycap(row=1, length=18.25, width=18.25, height_extra=0, wall_thicknes
         legends=legends, legend_font_sizes=legend_font_sizes, legend_fonts=legend_fonts,
         legend_trans=legend_trans, legend_trans2=legend_trans2, legend_scale=legend_scale,
         legend_rotation=legend_rotation, legend_rotation2=legend_rotation2,
+        legend_underset=legend_underset,
         polygon_layers=polygon_layers, polygon_layer_rotation=0, polygon_edges=4, polygon_curve=0,
         key_rotation=key_rotation,
         homing_dot_length=homing_dot_length, homing_dot_width=homing_dot_width,
