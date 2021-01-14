@@ -507,6 +507,7 @@ module KAM_stem(stem_type="box_cherry", key_height=9.05, key_length=18.3, key_wi
 */
 module riskeycap(row=1, length=18.25, width=18.25, height_extra=0, wall_thickness=1.8, dish_thickness=0.9, dish_fn=64, dish_depth=1.5, dish_invert=false, top_difference=6, key_rotation=[0,0,0], corner_radius=1.25, corner_radius_curve=1.5, legends=[""], legend_font_sizes=[6], legend_fonts=["Roboto"], legend_trans=[[0,0,0]], legend_trans2=[[0,0,0]], legend_rotation=[[0,0,0]], legend_rotation2=[[0,0,0]], legend_scale=[[0,0,0]], legend_underset=[[0,0,0]], homing_dot_length=0, homing_dot_width=0, homing_dot_x=0, homing_dot_y=0, homing_dot_z=0, polygon_layers=10, visualize_legends=false, debug=false) {
     adjusted_height = dish_invert ? 6.5+height_extra : 8.2+height_extra; // A bit less if we're generating a spacebar because the dish_depth is bigger than is typical
+    adjusted_dish_depth = dish_invert ? 1 : dish_depth; // Make it a smaller for inverted dishes
     if (row < 1) {
         warning("We only support rows 1 for Riskeycap profile caps!");
     }
@@ -519,7 +520,7 @@ module riskeycap(row=1, length=18.25, width=18.25, height_extra=0, wall_thicknes
     poly_keycap(
         height=adjusted_height, length=length, width=width, wall_thickness=wall_thickness,
         top_difference=top_difference, dish_tilt=0, dish_z=dish_z, dish_fn=dish_fn,
-        dish_invert=dish_invert, top_y=top_y, dish_depth=dish_depth, dish_type=dish_type,
+        dish_invert=dish_invert, top_y=top_y, dish_depth=adjusted_dish_depth, dish_type=dish_type,
         dish_thickness=dish_thickness, corner_radius=corner_radius,
         corner_radius_curve=corner_radius_curve,
         legends=legends, legend_font_sizes=legend_font_sizes, legend_fonts=legend_fonts,
@@ -536,12 +537,13 @@ module riskeycap(row=1, length=18.25, width=18.25, height_extra=0, wall_thicknes
 // Riskeycap stems are very straightforward (nothing special required; mostly defaults)
 module riskeystem(stem_type="box_cherry", key_height=8.2, key_length=18.41, key_width=18.41, height_extra=0, dish_depth=1.5, dish_thickness=0.9, dish_invert=false, depth=4, top_difference=5.25, wall_thickness=1.8, key_corner_radius=1.15, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=1, top_thickness=0.6, side_support_thickness=0.8, side_supports=[0,0,0,0], flat_support=true, locations=[[0,0,0]], key_rotation=[0,0,0]) {
     adjusted_height = dish_invert ? 6.5+height_extra : 8.2+height_extra; // A bit less if we're generating a spacebar
+    adjusted_dish_depth = dish_invert ? 1 : dish_depth; // Make it a smaller for inverted dishes
     if (stem_type == "box_cherry") {
         stem_box_cherry(
             key_height=adjusted_height+height_extra,
             key_length=key_length,
             key_width=key_width,
-            dish_depth=dish_depth,
+            dish_depth=adjusted_dish_depth,
             dish_thickness=dish_thickness,
             top_difference=top_difference,
             depth=depth, dish_tilt=0,
