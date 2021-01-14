@@ -42,7 +42,7 @@ RENDER = ["keycap", "stem"]; // Supported values: keycap, stem, legends, row, ro
 
 // CONSTANTS
 KEY_UNIT = 19.05; // Square that makes up the entire space of a key
-BETWEENSPACE = 1.05; // The Betweenspace:  The void between realms...  And keycaps (for an 18mm keycap)
+BETWEENSPACE = 0.8; // The Betweenspace:  The void between realms...  And keycaps (for an 18.25mm keycap)
 
 // BASIC KEYCAP PARAMETERS
 // If you want to make a keycap using a common profile set this to one of: dcs, dss, dsa, kat, kam, riskeycap:
@@ -52,7 +52,7 @@ KEY_ROW = 1; // NOTE: For a spacebar make sure you also set DISH_INVERT=true
 KEY_HEIGHT = 9; // The Z (NOTE: Dish values may reduce this a bit as they carve themselves out)
 KEY_HEIGHT_EXTRA = 0.0; // If you're planning on sanding the keycap you can use this to make up for lost material (normally this is only useful when using a profile e.g. DSA)
 // NOTE: You *can* just set KEY_LENGTH/KEY_WIDTH to something simple e.g. 18
-KEY_LENGTH = 18.24; // The X (NOTE: Increase DISH_FN if you make this >1U!)
+KEY_LENGTH = (KEY_UNIT-BETWEENSPACE); // The X (NOTE: Increase DISH_FN if you make this >1U!)
 // NOTE: If using a profile make sure KEY_LENGTH matches the profile's KEY_WIDTH for 1U keycaps!
 KEY_WIDTH = (KEY_UNIT-BETWEENSPACE); // The Y (NOTE: If using POLYGON_EGDES>4 this will be ignored)
 // NOTE: Spacebars don't seem to use BETWEENSPACE (for whatever reason).  So to make a spacebar just use "KEY_UNIT*<spacebar unit length>" and omit the "-BETWEENSPACE" part.  Or just be precise and give it a value like 119.0625 (19.05*6.25)
