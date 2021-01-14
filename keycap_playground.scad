@@ -58,7 +58,7 @@ KEY_WIDTH = (KEY_UNIT-BETWEENSPACE); // The Y (NOTE: If using POLYGON_EGDES>4 th
 // NOTE: Spacebars don't seem to use BETWEENSPACE (for whatever reason).  So to make a spacebar just use "KEY_UNIT*<spacebar unit length>" and omit the "-BETWEENSPACE" part.  Or just be precise and give it a value like 119.0625 (19.05*6.25)
 // NOTE: When making longer keycaps you may need to increase KEY_HEIGHT slightly in order for the height to be accurate.  I recommend giving it an extra 0.3mm per extra unit of length so 2U would be +0.3, 3U would be +0.6, etc BUT DOUBLE CHECK IT.  Do a side profile view and look at the ruler or render it and double-check the height in your slicer.
 //KEY_ROTATION = [0,0,0]; // I *highly* recommend 3D printing keycaps on their front/back/sides! Try this:
-KEY_ROTATION = [0,111.05,0]; // An example of how you'd rotate a keycap on its side.  Make sure to zoom in on the bottom to make sure it's *actually* going to print flat! This should be the correct rotation for riskeycap profile.
+KEY_ROTATION = [0,110.1,0]; // An example of how you'd rotate a keycap on its side.  Make sure to zoom in on the bottom to make sure it's *actually* going to print flat! This should be the correct rotation for riskeycap profile.
 // NOTE: If you rotate a keycap to print on its side don't forget to add a built-in support via STEM_SIDE_SUPPORTS! [0,1,0,0] is what you want if you rotated to print on the right side.
 KEY_TOP_DIFFERENCE = 5; // How much skinnier the key is at the top VS the bottom [x,y]
 KEY_TOP_X = 0; // Move the keycap's top on the X axis (controls skew left/right)
@@ -73,7 +73,7 @@ DISH_TYPE = "cylinder"; // "inv_pyramid", "cylinder", "sphere" (aka "domed"), an
 // NOTE: inv_pyramid doesn't work for making spacbars (kinda, "duh")
 DISH_DEPTH = 1; // Distance between the top sides and the bottommost point in the dish (set to 0 for flat top)
 // NOTE: When DISH_INVERT is true DISH_DEPTH becomes more like, "how far dish protrudes upwards"
-DISH_THICKNESS = 1.5; // Amount of material that will be placed under the bottommost part of the dish
+DISH_THICKNESS = 1.2; // Amount of material that will be placed under the bottommost part of the dish
 // NOTE: If you make DISH_THICKNESS too small legends might not print properly--even with a tiny nozzle.  In other words, a thick keycap top makes for nice clean (3D printed) legends.
 DISH_TILT = -6; // How to rotate() the dish of the key (on the Y axis)
 DISH_TILT_CURVE = false; // If you want a more organic ("tentacle"!) shape set this to true
@@ -100,8 +100,8 @@ STEM_OUTSIDE_TOLERANCE_X = 0.24; // Shrinks the stem a bit on the X axis (both a
 STEM_OUTSIDE_TOLERANCE_Y = 0.24; // Shrinks the stem a bit on th Y axix (unused with round_cherry)
 // For box stems (e.g. Kailh box) you want outside tolerances to be equal.  For Cherry stems you (usually) want the Y tolerance to be greater (since there's plenty of room on the sides).  In fact, you can go *negative* with STEM_OUTSIDE_TOLERANCE_X (e.g. -0.5) for extra strength!
 // NOTE ABOUT STEM STRENGTH AND ACCURACY: Printing stems upright/flat with a 0.4mm nozzle is troublesome.  They work OK but they're usually quite tight.  It's better to print keys on their side (front or left/right) so that the layer lines run at an angle to the switch stem; they end up more accurate *and* much, much stronger.
-STEM_INSET = 0; // How far to inset the stem (set to 0 to have the stem rest on the build plate which means you won't need supports when printing flat)
-STEM_FLAT_SUPPORT = true; // Add built-in support for the stem when printing flat (if inset)
+STEM_INSET = 1; // How far to inset the stem (set to 0 to have the stem rest on the build plate which means you won't need supports when printing flat)
+STEM_FLAT_SUPPORT = false; // Add built-in support for the stem when printing flat (if inset)
 STEM_SIDE_SUPPORT_THICKNESS = 0.8; // 0.8 works well for most things
 // This controls which sides get (internal, under-the-top) stem supports (for printing on the side):
 STEM_SIDE_SUPPORTS = [0,1,0,0]; // Left, right, front, back
@@ -552,6 +552,7 @@ module handle_render(what, legends) {
                 height_extra=KEY_HEIGHT_EXTRA,
                 inset=STEM_INSET,
                 dish_thickness=DISH_THICKNESS,
+                dish_invert=DISH_INVERT,
                 flat_support=STEM_FLAT_SUPPORT,
                 side_support_thickness=STEM_SIDE_SUPPORT_THICKNESS,
                 side_supports=STEM_SIDE_SUPPORTS,
@@ -569,6 +570,7 @@ module handle_render(what, legends) {
                 wall_thickness=WALL_THICKNESS,
                 inset=STEM_INSET,
                 dish_thickness=DISH_THICKNESS,
+                dish_invert=DISH_INVERT,
                 flat_support=STEM_FLAT_SUPPORT,
                 side_support_thickness=STEM_SIDE_SUPPORT_THICKNESS,
                 side_supports=STEM_SIDE_SUPPORTS,
@@ -586,6 +588,7 @@ module handle_render(what, legends) {
                 wall_thickness=WALL_THICKNESS,
                 inset=STEM_INSET,
                 dish_thickness=DISH_THICKNESS,
+                dish_invert=DISH_INVERT,
                 flat_support=STEM_FLAT_SUPPORT,
                 side_support_thickness=STEM_SIDE_SUPPORT_THICKNESS,
                 side_supports=STEM_SIDE_SUPPORTS,
@@ -603,6 +606,7 @@ module handle_render(what, legends) {
                 wall_thickness=WALL_THICKNESS,
                 inset=STEM_INSET,
                 dish_thickness=DISH_THICKNESS,
+                dish_invert=DISH_INVERT,
                 flat_support=STEM_FLAT_SUPPORT,
                 side_support_thickness=STEM_SIDE_SUPPORT_THICKNESS,
                 side_supports=STEM_SIDE_SUPPORTS,
@@ -619,6 +623,7 @@ module handle_render(what, legends) {
                 height_extra=KEY_HEIGHT_EXTRA,
                 inset=STEM_INSET,
                 dish_thickness=DISH_THICKNESS,
+                dish_invert=DISH_INVERT,
                 flat_support=STEM_FLAT_SUPPORT,
                 side_support_thickness=STEM_SIDE_SUPPORT_THICKNESS,
                 side_supports=STEM_SIDE_SUPPORTS,
@@ -635,6 +640,7 @@ module handle_render(what, legends) {
                 height_extra=KEY_HEIGHT_EXTRA,
                 inset=STEM_INSET,
                 dish_thickness=DISH_THICKNESS,
+                dish_invert=DISH_INVERT,
                 flat_support=STEM_FLAT_SUPPORT,
                 side_support_thickness=STEM_SIDE_SUPPORT_THICKNESS,
                 side_supports=STEM_SIDE_SUPPORTS,
