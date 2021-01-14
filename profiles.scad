@@ -54,7 +54,7 @@ module DSA_keycap(row=1, length=18.41, height_extra=0, wall_thickness=1.35, dish
 }
 
 // DSA Stems are pretty simple (don't need anything special)
-module DSA_stem(stem_type="box_cherry", key_height=8, key_length=18.2, key_width=18.2, height_extra=0, dish_depth=1, dish_thickness=1, depth=4, top_difference=6, wall_thickness=1.35, key_corner_radius=0.5, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=0, top_thickness=0.6, side_support_thickness=0.8, side_supports=[0,0,0,0], flat_support=true, locations=[[0,0,0]], key_rotation=[0,0,0]) {
+module DSA_stem(stem_type="box_cherry", key_height=7.3914, key_length=18.2, key_width=18.2, height_extra=0, dish_depth=1, dish_thickness=1, dish_invert=false, depth=4, top_difference=6, wall_thickness=1.35, key_corner_radius=0.5, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=0, top_thickness=0.6, side_support_thickness=0.8, side_supports=[0,0,0,0], flat_support=true, locations=[[0,0,0]], key_rotation=[0,0,0]) {
     if (stem_type == "box_cherry") {
         stem_box_cherry(
             key_height=key_height+height_extra,
@@ -142,7 +142,7 @@ module DCS_keycap(row=2, length=18.15, height_extra=0, wall_thickness=1.35, dish
 }
 
 // DCS stems are a pain in the ass so they need their own special fidding...
-module DCS_stem(row=2, stem_type="box_cherry", key_length=18.15, height_extra=0, depth=4, top_difference=6, wall_thickness=1.35, key_corner_radius=0.5, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=0, dish_thickness=0.6, top_thickness=0.6, side_support_thickness=0.8, side_supports=[0,0,0,0], flat_support=true, locations=[[0,0,0]], key_rotation=[0,0,0]) {
+module DCS_stem(row=2, stem_type="box_cherry", key_length=18.15, height_extra=0, depth=4, top_difference=6, wall_thickness=1.35, key_corner_radius=0.5, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=0, dish_thickness=0.6, dish_invert=false, top_thickness=0.6, side_support_thickness=0.8, side_supports=[0,0,0,0], flat_support=true, locations=[[0,0,0]], key_rotation=[0,0,0]) {
     row_height = [
         0, 9.5, 7.39, 7.39, 9, 12.5
     ];
@@ -248,7 +248,7 @@ module DSS_keycap(row=1, length=18.24, height_extra=0, wall_thickness=1.35, dish
         key_rotation=key_rotation, debug=debug);
 }
 
-module DSS_stem(row=2, stem_type="box_cherry", key_length=18.24, height_extra=0, depth=4, top_difference=5.54, wall_thickness=1.35, key_corner_radius=0.5, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=0, dish_thickness=0.6, top_thickness=0.6, side_support_thickness=0.8, side_supports=[0,0,0,0], flat_support=true, locations=[[0,0,0]], key_rotation=[0,0,0]) {
+module DSS_stem(row=2, stem_type="box_cherry", key_length=18.24, height_extra=0, depth=4, top_difference=5.54, wall_thickness=1.35, key_corner_radius=0.5, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=0, dish_thickness=0.6, dish_invert=false, top_thickness=0.6, side_support_thickness=0.8, side_supports=[0,0,0,0], flat_support=true, locations=[[0,0,0]], key_rotation=[0,0,0]) {
     row_height = [
         0, 10.4, 8.7, 8.5, 10.6
     ];
@@ -360,7 +360,7 @@ module KAT_keycap(row=1, length=18.2, height_extra=0, wall_thickness=1.658, dish
 }
 
 // NOTE: I double-checked and KAT profile stems really *do* go all the way to the floor!  They're not inset at all (which is different)!
-module KAT_stem(row=1, stem_type="box_cherry", key_height=9.15, key_length=18.2, key_width=18.2, height_extra=0, dish_depth=0.75, dish_thickness=1, depth=4, top_difference=6, wall_thickness=1.658, key_corner_radius=0.35, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=0, top_thickness=0.6, side_support_thickness=0.8, side_supports=[0,0,0,0], flat_support=true, locations=[[0,0,0]], key_rotation=[0,0,0]) {
+module KAT_stem(row=1, stem_type="box_cherry", key_height=9.15, key_length=18.2, key_width=18.2, height_extra=0, dish_depth=0.75, dish_thickness=1, dish_invert=false, depth=4, top_difference=6, wall_thickness=1.658, key_corner_radius=0.35, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=0, top_thickness=0.6, side_support_thickness=0.8, side_supports=[0,0,0,0], flat_support=true, locations=[[0,0,0]], key_rotation=[0,0,0]) {
     if (inset > 0) {
         warning("FYI: Official KAT profile keycaps don't have an inset stem.  The stems go all the way to the floor (but you don't have to do that if you don't want).");
     }
@@ -450,7 +450,7 @@ module KAM_keycap(row=1, length=18.3, height_extra=0, wall_thickness=1.65, dish_
 }
 
 // KAM stems are pretty simple (don't need anything special)
-module KAM_stem(stem_type="box_cherry", key_height=9.05, key_length=18.3, key_width=18.3, height_extra=0, dish_depth=1, dish_thickness=1, depth=4, top_difference=6, wall_thickness=1.65, key_corner_radius=0.35, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=0, top_thickness=0.6, side_support_thickness=0.8, side_supports=[0,0,0,0], flat_support=true, locations=[[0,0,0]], key_rotation=[0,0,0]) {
+module KAM_stem(stem_type="box_cherry", key_height=9.05, key_length=18.3, key_width=18.3, height_extra=0, dish_depth=1, dish_thickness=1, dish_invert=false, depth=4, top_difference=6, wall_thickness=1.65, key_corner_radius=0.35, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=0, top_thickness=0.6, side_support_thickness=0.8, side_supports=[0,0,0,0], flat_support=true, locations=[[0,0,0]], key_rotation=[0,0,0]) {
     if (stem_type == "box_cherry") {
         stem_box_cherry(
             key_height=key_height+height_extra,
@@ -499,14 +499,14 @@ module KAM_stem(stem_type="box_cherry", key_height=9.05, key_length=18.3, key_wi
 
 // Riskable's keycap profile specifically made for 3D printing, the Riskeycap!
 /* NOTES about the Riskeycap:
-    * It's a non-sculpted (aka "all the same height") profile with a 7.8mm height (similar to DSA).
-    * To print on it's side use: KEY_ROTATION = [0,108.6,0];
-    * 1mm inverted pyramid dish (because that's my favorite in terms of feel--like your finger is getting kissed with every keypress).
+    * It's a non-sculpted (aka "all the same height") profile with a 8.2mm height (similar to DSA).
+    * To print on it's side use: KEY_ROTATION = [0,110.1,0];
+    * 1.5mm spherical dish (because that's my favorite in terms of feel--like your finger is getting kissed with every keypress).
     * Sides are flat so that it can be easily printed on its side.  This ensures that stems end up strong and the top will feel smooth right off the printer (no sanding required).
     * Stem is not inset so it can be printed flat if needed.
 */
-module riskeycap(row=1, length=18.25, width=18.25, height_extra=0, wall_thickness=1.8, dish_thickness=0.75, dish_fn=64, dish_depth=1.5, dish_invert=false, top_difference=6, key_rotation=[0,0,0], corner_radius=1.25, corner_radius_curve=1.5, legends=[""], legend_font_sizes=[6], legend_fonts=["Roboto"], legend_trans=[[0,0,0]], legend_trans2=[[0,0,0]], legend_rotation=[[0,0,0]], legend_rotation2=[[0,0,0]], legend_scale=[[0,0,0]], legend_underset=[[0,0,0]], homing_dot_length=0, homing_dot_width=0, homing_dot_x=0, homing_dot_y=0, homing_dot_z=0, polygon_layers=10, visualize_legends=false, debug=false) {
-    row_height = dish_invert ? 6.8+height_extra : 7.8+height_extra; // One less if we're generating a spacebar
+module riskeycap(row=1, length=18.25, width=18.25, height_extra=0, wall_thickness=1.8, dish_thickness=0.9, dish_fn=64, dish_depth=1.5, dish_invert=false, top_difference=6, key_rotation=[0,0,0], corner_radius=1.25, corner_radius_curve=1.5, legends=[""], legend_font_sizes=[6], legend_fonts=["Roboto"], legend_trans=[[0,0,0]], legend_trans2=[[0,0,0]], legend_rotation=[[0,0,0]], legend_rotation2=[[0,0,0]], legend_scale=[[0,0,0]], legend_underset=[[0,0,0]], homing_dot_length=0, homing_dot_width=0, homing_dot_x=0, homing_dot_y=0, homing_dot_z=0, polygon_layers=10, visualize_legends=false, debug=false) {
+    adjusted_height = dish_invert ? 6.5+height_extra : 8.2+height_extra; // A bit less if we're generating a spacebar because the dish_depth is bigger than is typical
     if (row < 1) {
         warning("We only support rows 1 for Riskeycap profile caps!");
     }
@@ -517,7 +517,7 @@ module riskeycap(row=1, length=18.25, width=18.25, height_extra=0, wall_thicknes
     dish_z = 0;
     top_y = 0;
     poly_keycap(
-        height=row_height, length=length, width=width, wall_thickness=wall_thickness,
+        height=adjusted_height, length=length, width=width, wall_thickness=wall_thickness,
         top_difference=top_difference, dish_tilt=0, dish_z=dish_z, dish_fn=dish_fn,
         dish_invert=dish_invert, top_y=top_y, dish_depth=dish_depth, dish_type=dish_type,
         dish_thickness=dish_thickness, corner_radius=corner_radius,
@@ -534,10 +534,11 @@ module riskeycap(row=1, length=18.25, width=18.25, height_extra=0, wall_thicknes
 }
 
 // Riskeycap stems are very straightforward (nothing special required; mostly defaults)
-module riskeystem(stem_type="box_cherry", key_height=7.8, key_length=18.41, key_width=18.41, height_extra=0, dish_depth=1.5, dish_thickness=0.75, depth=4, top_difference=5.25, wall_thickness=1.8, key_corner_radius=1.15, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=0, top_thickness=0.6, side_support_thickness=0.8, side_supports=[0,0,0,0], flat_support=true, locations=[[0,0,0]], key_rotation=[0,0,0]) {
+module riskeystem(stem_type="box_cherry", key_height=8.2, key_length=18.41, key_width=18.41, height_extra=0, dish_depth=1.5, dish_thickness=0.9, dish_invert=false, depth=4, top_difference=5.25, wall_thickness=1.8, key_corner_radius=1.15, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=1, top_thickness=0.6, side_support_thickness=0.8, side_supports=[0,0,0,0], flat_support=true, locations=[[0,0,0]], key_rotation=[0,0,0]) {
+    adjusted_height = dish_invert ? 6.5+height_extra : 8.2+height_extra; // A bit less if we're generating a spacebar
     if (stem_type == "box_cherry") {
         stem_box_cherry(
-            key_height=key_height+height_extra,
+            key_height=adjusted_height+height_extra,
             key_length=key_length,
             key_width=key_width,
             dish_depth=dish_depth,
