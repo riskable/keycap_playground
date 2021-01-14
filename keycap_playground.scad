@@ -78,6 +78,7 @@ DISH_THICKNESS = 1.2; // Amount of material that will be placed under the bottom
 DISH_TILT = -6; // How to rotate() the dish of the key (on the Y axis)
 DISH_TILT_CURVE = false; // If you want a more organic ("tentacle"!) shape set this to true
 DISH_INVERT = false; // Set to true for things like spacebars
+// NOTE: Don't forget to increase DISH_FN if you make a longer/wider keycap!
 DISH_FN = 128; // If you want to increase or decrease the resolution of the shapes used to make the dish (Tip: Don't go <64 for "sphere" dish types and don't go <128 for "cylinder")
 // NOTE: DISH_FN does not apply if DISH_INVERT==true (because it would be too much; inverted dish doesn't need as much resolution)
 
@@ -302,7 +303,7 @@ module handle_render(what, legends) {
     if (what=="legends") {
     // NOTE: just_legends() uses children() which is why there's no semicolon after it
         if (KEY_PROFILE == "dsa") {
-            just_legends(height=KEY_HEIGHT+KEY_HEIGHT_EXTRA,
+            just_legends(height=KEY_HEIGHT+KEY_HEIGHT_EXTRA, width=KEY_WIDTH,
                 legends=legends, polygon_layers=POLYGON_LAYERS,
                 legend_font_sizes=LEGEND_FONT_SIZES, legend_fonts=LEGEND_FONTS,
                 legend_trans=LEGEND_TRANS, legend_trans2=LEGEND_TRANS2, legend_scale=LEGEND_SCALE,
@@ -315,7 +316,7 @@ module handle_render(what, legends) {
                         homing_dot_x=HOMING_DOT_X, homing_dot_y=HOMING_DOT_Y, homing_dot_z=HOMING_DOT_Z,
                         key_rotation=KEY_ROTATION, dish_invert=DISH_INVERT, debug=DEBUG);
         } else if (KEY_PROFILE == "dcs") {
-            just_legends(height=KEY_HEIGHT+KEY_HEIGHT_EXTRA,
+            just_legends(height=KEY_HEIGHT+KEY_HEIGHT_EXTRA, width=KEY_WIDTH,
                 dish_tilt=DISH_TILT, dish_tilt_curve=false, 
                 polygon_layers=POLYGON_LAYERS, legends=legends,
                 legend_font_sizes=LEGEND_FONT_SIZES, legend_fonts=LEGEND_FONTS,
@@ -330,7 +331,7 @@ module handle_render(what, legends) {
                         homing_dot_x=HOMING_DOT_X, homing_dot_y=HOMING_DOT_Y, homing_dot_z=HOMING_DOT_Z,
                         key_rotation=KEY_ROTATION, dish_invert=DISH_INVERT, debug=DEBUG);
         } else if (KEY_PROFILE == "kat") {
-            just_legends(height=KEY_HEIGHT+KEY_HEIGHT_EXTRA,
+            just_legends(height=KEY_HEIGHT+KEY_HEIGHT_EXTRA, width=KEY_WIDTH,
                 dish_tilt=DISH_TILT, dish_tilt_curve=false, 
                 polygon_layers=POLYGON_LAYERS, legends=legends,
                 legend_font_sizes=LEGEND_FONT_SIZES, legend_fonts=LEGEND_FONTS,
@@ -345,7 +346,7 @@ module handle_render(what, legends) {
                         homing_dot_x=HOMING_DOT_X, homing_dot_y=HOMING_DOT_Y, homing_dot_z=HOMING_DOT_Z,
                         key_rotation=KEY_ROTATION, dish_invert=DISH_INVERT, debug=DEBUG);
         } else if (KEY_PROFILE == "kam") {
-            just_legends(height=KEY_HEIGHT+KEY_HEIGHT_EXTRA,
+            just_legends(height=KEY_HEIGHT+KEY_HEIGHT_EXTRA, width=KEY_WIDTH,
                 dish_tilt=DISH_TILT, dish_tilt_curve=false, 
                 polygon_layers=POLYGON_LAYERS, legends=legends,
                 legend_font_sizes=LEGEND_FONT_SIZES, legend_fonts=LEGEND_FONTS,
@@ -359,7 +360,7 @@ module handle_render(what, legends) {
                         homing_dot_x=HOMING_DOT_X, homing_dot_y=HOMING_DOT_Y, homing_dot_z=HOMING_DOT_Z,
                         key_rotation=KEY_ROTATION, dish_invert=DISH_INVERT, debug=DEBUG);
         } else if (KEY_PROFILE == "riskeycap") {
-            just_legends(height=KEY_HEIGHT+KEY_HEIGHT_EXTRA,
+            just_legends(height=KEY_HEIGHT+KEY_HEIGHT_EXTRA, width=KEY_WIDTH,
                 dish_tilt=DISH_TILT, dish_tilt_curve=false, 
                 polygon_layers=POLYGON_LAYERS, legends=legends,
                 legend_font_sizes=LEGEND_FONT_SIZES, legend_fonts=LEGEND_FONTS,
@@ -373,7 +374,7 @@ module handle_render(what, legends) {
                         homing_dot_x=HOMING_DOT_X, homing_dot_y=HOMING_DOT_Y, homing_dot_z=HOMING_DOT_Z,
                         key_rotation=KEY_ROTATION, dish_invert=DISH_INVERT, debug=DEBUG);
         } else {
-            just_legends(height=KEY_HEIGHT+KEY_HEIGHT_EXTRA,
+            just_legends(height=KEY_HEIGHT+KEY_HEIGHT_EXTRA, width=KEY_WIDTH,
                 dish_tilt=DISH_TILT, dish_tilt_curve=DISH_TILT_CURVE,
                 polygon_layers=POLYGON_LAYERS, legends=legends,
                 legend_font_sizes=LEGEND_FONT_SIZES, legend_fonts=LEGEND_FONTS,
@@ -385,7 +386,7 @@ module handle_render(what, legends) {
     } else if (what=="underset_mask") {
         difference() {
             stem_top_using_globals();
-            just_legends(height=KEY_HEIGHT+KEY_HEIGHT_EXTRA,
+            just_legends(height=KEY_HEIGHT+KEY_HEIGHT_EXTRA, width=KEY_WIDTH,
                 dish_tilt=DISH_TILT, dish_tilt_curve=DISH_TILT_CURVE,
                 polygon_layers=POLYGON_LAYERS, legends=legends,
                 legend_font_sizes=LEGEND_FONT_SIZES, legend_fonts=LEGEND_FONTS,
@@ -395,8 +396,8 @@ module handle_render(what, legends) {
         }
     } else if (what=="keycap") {
         if (KEY_PROFILE == "dsa") {
-            DSA_keycap(row=KEY_ROW, length=KEY_LENGTH, height_extra=KEY_HEIGHT_EXTRA,
-                wall_thickness=WALL_THICKNESS,
+            DSA_keycap(row=KEY_ROW, length=KEY_LENGTH, width=KEY_WIDTH,
+                height_extra=KEY_HEIGHT_EXTRA, wall_thickness=WALL_THICKNESS,
                 legends=legends, legend_font_sizes=LEGEND_FONT_SIZES, legend_fonts=LEGEND_FONTS,
                 legend_trans=LEGEND_TRANS, legend_trans2=LEGEND_TRANS2, legend_scale=LEGEND_SCALE,
                 legend_rotation=LEGEND_ROTATION, legend_rotation2=LEGEND_ROTATION2,
@@ -406,8 +407,8 @@ module handle_render(what, legends) {
                 homing_dot_x=HOMING_DOT_X, homing_dot_y=HOMING_DOT_Y, homing_dot_z=HOMING_DOT_Z,
                 key_rotation=KEY_ROTATION, dish_invert=DISH_INVERT, debug=DEBUG);
         } else if (KEY_PROFILE == "dcs") {
-            DCS_keycap(row=KEY_ROW, length=KEY_LENGTH, height_extra=KEY_HEIGHT_EXTRA,
-                wall_thickness=WALL_THICKNESS,
+            DCS_keycap(row=KEY_ROW, length=KEY_LENGTH, width=KEY_WIDTH,
+                height_extra=KEY_HEIGHT_EXTRA, wall_thickness=WALL_THICKNESS,
                 legends=legends, legend_font_sizes=LEGEND_FONT_SIZES, legend_fonts=LEGEND_FONTS,
                 legend_trans=LEGEND_TRANS, legend_trans2=LEGEND_TRANS2, legend_scale=LEGEND_SCALE,
                 legend_rotation=LEGEND_ROTATION, legend_rotation2=LEGEND_ROTATION2,
@@ -418,8 +419,8 @@ module handle_render(what, legends) {
                 homing_dot_x=HOMING_DOT_X, homing_dot_y=HOMING_DOT_Y, homing_dot_z=HOMING_DOT_Z,
                 key_rotation=KEY_ROTATION, dish_invert=DISH_INVERT, debug=DEBUG);
         } else if (KEY_PROFILE == "dss") {
-            DSS_keycap(row=KEY_ROW, length=KEY_LENGTH, height_extra=KEY_HEIGHT_EXTRA,
-                wall_thickness=WALL_THICKNESS,
+            DSS_keycap(row=KEY_ROW, length=KEY_LENGTH, width=KEY_WIDTH,
+                height_extra=KEY_HEIGHT_EXTRA, wall_thickness=WALL_THICKNESS,
                 legends=legends, legend_font_sizes=LEGEND_FONT_SIZES, legend_fonts=LEGEND_FONTS,
                 legend_trans=LEGEND_TRANS, legend_trans2=LEGEND_TRANS2, legend_scale=LEGEND_SCALE,
                 legend_rotation=LEGEND_ROTATION, legend_rotation2=LEGEND_ROTATION2,
@@ -430,8 +431,8 @@ module handle_render(what, legends) {
                 homing_dot_x=HOMING_DOT_X, homing_dot_y=HOMING_DOT_Y, homing_dot_z=HOMING_DOT_Z,
                 key_rotation=KEY_ROTATION, dish_invert=DISH_INVERT, debug=DEBUG);
         } else if (KEY_PROFILE == "kat") {
-            KAT_keycap(row=KEY_ROW, length=KEY_LENGTH, height_extra=KEY_HEIGHT_EXTRA,
-                wall_thickness=WALL_THICKNESS,
+            KAT_keycap(row=KEY_ROW, length=KEY_LENGTH, width=KEY_WIDTH,
+                height_extra=KEY_HEIGHT_EXTRA, wall_thickness=WALL_THICKNESS,
                 legends=legends, legend_font_sizes=LEGEND_FONT_SIZES, legend_fonts=LEGEND_FONTS,
                 legend_trans=LEGEND_TRANS, legend_trans2=LEGEND_TRANS2, legend_scale=LEGEND_SCALE,
                 legend_rotation=LEGEND_ROTATION, legend_rotation2=LEGEND_ROTATION2,
@@ -442,8 +443,8 @@ module handle_render(what, legends) {
                 homing_dot_x=HOMING_DOT_X, homing_dot_y=HOMING_DOT_Y, homing_dot_z=HOMING_DOT_Z,
                 key_rotation=KEY_ROTATION, dish_invert=DISH_INVERT, debug=DEBUG);
         } else if (KEY_PROFILE == "kam") {
-            KAM_keycap(row=KEY_ROW, length=KEY_LENGTH, height_extra=KEY_HEIGHT_EXTRA,
-                wall_thickness=WALL_THICKNESS,
+            KAM_keycap(row=KEY_ROW, length=KEY_LENGTH, width=KEY_WIDTH,
+                height_extra=KEY_HEIGHT_EXTRA, wall_thickness=WALL_THICKNESS,
                 legends=legends, legend_font_sizes=LEGEND_FONT_SIZES, legend_fonts=LEGEND_FONTS,
                 legend_trans=LEGEND_TRANS, legend_trans2=LEGEND_TRANS2, legend_scale=LEGEND_SCALE,
                 legend_rotation=LEGEND_ROTATION, legend_rotation2=LEGEND_ROTATION2,
@@ -454,8 +455,8 @@ module handle_render(what, legends) {
                 homing_dot_x=HOMING_DOT_X, homing_dot_y=HOMING_DOT_Y, homing_dot_z=HOMING_DOT_Z,
                 key_rotation=KEY_ROTATION, dish_invert=DISH_INVERT, debug=DEBUG);
         } else if (KEY_PROFILE == "riskeycap") {
-            riskeycap(row=KEY_ROW, length=KEY_LENGTH, height_extra=KEY_HEIGHT_EXTRA,
-                wall_thickness=WALL_THICKNESS,
+            riskeycap(row=KEY_ROW, length=KEY_LENGTH, width=KEY_WIDTH,
+                height_extra=KEY_HEIGHT_EXTRA, wall_thickness=WALL_THICKNESS,
                 legends=legends, legend_font_sizes=LEGEND_FONT_SIZES, legend_fonts=LEGEND_FONTS,
                 legend_trans=LEGEND_TRANS, legend_trans2=LEGEND_TRANS2, legend_scale=LEGEND_SCALE,
                 legend_rotation=LEGEND_ROTATION, legend_rotation2=LEGEND_ROTATION2,
@@ -470,8 +471,8 @@ module handle_render(what, legends) {
         }
     } else if (what=="%keycap") {
         if (KEY_PROFILE == "dsa") {
-            %DSA_keycap(row=KEY_ROW, length=KEY_LENGTH, height_extra=KEY_HEIGHT_EXTRA,
-                wall_thickness=WALL_THICKNESS,
+            %DSA_keycap(row=KEY_ROW, length=KEY_LENGTH, width=KEY_WIDTH,
+                height_extra=KEY_HEIGHT_EXTRA, wall_thickness=WALL_THICKNESS,
                 legends=legends, legend_font_sizes=LEGEND_FONT_SIZES, legend_fonts=LEGEND_FONTS,
                 legend_trans=LEGEND_TRANS, legend_trans2=LEGEND_TRANS2, legend_scale=LEGEND_SCALE,
                 legend_rotation=LEGEND_ROTATION, legend_rotation2=LEGEND_ROTATION2,
@@ -481,8 +482,8 @@ module handle_render(what, legends) {
                 homing_dot_x=HOMING_DOT_X, homing_dot_y=HOMING_DOT_Y, homing_dot_z=HOMING_DOT_Z,
                 key_rotation=KEY_ROTATION, dish_invert=DISH_INVERT, debug=DEBUG);
         } else if (KEY_PROFILE == "dcs") {
-            %DCS_keycap(row=KEY_ROW, length=KEY_LENGTH, height_extra=KEY_HEIGHT_EXTRA,
-                wall_thickness=WALL_THICKNESS,
+            %DCS_keycap(row=KEY_ROW, length=KEY_LENGTH, width=KEY_WIDTH,
+                height_extra=KEY_HEIGHT_EXTRA, wall_thickness=WALL_THICKNESS,
                 legends=legends, legend_font_sizes=LEGEND_FONT_SIZES, legend_fonts=LEGEND_FONTS,
                 legend_trans=LEGEND_TRANS, legend_trans2=LEGEND_TRANS2, legend_scale=LEGEND_SCALE,
                 legend_rotation=LEGEND_ROTATION, legend_rotation2=LEGEND_ROTATION2,
@@ -493,8 +494,8 @@ module handle_render(what, legends) {
                 homing_dot_x=HOMING_DOT_X, homing_dot_y=HOMING_DOT_Y, homing_dot_z=HOMING_DOT_Z,
                 key_rotation=KEY_ROTATION, dish_invert=DISH_INVERT, debug=DEBUG);
         } else if (KEY_PROFILE == "dss") {
-            %DSS_keycap(row=KEY_ROW, length=KEY_LENGTH, height_extra=KEY_HEIGHT_EXTRA,
-                wall_thickness=WALL_THICKNESS,
+            %DSS_keycap(row=KEY_ROW, length=KEY_LENGTH, width=KEY_WIDTH,
+                height_extra=KEY_HEIGHT_EXTRA, wall_thickness=WALL_THICKNESS,
                 legends=legends, legend_font_sizes=LEGEND_FONT_SIZES, legend_fonts=LEGEND_FONTS,
                 legend_trans=LEGEND_TRANS, legend_trans2=LEGEND_TRANS2, legend_scale=LEGEND_SCALE,
                 legend_rotation=LEGEND_ROTATION, legend_rotation2=LEGEND_ROTATION2,
@@ -505,8 +506,8 @@ module handle_render(what, legends) {
                 homing_dot_x=HOMING_DOT_X, homing_dot_y=HOMING_DOT_Y, homing_dot_z=HOMING_DOT_Z,
                 key_rotation=KEY_ROTATION, dish_invert=DISH_INVERT, debug=DEBUG);
         } else if (KEY_PROFILE == "kat") {
-            %KAT_keycap(row=KEY_ROW, length=KEY_LENGTH, height_extra=KEY_HEIGHT_EXTRA,
-                wall_thickness=WALL_THICKNESS,
+            %KAT_keycap(row=KEY_ROW, length=KEY_LENGTH, width=KEY_WIDTH,
+                height_extra=KEY_HEIGHT_EXTRA, wall_thickness=WALL_THICKNESS,
                 legends=legends, legend_font_sizes=LEGEND_FONT_SIZES, legend_fonts=LEGEND_FONTS,
                 legend_trans=LEGEND_TRANS, legend_trans2=LEGEND_TRANS2, legend_scale=LEGEND_SCALE,
                 legend_rotation=LEGEND_ROTATION, legend_rotation2=LEGEND_ROTATION2,
@@ -517,8 +518,8 @@ module handle_render(what, legends) {
                 homing_dot_x=HOMING_DOT_X, homing_dot_y=HOMING_DOT_Y, homing_dot_z=HOMING_DOT_Z,
                 key_rotation=KEY_ROTATION, dish_invert=DISH_INVERT, debug=DEBUG);
         } else if (KEY_PROFILE == "kam") {
-            %KAM_keycap(row=KEY_ROW, length=KEY_LENGTH, height_extra=KEY_HEIGHT_EXTRA,
-                wall_thickness=WALL_THICKNESS,
+            %KAM_keycap(row=KEY_ROW, length=KEY_LENGTH, width=KEY_WIDTH,
+                height_extra=KEY_HEIGHT_EXTRA, wall_thickness=WALL_THICKNESS,
                 legends=legends, legend_font_sizes=LEGEND_FONT_SIZES, legend_fonts=LEGEND_FONTS,
                 legend_trans=LEGEND_TRANS, legend_trans2=LEGEND_TRANS2, legend_scale=LEGEND_SCALE,
                 legend_rotation=LEGEND_ROTATION, legend_rotation2=LEGEND_ROTATION2,
@@ -529,8 +530,8 @@ module handle_render(what, legends) {
                 homing_dot_x=HOMING_DOT_X, homing_dot_y=HOMING_DOT_Y, homing_dot_z=HOMING_DOT_Z,
                 key_rotation=KEY_ROTATION, dish_invert=DISH_INVERT, debug=DEBUG);
         } else if (KEY_PROFILE == "riskeycap") {
-            %riskeycap(row=KEY_ROW, length=KEY_LENGTH, height_extra=KEY_HEIGHT_EXTRA,
-                wall_thickness=WALL_THICKNESS,
+            %riskeycap(row=KEY_ROW, length=KEY_LENGTH, width=KEY_WIDTH,
+                height_extra=KEY_HEIGHT_EXTRA, wall_thickness=WALL_THICKNESS,
                 legends=legends, legend_font_sizes=LEGEND_FONT_SIZES, legend_fonts=LEGEND_FONTS,
                 legend_trans=LEGEND_TRANS, legend_trans2=LEGEND_TRANS2, legend_scale=LEGEND_SCALE,
                 legend_rotation=LEGEND_ROTATION, legend_rotation2=LEGEND_ROTATION2,
@@ -549,6 +550,7 @@ module handle_render(what, legends) {
                 stem_type=STEM_TYPE,
                 wall_thickness=WALL_THICKNESS,
                 key_length=KEY_LENGTH,
+                key_width=KEY_WIDTH,
                 height_extra=KEY_HEIGHT_EXTRA,
                 inset=STEM_INSET,
                 dish_thickness=DISH_THICKNESS,
@@ -566,6 +568,7 @@ module handle_render(what, legends) {
                 row=KEY_ROW,
                 stem_type=STEM_TYPE,
                 key_length=KEY_LENGTH,
+                key_width=KEY_WIDTH,
                 height_extra=KEY_HEIGHT_EXTRA,
                 wall_thickness=WALL_THICKNESS,
                 inset=STEM_INSET,
@@ -584,6 +587,7 @@ module handle_render(what, legends) {
                 row=KEY_ROW,
                 stem_type=STEM_TYPE,
                 key_length=KEY_LENGTH,
+                key_width=KEY_WIDTH,
                 height_extra=KEY_HEIGHT_EXTRA,
                 wall_thickness=WALL_THICKNESS,
                 inset=STEM_INSET,
@@ -602,6 +606,7 @@ module handle_render(what, legends) {
                 row=KEY_ROW,
                 stem_type=STEM_TYPE,
                 key_length=KEY_LENGTH,
+                key_width=KEY_WIDTH,
                 height_extra=KEY_HEIGHT_EXTRA,
                 wall_thickness=WALL_THICKNESS,
                 inset=STEM_INSET,
@@ -620,6 +625,7 @@ module handle_render(what, legends) {
                 stem_type=STEM_TYPE,
                 wall_thickness=WALL_THICKNESS,
                 key_length=KEY_LENGTH,
+                key_width=KEY_WIDTH,
                 height_extra=KEY_HEIGHT_EXTRA,
                 inset=STEM_INSET,
                 dish_thickness=DISH_THICKNESS,
@@ -637,6 +643,7 @@ module handle_render(what, legends) {
                 stem_type=STEM_TYPE,
                 wall_thickness=WALL_THICKNESS,
                 key_length=KEY_LENGTH,
+                key_width=KEY_WIDTH,
                 height_extra=KEY_HEIGHT_EXTRA,
                 inset=STEM_INSET,
                 dish_thickness=DISH_THICKNESS,
