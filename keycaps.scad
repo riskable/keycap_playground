@@ -403,11 +403,16 @@ module poly_keycap(height=9.0, length=18, width=18,
                         xy2_offset=[top_x,top_y],
                         h=height, r=corner_radius/2, center=false);
             // This adds a northeast (back right) indicator so you can tell which side is which with symmetrical keycaps
-                    translate([length-wall_thickness*2-0.925,width-wall_thickness*2-1.125,0]) squarish_rpoly(
-                        xy1=[length-wall_thickness*2,width-wall_thickness*2],
-                        xy2=[length-wall_thickness*2-top_difference,width-wall_thickness*2-top_difference],
-                        xy2_offset=[top_x,top_y],
-                        h=height, r=corner_radius/2, center=false);
+                    if (wall_thickness > 0) {
+                        translate([
+                          length-wall_thickness*2-0.925,
+                          width-wall_thickness*2-1.125,
+                          0]) squarish_rpoly(
+                            xy1=[length-wall_thickness*2,width-wall_thickness*2],
+                            xy2=[length-wall_thickness*2-top_difference,width-wall_thickness*2-top_difference],
+                            xy2_offset=[top_x,top_y],
+                            h=height, r=corner_radius/2, center=false);
+                    }
                 }
                 // Cut off the top (of the interior--to make it the right height)
                 translate([0,0,height/2+height-dish_depth-dish_thickness])

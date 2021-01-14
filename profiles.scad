@@ -22,7 +22,7 @@ KEY_UNIT = 19.05; // Standard spacing between keys
 
 // NOTE: Measured dish_depth in multiple DSA keycaps came out to ~.8
 // NOTE: Spec says wall_thickness should be 1mm but the default here is 1.35 since this script will mostly be used in 3D printing.  Make sure to set it to 1mm if making an injection mold.
-module DSA_keycap(row=1, length=18.41, height_extra=0, wall_thickness=1.35, dish_thickness=1, dish_fn=128, dish_depth=.8, dish_invert=false, top_difference=6.08, key_rotation=[0,0,0], corner_radius=0.5, corner_radius_curve=2, legends=[""], legend_font_sizes=[6], legend_fonts=["Roboto"], legend_trans=[[0,0,0]], legend_trans2=[[0,0,0]], legend_rotation=[[0,0,0]], legend_rotation2=[[0,0,0]], legend_scale=[[0,0,0]], legend_underset=[[0,0,0]], homing_dot_length=0, homing_dot_width=0, homing_dot_x=0, homing_dot_y=0, homing_dot_z=0, polygon_layers=10, visualize_legends=false, debug=false) {
+module DSA_keycap(row=1, length=18.41, width=18.41, height_extra=0, wall_thickness=1.35, dish_thickness=1, dish_fn=128, dish_depth=.8, dish_invert=false, top_difference=6.08, key_rotation=[0,0,0], corner_radius=0.5, corner_radius_curve=2, legends=[""], legend_font_sizes=[6], legend_fonts=["Roboto"], legend_trans=[[0,0,0]], legend_trans2=[[0,0,0]], legend_rotation=[[0,0,0]], legend_rotation2=[[0,0,0]], legend_scale=[[0,0,0]], legend_underset=[[0,0,0]], homing_dot_length=0, homing_dot_width=0, homing_dot_x=0, homing_dot_y=0, homing_dot_z=0, polygon_layers=10, visualize_legends=false, debug=false) {
     // NOTE: The 0-index values are ignored (there's no row 0 in DSA)
     row_height = dish_invert ? 6.3914+height_extra : 7.3914+height_extra; // One less if we're generating a spacebar
     // NOTE: 7.3914 is from the Signature Plastics DSA spec which has .291 inches
@@ -32,7 +32,7 @@ module DSA_keycap(row=1, length=18.41, height_extra=0, wall_thickness=1.35, dish
     if (row > 1) {
         warning("We only support row 1 for DSA profile caps!");
     }
-    width = 18.41; // 0.725 inches
+//    width = 18.41; // 0.725 inches
     dish_type = "sphere";
     dish_z = 0.111; // NOTE: Width of the top dish (at widest) should be ~12.7mm
     top_y = 0;
@@ -54,7 +54,8 @@ module DSA_keycap(row=1, length=18.41, height_extra=0, wall_thickness=1.35, dish
 }
 
 // DSA Stems are pretty simple (don't need anything special)
-module DSA_stem(stem_type="box_cherry", key_height=7.3914, key_length=18.2, key_width=18.2, height_extra=0, dish_depth=1, dish_thickness=1, dish_invert=false, depth=4, top_difference=6, wall_thickness=1.35, key_corner_radius=0.5, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=0, top_thickness=0.6, side_support_thickness=0.8, side_supports=[0,0,0,0], flat_support=true, locations=[[0,0,0]], key_rotation=[0,0,0]) {
+module DSA_stem(stem_type="box_cherry", key_height=7.3914, key_length=18.41, key_width=18.41, height_extra=0, dish_depth=1, dish_thickness=1, dish_invert=false, depth=4, top_difference=6, wall_thickness=1.35, key_corner_radius=0.5, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=0, top_thickness=0.6, side_support_thickness=0.8, side_supports=[0,0,0,0], flat_support=true, locations=[[0,0,0]], key_rotation=[0,0,0]) {
+//    adjusted_dish_depth = dish_invert ? 0.5 : dish_depth; // Make it a smaller for inverted dishes
     if (stem_type == "box_cherry") {
         stem_box_cherry(
             key_height=key_height+height_extra,
@@ -102,7 +103,7 @@ module DSA_stem(stem_type="box_cherry", key_height=7.3914, key_length=18.2, key_
 }
 
 // NOTE: dish_thickness gets *added* to the default thickness of this profile which is approximately 1mm (depending on the keycap). This is to prevent a low dish_thickness value from making an unusable keycap
-module DCS_keycap(row=2, length=18.15, height_extra=0, wall_thickness=1.35, dish_thickness=0.6, dish_fn=128, dish_invert=false, top_difference=6, key_rotation=[0,0,0], corner_radius=0.5, corner_radius_curve=0, legends=[""], legend_font_sizes=[6], legend_fonts=["Roboto"], legend_trans=[[0,0,0]], legend_trans2=[[0,0,0]], legend_rotation=[[0,0,0]], legend_rotation2=[[0,0,0]], legend_scale=[[0,0,0]], polygon_layers=20, legend_underset=[[0,0,0]], homing_dot_length=0, homing_dot_width=0, homing_dot_x=0, homing_dot_y=0, homing_dot_z=0, visualize_legends=false, debug=false) {
+module DCS_keycap(row=2, length=18.15, width=18.15, height_extra=0, wall_thickness=1.35, dish_thickness=0.6, dish_fn=128, dish_invert=false, top_difference=6, key_rotation=[0,0,0], corner_radius=0.5, corner_radius_curve=0, legends=[""], legend_font_sizes=[6], legend_fonts=["Roboto"], legend_trans=[[0,0,0]], legend_trans2=[[0,0,0]], legend_rotation=[[0,0,0]], legend_rotation2=[[0,0,0]], legend_scale=[[0,0,0]], polygon_layers=20, legend_underset=[[0,0,0]], homing_dot_length=0, homing_dot_width=0, homing_dot_x=0, homing_dot_y=0, homing_dot_z=0, visualize_legends=false, debug=false) {
     // NOTE: The 0-index values are ignored (there's no row 0 in DCS)
     row_height = [
         0, 9.5, 7.39, 7.39, 9, 12.5
@@ -121,7 +122,6 @@ module DCS_keycap(row=2, length=18.15, height_extra=0, wall_thickness=1.35, dish
         warning("We only support rows 1-5 for DCS profile caps!");
     }
     row = row < 6 ? row : 5; // We only support rows 0-4 (5 total rows)
-    width = 18.15;
     dish_type = "cylinder";
     dish_depth = 1;
     top_y = -1.75;
@@ -142,7 +142,7 @@ module DCS_keycap(row=2, length=18.15, height_extra=0, wall_thickness=1.35, dish
 }
 
 // DCS stems are a pain in the ass so they need their own special fidding...
-module DCS_stem(row=2, stem_type="box_cherry", key_length=18.15, height_extra=0, depth=4, top_difference=6, wall_thickness=1.35, key_corner_radius=0.5, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=0, dish_thickness=0.6, dish_invert=false, top_thickness=0.6, side_support_thickness=0.8, side_supports=[0,0,0,0], flat_support=true, locations=[[0,0,0]], key_rotation=[0,0,0]) {
+module DCS_stem(row=2, stem_type="box_cherry", key_length=18.15, key_width=18.15, height_extra=0, depth=4, top_difference=6, wall_thickness=1.35, key_corner_radius=0.5, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=0, dish_thickness=0.6, dish_invert=false, top_thickness=0.6, side_support_thickness=0.8, side_supports=[0,0,0,0], flat_support=true, locations=[[0,0,0]], key_rotation=[0,0,0]) {
     row_height = [
         0, 9.5, 7.39, 7.39, 9, 12.5
     ];
@@ -157,7 +157,6 @@ module DCS_stem(row=2, stem_type="box_cherry", key_length=18.15, height_extra=0,
     }
     row = row < 6 ? row : 5; // We only support rows 0-4 (5 total rows)
     adjusted_dish_thickness = dish_thicknesses[row] + dish_thickness;
-    key_width = 18.15;
     dish_depth = 1;
     if (stem_type == "box_cherry") {
         stem_box_cherry(
@@ -205,7 +204,7 @@ module DCS_stem(row=2, stem_type="box_cherry", key_length=18.15, height_extra=0,
     }
 }
 
-module DSS_keycap(row=1, length=18.24, height_extra=0, wall_thickness=1.35, dish_thickness=1.8, dish_fn=128, dish_invert=false, top_difference=5.54, key_rotation=[0,0,0], corner_radius=0.75, corner_radius_curve=1.5, legends=[""], legend_font_sizes=[6], legend_fonts=["Roboto"], legend_trans=[[0,0,0]], legend_trans2=[[0,0,0]], legend_rotation=[[0,0,0]], legend_rotation2=[[0,0,0]], legend_scale=[[0,0,0]], polygon_layers=20, legend_underset=[[0,0,0]], homing_dot_length=0, homing_dot_width=0, homing_dot_x=0, homing_dot_y=0, homing_dot_z=0, visualize_legends=false, debug=false) {
+module DSS_keycap(row=1, length=18.24, width=18.24, height_extra=0, wall_thickness=1.35, dish_thickness=1.8, dish_fn=128, dish_invert=false, top_difference=5.54, key_rotation=[0,0,0], corner_radius=0.75, corner_radius_curve=1.5, legends=[""], legend_font_sizes=[6], legend_fonts=["Roboto"], legend_trans=[[0,0,0]], legend_trans2=[[0,0,0]], legend_rotation=[[0,0,0]], legend_rotation2=[[0,0,0]], legend_scale=[[0,0,0]], polygon_layers=20, legend_underset=[[0,0,0]], homing_dot_length=0, homing_dot_width=0, homing_dot_x=0, homing_dot_y=0, homing_dot_z=0, visualize_legends=false, debug=false) {
     // NOTE: The 0-index values are ignored (there's no row 0 in DSS)
     row_height = [
         0, 10.4, 8.7, 8.5, 10.6
@@ -227,7 +226,6 @@ module DSS_keycap(row=1, length=18.24, height_extra=0, wall_thickness=1.35, dish
         warning("We only support rows 1-4 for DSS profile caps!");
     }
     row = row < 5 ? row : 4; // We only support rows 1-4 (4 total rows)
-    width = 18.24;
     dish_type = "sphere";
     dish_depth = 1;
     top_y = 0;
@@ -248,7 +246,7 @@ module DSS_keycap(row=1, length=18.24, height_extra=0, wall_thickness=1.35, dish
         key_rotation=key_rotation, debug=debug);
 }
 
-module DSS_stem(row=2, stem_type="box_cherry", key_length=18.24, height_extra=0, depth=4, top_difference=5.54, wall_thickness=1.35, key_corner_radius=0.5, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=0, dish_thickness=0.6, dish_invert=false, top_thickness=0.6, side_support_thickness=0.8, side_supports=[0,0,0,0], flat_support=true, locations=[[0,0,0]], key_rotation=[0,0,0]) {
+module DSS_stem(row=2, stem_type="box_cherry", key_length=18.24, key_width=18.24, height_extra=0, depth=4, top_difference=5.54, wall_thickness=1.35, key_corner_radius=0.5, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=0, dish_thickness=0.6, dish_invert=false, top_thickness=0.6, side_support_thickness=0.8, side_supports=[0,0,0,0], flat_support=true, locations=[[0,0,0]], key_rotation=[0,0,0]) {
     row_height = [
         0, 10.4, 8.7, 8.5, 10.6
     ];
@@ -262,7 +260,6 @@ module DSS_stem(row=2, stem_type="box_cherry", key_length=18.24, height_extra=0,
         warning("We only support rows 1-5 for DCS profile caps!");
     }
     row = row < 6 ? row : 5; // We only support rows 0-4 (5 total rows)
-    key_width = 18.24;
     dish_depth = 1;
     if (stem_type == "box_cherry") {
         stem_box_cherry(
@@ -313,7 +310,7 @@ module DSS_stem(row=2, stem_type="box_cherry", key_length=18.24, height_extra=0,
 /* NOTES
 So here's the deal with the KAT profile:  The *dishes* are accurately-placed but the curve that goes up the side of the keycap (front and back) isn't *quite* right because whoever modeled the KAT profile probably started with DSA and then extruded/moved things up/down and forwards/backwards a bit until they had what they wanted.  This makes generating these keycaps via an algorithm difficult.  Having said that the curve is quite close to the original and you'd have to look *very* closely to be able to tell the difference in real life.  As long as the dishes are in the right place that's what matters most.
 */
-module KAT_keycap(row=1, length=18.2, height_extra=0, wall_thickness=1.658, dish_thickness=1.658, dish_fn=128, dish_depth=0.75, dish_invert=false, top_difference=6.5, key_rotation=[0,0,0], corner_radius=0.35, corner_radius_curve=2.75, legends=[""], legend_font_sizes=[6], legend_fonts=["Roboto"], legend_trans=[[0,0,0]], legend_trans2=[[0,0,0]], legend_rotation=[[0,0,0]], legend_rotation2=[[0,0,0]], legend_scale=[[0,0,0]], legend_underset=[[0,0,0]], homing_dot_length=0, homing_dot_width=0, homing_dot_x=0, homing_dot_y=0, homing_dot_z=0, polygon_layers=10, visualize_legends=false, debug=false) {
+module KAT_keycap(row=1, length=18.2, width=18.2, height_extra=0, wall_thickness=1.658, dish_thickness=1.658, dish_fn=128, dish_depth=0.75, dish_invert=false, top_difference=6.5, key_rotation=[0,0,0], corner_radius=0.35, corner_radius_curve=2.75, legends=[""], legend_font_sizes=[6], legend_fonts=["Roboto"], legend_trans=[[0,0,0]], legend_trans2=[[0,0,0]], legend_rotation=[[0,0,0]], legend_rotation2=[[0,0,0]], legend_scale=[[0,0,0]], legend_underset=[[0,0,0]], homing_dot_length=0, homing_dot_width=0, homing_dot_x=0, homing_dot_y=0, homing_dot_z=0, polygon_layers=10, visualize_legends=false, debug=false) {
     // FYI: I know that the curve up the side of the keycap is a little off...  If anyone knows how to calculate the correct curve for KAT profile let me know and I'll fix it!
     if (row < 1) {
         warning("We only support rows 1-5 for KAT profile caps!");
@@ -338,7 +335,6 @@ module KAT_keycap(row=1, length=18.2, height_extra=0, wall_thickness=1.658, dish
     dish_z = [
         0, -0.25, 0, -0.25, -0.25, -0.5
     ];
-    width = 18.2;
     // Official KAT keycaps have a cylindrical dish when inverted:
     dish_type = dish_invert ? "cylinder" : "sphere";
     poly_keycap(
@@ -420,7 +416,7 @@ module KAT_stem(row=1, stem_type="box_cherry", key_height=9.15, key_length=18.2,
     }
 }
 
-module KAM_keycap(row=1, length=18.3, height_extra=0, wall_thickness=1.65, dish_thickness=1, dish_fn=128, dish_depth=1, dish_invert=false, top_difference=6.35, key_rotation=[0,0,0], corner_radius=0.5, corner_radius_curve=1.5, legends=[""], legend_font_sizes=[6], legend_fonts=["Roboto"], legend_trans=[[0,0,0]], legend_trans2=[[0,0,0]], legend_rotation=[[0,0,0]], legend_rotation2=[[0,0,0]], legend_scale=[[0,0,0]], legend_underset=[[0,0,0]], homing_dot_length=0, homing_dot_width=0, homing_dot_x=0, homing_dot_y=0, homing_dot_z=0, polygon_layers=10, visualize_legends=false, debug=false) {
+module KAM_keycap(row=1, length=18.3, width=18.3, height_extra=0, wall_thickness=1.65, dish_thickness=1, dish_fn=128, dish_depth=1, dish_invert=false, top_difference=6.35, key_rotation=[0,0,0], corner_radius=0.5, corner_radius_curve=1.5, legends=[""], legend_font_sizes=[6], legend_fonts=["Roboto"], legend_trans=[[0,0,0]], legend_trans2=[[0,0,0]], legend_rotation=[[0,0,0]], legend_rotation2=[[0,0,0]], legend_scale=[[0,0,0]], legend_underset=[[0,0,0]], homing_dot_length=0, homing_dot_width=0, homing_dot_x=0, homing_dot_y=0, homing_dot_z=0, polygon_layers=10, visualize_legends=false, debug=false) {
     row_height = dish_invert ? 8.05 : 9.05; // One less if we're generating a spacebar
     if (row < 1) {
         warning("We only support rows 1 for DSA profile caps!");
@@ -428,7 +424,6 @@ module KAM_keycap(row=1, length=18.3, height_extra=0, wall_thickness=1.65, dish_
     if (row > 1) {
         warning("We only support row 1 for DSA profile caps!");
     }
-    width = 18.3;
     dish_type = dish_invert ? "cylinder" : "sphere"; // KAM spacebars actually use cylindrical tops
     dish_z = 0;
     top_y = 0;
