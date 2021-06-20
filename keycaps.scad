@@ -7,11 +7,13 @@ use <legends.scad>
 
 // Draws the keycap without legends (because we need to do an intersection() of the keycap+legends to make sure legends conform to the correct shape)
 module _poly_keycap(height=9.0, length=18, width=18,
-  wall_thickness=1.25, top_difference=6, top_x=0, top_y=-2, dish_type="cylinder", 
+  wall_thickness=1.25, top_difference=6, top_x=0, top_y=0, dish_type="cylinder", 
   dish_tilt=-4, dish_depth=1, dish_x=0, dish_y=0, dish_z=-0.75, dish_thickness=2,
-  dish_fn=32, dish_tilt_curve=false,
+  dish_fn=32, dish_tilt_curve=false, stem_clips=false,
+  stem_walls_inset=0, stem_walls_tolerance=0.25,
   polygon_layers=5, polygon_layer_rotation=10, polygon_curve=0, polygon_edges=4,
   corner_radius=0.5, corner_radius_curve=0, polygon_rotation=false,
+  dish_division_x=4, dish_division_y=1, // Fancy schmancy control over spherical inverted dishes
   dish_invert=false, debug=false) {
     layer_x_adjust = top_x/polygon_layers;
     layer_y_adjust = top_y/polygon_layers;
@@ -205,8 +207,8 @@ module _poly_keycap(height=9.0, length=18, width=18,
                                 depth_curve_val = (depth_step - depth_reduction_factor) * (bend_layer/polygon_layers);
                                 adjusted_length = length - top_difference;
                                 adjusted_width = width - top_difference;
-                                layer_length = adjusted_length-(adjusted_length*ratio/4);
-                                layer_width = adjusted_width-(adjusted_width*ratio);
+                                layer_length = adjusted_length-(adjusted_length*ratio/dish_division_x);
+                                layer_width = adjusted_width-(adjusted_width*ratio/dish_division_y);
                                 layer_height = dish_depth*ratio;
                                 translate([
                                     0,
@@ -297,7 +299,8 @@ module _poly_keycap(height=9.0, length=18, width=18,
                 rotate([tilt_above_curved,0,0])
                     translate([dish_x+top_x,dish_y+top_y,chord_length+height+dish_z-z_adjust]) 
                         rotate([tilt_above_straight,0,0])
-                            rotate([90, 0, 0]) cylinder(h=length*3, r=rad, center=true, $fn=dish_fn);
+                            rotate([90, 0, 0])
+                                cylinder(h=length*3, r=rad, center=true, $fn=dish_fn);
             } else if (dish_type == "sphere") {
                 adjusted_key_length = length - top_difference;
                 adjusted_key_width = width - top_difference;
@@ -315,9 +318,12 @@ module _poly_keycap(height=9.0, length=18, width=18,
 // TODO: Document all these arguments
 // NOTE: If polygon_curve or corner_radius_curve are 0 they will be ignored (respectively)
 module poly_keycap(height=9.0, length=18, width=18,
-  wall_thickness=1.25, top_difference=6, top_x=0, top_y=-2,
-  dish_tilt=-4, dish_tilt_curve=false, dish_depth=1, dish_x=0, dish_y=0,
+  wall_thickness=1.25, top_difference=6, top_x=0, top_y=0,
+  dish_tilt=-4, dish_tilt_curve=false, stem_clips=false,
+  stem_walls_inset=0, stem_walls_tolerance=0.25,
+  dish_depth=1, dish_x=0, dish_y=0,
   dish_z=-0.75, dish_thickness=2, dish_fn=32, dish_tilt_curve=false,
+  dish_division_x=4, dish_division_y=1, // Fancy schmancy control over spherical inverted dishes
   legends=[""], legend_font_sizes=[6], legend_fonts=["Roboto"],
   legend_trans=[[0,0,0]], legend_trans2=[[0,0,0]], legend_scale=[[1,1,1]],
   legend_rotation=[[0,0,0]], legend_rotation2=[[0,0,0]], legend_underset=[[0,0,0]],
@@ -326,7 +332,7 @@ module poly_keycap(height=9.0, length=18, width=18,
   homing_dot_length=0, homing_dot_width=0,
   homing_dot_x=0, homing_dot_y=0, homing_dot_z=0,
   visualize_legends=false, polygon_rotation=false, key_rotation=[0,0,0],
-  dish_invert=false, debug=false) {
+  dish_invert=false, uniform_wall_thickness=true, debug=false) {
     layer_tilt_adjust = dish_tilt/polygon_layers;
     if (debug) {
         // NOTE: Tried to divide these up into logical sections; all related elements should be on one line
@@ -340,17 +346,22 @@ module poly_keycap(height=9.0, length=18, width=18,
         echo(polygon_layers=polygon_layers, polygon_layer_rotation=polygon_layer_rotation, polygon_rotation=polygon_rotation, polygon_curve=polygon_curve, polygon_edges=polygon_edges, corner_radius=corner_radius, corner_radius_curve=corner_radius_curve);
         // These should be obvious enough that you don't need to see their values spit out in the console:
 //        echo(visualize_legends=visualize_legends, key_rotation=key_rotation);
+        echo(stem_clips=stem_clips, stem_walls_inset=stem_walls_inset);
     }
     rotate(key_rotation) {
         difference() {
             _poly_keycap(
                 height=height, length=length, width=width, wall_thickness=wall_thickness,
-                top_difference=top_difference, dish_tilt=dish_tilt, dish_tilt_curve=dish_tilt_curve,
+                top_difference=top_difference, dish_tilt=dish_tilt,
+                dish_tilt_curve=dish_tilt_curve, stem_clips=stem_clips,
+                stem_walls_inset=stem_walls_inset,
                 top_x=top_x, top_y=top_y, dish_depth=dish_depth,
-                dish_x=dish_x, dish_y=dish_y, dish_z=dish_z, dish_thickness=dish_thickness, dish_fn=dish_fn,
+                dish_x=dish_x, dish_y=dish_y, dish_z=dish_z,
+                dish_thickness=dish_thickness, dish_fn=dish_fn,
                 polygon_layers=polygon_layers, polygon_layer_rotation=polygon_layer_rotation,
                 polygon_edges=polygon_edges, polygon_curve=polygon_curve,
                 dish_type=dish_type, corner_radius=corner_radius,
+                dish_division_x=dish_division_x, dish_division_y=dish_division_y,
                 corner_radius_curve=corner_radius_curve, polygon_rotation=polygon_rotation,
                 dish_invert=dish_invert);
             tilt_above_curved = dish_tilt_curve ? layer_tilt_adjust * polygon_layers : 0;
@@ -378,45 +389,111 @@ module poly_keycap(height=9.0, length=18, width=18,
                         translate(trans2) rotate(rotation2) translate(trans) rotate(rotation) scale(l_scale)
                             rotate([tilt_above_curved,0,0])
                                 draw_legend(legend, font_size, font, height);
-                            _poly_keycap(
-                                height=height, length=length, width=width, wall_thickness=wall_thickness,
-                                top_difference=top_difference, dish_tilt=dish_tilt, dish_tilt_curve=dish_tilt_curve,
-                                top_x=top_x, top_y=top_y, dish_depth=dish_depth,
-                                dish_x=dish_x, dish_y=dish_y, dish_z=dish_z,
-                                dish_thickness=dish_thickness+0.1, dish_fn=dish_fn,
-                                polygon_layers=polygon_layers, polygon_layer_rotation=polygon_layer_rotation,
-                                polygon_edges=polygon_edges, polygon_curve=polygon_curve,
-                                dish_type=dish_type, corner_radius=corner_radius,
-                                corner_radius_curve=corner_radius_curve,
-                                polygon_rotation=polygon_rotation,
-                                dish_invert=dish_invert);
+                                _poly_keycap(
+                                    height=height, length=length, width=width,
+                                    wall_thickness=wall_thickness,
+                                    top_difference=top_difference, dish_tilt=dish_tilt,
+                                    dish_tilt_curve=dish_tilt_curve, stem_clips=stem_clips,
+                                    stem_walls_inset=stem_walls_inset,
+                                    top_x=top_x, top_y=top_y, dish_depth=dish_depth,
+                                    dish_x=dish_x, dish_y=dish_y, dish_z=dish_z,
+                                    dish_division_x=dish_division_x,
+                                    dish_division_y=dish_division_y,
+                                    dish_thickness=dish_thickness+0.1, dish_fn=dish_fn,
+                                    polygon_layers=polygon_layers,
+                                    polygon_layer_rotation=polygon_layer_rotation,
+                                    polygon_edges=polygon_edges, polygon_curve=polygon_curve,
+                                    dish_type=dish_type, corner_radius=corner_radius,
+                                    corner_radius_curve=corner_radius_curve,
+                                    polygon_rotation=polygon_rotation,
+                                    dish_invert=dish_invert);
                     }
                 }
             }
-            // Trapezoidal interior cutout (i.e. make room inside the keycap)
-            // TODO: Add an option to have the interior cutout match the exterior so we can have uniform wall thickness (and make it easier to deal with odd-shaped keycaps e.g. hexagonal)
-            difference() {
-                translate([0,0,-0.01]) difference() {
-                    squarish_rpoly(
-                        xy1=[length-wall_thickness*2,width-wall_thickness*2],
-                        xy2=[length-wall_thickness*2-top_difference,width-wall_thickness*2-top_difference],
-                        xy2_offset=[top_x,top_y],
-                        h=height, r=corner_radius/2, center=false);
-            // This adds a northeast (back right) indicator so you can tell which side is which with symmetrical keycaps
-                    if (wall_thickness > 0) {
-                        translate([
-                          length-wall_thickness*2-0.925,
-                          width-wall_thickness*2-1.125,
-                          0]) squarish_rpoly(
+            // Interior cutout (i.e. make room inside the keycap)
+            // TODO: Add support for snap-fit stems with uniform_wall_thickness
+            if (uniform_wall_thickness) { // Make the interior match the shape of the dish
+                translate([0,0,-wall_thickness]) {
+                    _poly_keycap(
+                        height=height, length=length-wall_thickness*1.333,
+                        width=width-wall_thickness*1.333, wall_thickness=wall_thickness,
+                        top_difference=top_difference, dish_tilt=dish_tilt,
+                        dish_tilt_curve=dish_tilt_curve, stem_clips=stem_clips,
+                        stem_walls_inset=stem_walls_inset,
+                        top_x=top_x, top_y=top_y, dish_depth=dish_depth,
+                        dish_x=dish_x, dish_y=dish_y, dish_z=dish_z,
+                        dish_thickness=dish_thickness, dish_fn=dish_fn,
+                        polygon_layers=polygon_layers,
+                        polygon_layer_rotation=polygon_layer_rotation,
+                        polygon_edges=polygon_edges, polygon_curve=polygon_curve,
+                        dish_type=dish_type, corner_radius=corner_radius/2,
+                        dish_division_x=dish_division_x, dish_division_y=dish_division_y,
+                        corner_radius_curve=corner_radius_curve, polygon_rotation=polygon_rotation,
+                        dish_invert=dish_invert);
+                }
+                if (stem_clips) {
+                    warning("STEM_SNAP_FIT/stem_clips does not currently wortk with UNIFORM_WALL_THICKNESS");
+                }
+            } else { // Trapezoidal interior cutout (keeps things simple)
+                difference() {
+                    translate([0,0,-0.001]) difference() {
+                        squarish_rpoly(
                             xy1=[length-wall_thickness*2,width-wall_thickness*2],
-                            xy2=[length-wall_thickness*2-top_difference,width-wall_thickness*2-top_difference],
+                            xy2=[length-wall_thickness*2-top_difference*1.03,
+                                 width-wall_thickness*2-top_difference*1.03],
                             xy2_offset=[top_x,top_y],
                             h=height, r=corner_radius/2, center=false);
+                // TEMPORARILY DISABLED NORTHEAST INDICATOR SINCE IT WAS CAUSING PROBLEMS:
+                // This adds a northeast (back right) indicator so you can tell which side is which with symmetrical keycaps
+//                        if (wall_thickness > 0) {
+//                            translate([
+//                              length-wall_thickness*2-0.925,
+//                              width-wall_thickness*2-1.125,
+//                              0]) squarish_rpoly(
+//                                xy1=[length-wall_thickness*2,width-wall_thickness*2],
+//                                xy2=[length-wall_thickness*2-top_difference,width-wall_thickness*2-top_difference],
+//                                xy2_offset=[top_x,top_y],
+//                                h=height, r=corner_radius/2, center=false);
+//                        }
+                        clip_width = 1.25;
+                        clip_height = 2;
+// NOTE: The top half of the clip gets cut off so the clip_height is really 1 (when set to 2)
+                        if (stem_clips) {
+                            echo(stem_clips=stem_clips);
+                            echo(stem_walls_inset=stem_walls_inset);
+                            translate([length/6,-width/2+clip_width/2+wall_thickness,0]) difference() {
+                                cube([length/5,clip_width,clip_height], center=true);
+                                translate([0,0,-clip_height/1.333])
+                                    rotate([45,0,0])
+                                        cube([length,10,clip_height], center=true);
+                            }
+                            translate([-length/6,-width/2+clip_width/2+wall_thickness,0]) difference() {
+                                cube([length/5,clip_width,clip_height], center=true);
+                                translate([0,0,-clip_height/1.333])
+                                    rotate([45,0,0])
+                                        cube([length,10,clip_height], center=true);
+                            }
+                            // Mirror the clips on the other side
+                            mirror([0,1,0]) {
+                                translate([length/6,-width/2+clip_width/2+wall_thickness,0]) difference() {
+                                    cube([length/5,clip_width,clip_height], center=true);
+                                    translate([0,0,-clip_height/1.333])
+                                        rotate([45,0,0])
+                                            cube([length,10,clip_height], center=true);
+                                }
+                                translate([-length/6,-width/2+clip_width/2+wall_thickness,0]) difference() {
+                                    cube([length/5,clip_width,clip_height], center=true);
+                                    translate([0,0,-clip_height/1.333])
+                                        rotate([45,0,0])
+                                            cube([length,10,clip_height], center=true);
+                                }
+                            }
+                        }
                     }
+                    // Cut off the top (of the interior--to make it the right height)
+                    translate([0,0,height/2+height-dish_depth-dish_thickness])
+                        cube([length*2,width*2,height], center=true);
                 }
-                // Cut off the top (of the interior--to make it the right height)
-                translate([0,0,height/2+height-dish_depth-dish_thickness])
-                    cube([length*2,width*2,height], center=true);
             }
         }
 // NOTE: ADA compliance calls for ~0.5mm-tall braille dots so that's why there's a -0.5mm below

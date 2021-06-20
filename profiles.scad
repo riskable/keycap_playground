@@ -22,7 +22,7 @@ KEY_UNIT = 19.05; // Standard spacing between keys
 
 // NOTE: Measured dish_depth in multiple DSA keycaps came out to ~.8
 // NOTE: Spec says wall_thickness should be 1mm but the default here is 1.35 since this script will mostly be used in 3D printing.  Make sure to set it to 1mm if making an injection mold.
-module DSA_keycap(row=1, length=18.41, width=18.41, height_extra=0, wall_thickness=1.35, dish_thickness=1, dish_fn=128, dish_depth=.8, dish_invert=false, top_difference=6.08, key_rotation=[0,0,0], corner_radius=0.5, corner_radius_curve=2, legends=[""], legend_font_sizes=[6], legend_fonts=["Roboto"], legend_trans=[[0,0,0]], legend_trans2=[[0,0,0]], legend_rotation=[[0,0,0]], legend_rotation2=[[0,0,0]], legend_scale=[[0,0,0]], legend_underset=[[0,0,0]], homing_dot_length=0, homing_dot_width=0, homing_dot_x=0, homing_dot_y=0, homing_dot_z=0, polygon_layers=10, visualize_legends=false, debug=false) {
+module DSA_keycap(row=1, length=18.41, width=18.41, height_extra=0, wall_thickness=1.35, dish_thickness=1, dish_fn=128, dish_depth=.8, dish_invert=false, stem_clips=false, stem_walls_inset=0, stem_walls_tolerance=0.25, top_difference=6.08, key_rotation=[0,0,0], corner_radius=0.5, corner_radius_curve=2, legends=[""], legend_font_sizes=[6], legend_fonts=["Roboto"], legend_trans=[[0,0,0]], legend_trans2=[[0,0,0]], legend_rotation=[[0,0,0]], legend_rotation2=[[0,0,0]], legend_scale=[[0,0,0]], legend_underset=[[0,0,0]], homing_dot_length=0, homing_dot_width=0, homing_dot_x=0, homing_dot_y=0, homing_dot_z=0, polygon_layers=10, visualize_legends=false, uniform_wall_thickness=false, debug=false) {
     // NOTE: The 0-index values are ignored (there's no row 0 in DSA)
     row_height = dish_invert ? 6.3914+height_extra : 7.3914+height_extra; // One less if we're generating a spacebar
     // NOTE: 7.3914 is from the Signature Plastics DSA spec which has .291 inches
@@ -42,19 +42,22 @@ module DSA_keycap(row=1, length=18.41, width=18.41, height_extra=0, wall_thickne
         dish_invert=dish_invert, top_y=top_y, dish_depth=dish_depth, dish_type=dish_type,
         dish_thickness=dish_thickness, corner_radius=corner_radius,
         corner_radius_curve=corner_radius_curve,
+        stem_clips=stem_clips, stem_walls_inset=stem_walls_inset,
         legends=legends, legend_font_sizes=legend_font_sizes, legend_fonts=legend_fonts,
         legend_trans=legend_trans, legend_trans2=legend_trans2, legend_scale=legend_scale,
         legend_rotation=legend_rotation, legend_rotation2=legend_rotation2,
         legend_underset=legend_underset,
-        polygon_layers=polygon_layers, polygon_layer_rotation=0, polygon_edges=4, polygon_curve=4.5,
+        polygon_layers=polygon_layers, polygon_layer_rotation=0,
+        polygon_edges=4, polygon_curve=4.5,
         key_rotation=key_rotation,
         homing_dot_length=homing_dot_length, homing_dot_width=homing_dot_width,
         homing_dot_x=homing_dot_x, homing_dot_y=homing_dot_y, homing_dot_z=homing_dot_z,
+        uniform_wall_thickness=uniform_wall_thickness,
         visualize_legends=visualize_legends, debug=debug);
 }
 
 // DSA Stems are pretty simple (don't need anything special)
-module DSA_stem(stem_type="box_cherry", key_height=7.3914, key_length=18.41, key_width=18.41, height_extra=0, dish_depth=1, dish_thickness=1, dish_invert=false, depth=4, top_difference=6, wall_thickness=1.35, key_corner_radius=0.5, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=0, top_thickness=0.6, side_support_thickness=0.8, side_supports=[0,0,0,0], flat_support=true, locations=[[0,0,0]], key_rotation=[0,0,0]) {
+module DSA_stem(stem_type="box_cherry", key_height=7.3914, key_length=18.41, key_width=18.41, height_extra=0, dish_depth=1, dish_thickness=1, dish_invert=false, depth=4, top_difference=6, wall_thickness=1.35, wall_extra=0.65, wall_inset=0, wall_tolerance=0.25, key_corner_radius=0.5, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=0, top_thickness=0.6, side_support_thickness=0.8, side_supports=[0,0,0,0], flat_support=true, locations=[[0,0,0]], key_rotation=[0,0,0], hollow=false, uniform_wall_thickness=false) {
 //    adjusted_dish_depth = dish_invert ? 0.5 : dish_depth; // Make it a smaller for inverted dishes
     if (stem_type == "box_cherry") {
         stem_box_cherry(
@@ -68,6 +71,7 @@ module DSA_stem(stem_type="box_cherry", key_height=7.3914, key_length=18.41, key
             top_thickness=top_thickness,
             key_corner_radius=key_corner_radius,
             wall_thickness=wall_thickness,
+            wall_extra=wall_extra, wall_inset=wall_inset, wall_tolerance=wall_tolerance,
             top_x=top_x, top_y=top_y,
             outside_tolerance_x=outside_tolerance_x,
             outside_tolerance_y=outside_tolerance_y,
@@ -77,7 +81,8 @@ module DSA_stem(stem_type="box_cherry", key_height=7.3914, key_length=18.41, key
             locations=locations,
             key_rotation=key_rotation,
             side_support_thickness=side_support_thickness,
-            side_supports=side_supports);
+            side_supports=side_supports,
+            uniform_wall_thickness=uniform_wall_thickness);
     } else if (stem_type == "round_cherry") {
         stem_round_cherry(
             key_height=key_height+height_extra,
@@ -90,6 +95,7 @@ module DSA_stem(stem_type="box_cherry", key_height=7.3914, key_length=18.41, key
             top_thickness=top_thickness,
             key_corner_radius=key_corner_radius,
             wall_thickness=wall_thickness,
+            wall_extra=wall_extra, wall_inset=wall_inset, wall_tolerance=wall_tolerance,
             top_x=top_x, top_y=top_y,
             outside_tolerance=outside_tolerance_x,
             inside_tolerance=inside_tolerance,
@@ -98,12 +104,47 @@ module DSA_stem(stem_type="box_cherry", key_height=7.3914, key_length=18.41, key
             locations=locations,
             key_rotation=key_rotation,
             side_support_thickness=side_support_thickness,
-            side_supports=side_supports);
+            side_supports=side_supports,
+            uniform_wall_thickness=uniform_wall_thickness);
+    } else if (stem_type == "alps") {
+        stem_alps(
+            key_height=adjusted_height+height_extra,
+            key_length=key_length,
+            key_width=key_width,
+            dish_depth=adjusted_dish_depth,
+            dish_thickness=dish_thickness,
+            dish_invert=dish_invert,
+            dish_x=dish_x, dish_y=dish_y, dish_z=dish_z,
+            polygon_layers=polygon_layers,
+            polygon_layer_rotation=polygon_layer_rotation,
+            polygon_edges=polygon_edges,
+            polygon_curve=polygon_curve,
+            dish_type=dish_type,
+            corner_radius=key_corner_radius,
+            corner_radius_curve=corner_radius_curve,
+            top_difference=top_difference,
+            depth=depth, dish_tilt=0,
+            top_thickness=top_thickness,
+            key_corner_radius=key_corner_radius,
+            wall_thickness=wall_thickness,
+            wall_extra=wall_extra, wall_inset=wall_inset, wall_tolerance=wall_tolerance,
+            top_x=top_x, top_y=top_y,
+            outside_tolerance_x=outside_tolerance_x,
+            outside_tolerance_y=outside_tolerance_y,
+            inside_tolerance=inside_tolerance,
+            inset=inset,
+            flat_support=flat_support,
+            locations=locations,
+            key_rotation=key_rotation,
+            side_support_thickness=side_support_thickness,
+            side_supports=side_supports,
+            hollow=hollow,
+            uniform_wall_thickness=uniform_wall_thickness);
     }
 }
 
 // NOTE: dish_thickness gets *added* to the default thickness of this profile which is approximately 1mm (depending on the keycap). This is to prevent a low dish_thickness value from making an unusable keycap
-module DCS_keycap(row=2, length=18.15, width=18.15, height_extra=0, wall_thickness=1.35, dish_thickness=0.6, dish_fn=128, dish_invert=false, top_difference=6, key_rotation=[0,0,0], corner_radius=0.5, corner_radius_curve=0, legends=[""], legend_font_sizes=[6], legend_fonts=["Roboto"], legend_trans=[[0,0,0]], legend_trans2=[[0,0,0]], legend_rotation=[[0,0,0]], legend_rotation2=[[0,0,0]], legend_scale=[[0,0,0]], polygon_layers=20, legend_underset=[[0,0,0]], homing_dot_length=0, homing_dot_width=0, homing_dot_x=0, homing_dot_y=0, homing_dot_z=0, visualize_legends=false, debug=false) {
+module DCS_keycap(row=2, length=18.15, width=18.15, height_extra=0, wall_thickness=1.35, dish_thickness=0.6, dish_fn=128, dish_invert=false, stem_clips=false, stem_walls_inset=0, stem_walls_tolerance=0.25, top_difference=6, key_rotation=[0,0,0], corner_radius=0.5, corner_radius_curve=0, legends=[""], legend_font_sizes=[6], legend_fonts=["Roboto"], legend_trans=[[0,0,0]], legend_trans2=[[0,0,0]], legend_rotation=[[0,0,0]], legend_rotation2=[[0,0,0]], legend_scale=[[0,0,0]], polygon_layers=20, legend_underset=[[0,0,0]], homing_dot_length=0, homing_dot_width=0, homing_dot_x=0, homing_dot_y=0, homing_dot_z=0, visualize_legends=false, uniform_wall_thickness=false, debug=false) {
     // NOTE: The 0-index values are ignored (there's no row 0 in DCS)
     row_height = [
         0, 9.5, 7.39, 7.39, 9, 12.5
@@ -126,9 +167,11 @@ module DCS_keycap(row=2, length=18.15, width=18.15, height_extra=0, wall_thickne
     dish_depth = 1;
     top_y = -1.75;
     poly_keycap(
-        height=row_height[row]+height_extra, length=length, width=width, wall_thickness=wall_thickness,
+        height=row_height[row]+height_extra, length=length, width=width,
+        wall_thickness=wall_thickness,
         top_difference=top_difference, dish_tilt=dish_tilt[row], dish_z=dish_z[row],
         top_y=top_y, dish_depth=dish_depth, dish_type=dish_type,
+        stem_clips=stem_clips, stem_walls_inset=stem_walls_inset,
         dish_thickness=adjusted_dish_thickness, dish_fn=dish_fn, dish_invert=dish_invert,
         legends=legends, legend_font_sizes=legend_font_sizes, legend_fonts=legend_fonts,
         legend_trans=legend_trans, legend_trans2=legend_trans2, legend_scale=legend_scale,
@@ -138,11 +181,12 @@ module DCS_keycap(row=2, length=18.15, width=18.15, height_extra=0, wall_thickne
         polygon_layers=polygon_layers, polygon_layer_rotation=0, polygon_edges=4,
         homing_dot_length=homing_dot_length, homing_dot_width=homing_dot_width,
         homing_dot_x=homing_dot_x, homing_dot_y=homing_dot_y, homing_dot_z=homing_dot_z,
+        uniform_wall_thickness=uniform_wall_thickness,
         key_rotation=key_rotation, debug=debug);
 }
 
 // DCS stems are a pain in the ass so they need their own special fidding...
-module DCS_stem(row=2, stem_type="box_cherry", key_length=18.15, key_width=18.15, height_extra=0, depth=4, top_difference=6, wall_thickness=1.35, key_corner_radius=0.5, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=0, dish_thickness=0.6, dish_invert=false, top_thickness=0.6, side_support_thickness=0.8, side_supports=[0,0,0,0], flat_support=true, locations=[[0,0,0]], key_rotation=[0,0,0]) {
+module DCS_stem(row=2, stem_type="box_cherry", key_length=18.15, key_width=18.15, height_extra=0, depth=4, top_difference=6, wall_thickness=1.35, wall_extra=0.65, wall_inset=0, wall_tolerance=0.25,  key_corner_radius=0.5, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=0, dish_thickness=0.6, dish_invert=false, top_thickness=0.6, side_support_thickness=0.8, side_supports=[0,0,0,0], flat_support=true, locations=[[0,0,0]], key_rotation=[0,0,0], hollow=false, uniform_wall_thickness=false) {
     row_height = [
         0, 9.5, 7.39, 7.39, 9, 12.5
     ];
@@ -170,6 +214,7 @@ module DCS_stem(row=2, stem_type="box_cherry", key_length=18.15, key_width=18.15
             top_thickness=top_thickness,
             key_corner_radius=key_corner_radius,
             wall_thickness=wall_thickness,
+            wall_extra=wall_extra, wall_inset=wall_inset, wall_tolerance=wall_tolerance,
             top_x=top_x, top_y=top_y,
             outside_tolerance_x=outside_tolerance_x,
             outside_tolerance_y=outside_tolerance_y,
@@ -179,7 +224,8 @@ module DCS_stem(row=2, stem_type="box_cherry", key_length=18.15, key_width=18.15
             locations=locations,
             key_rotation=key_rotation,
             side_support_thickness=side_support_thickness,
-            side_supports=side_supports);
+            side_supports=side_supports,
+            uniform_wall_thickness=uniform_wall_thickness);
     } else if (stem_type == "round_cherry") {
         stem_round_cherry(
             key_height=row_height[row]+height_extra,
@@ -192,6 +238,7 @@ module DCS_stem(row=2, stem_type="box_cherry", key_length=18.15, key_width=18.15
             top_thickness=top_thickness,
             key_corner_radius=key_corner_radius,
             wall_thickness=wall_thickness,
+            wall_extra=wall_extra, wall_inset=wall_inset, wall_tolerance=wall_tolerance,
             top_x=top_x, top_y=top_y,
             outside_tolerance=outside_tolerance_x,
             inside_tolerance=inside_tolerance,
@@ -200,11 +247,46 @@ module DCS_stem(row=2, stem_type="box_cherry", key_length=18.15, key_width=18.15
             locations=locations,
             key_rotation=key_rotation,
             side_support_thickness=side_support_thickness,
-            side_supports=side_supports);
+            side_supports=side_supports,
+            uniform_wall_thickness=uniform_wall_thickness);
+    } else if (stem_type == "alps") {
+        stem_alps(
+            key_height=adjusted_height+height_extra,
+            key_length=key_length,
+            key_width=key_width,
+            dish_depth=adjusted_dish_depth,
+            dish_thickness=dish_thickness,
+            dish_invert=dish_invert,
+            dish_x=dish_x, dish_y=dish_y, dish_z=dish_z,
+            polygon_layers=polygon_layers,
+            polygon_layer_rotation=polygon_layer_rotation,
+            polygon_edges=polygon_edges,
+            polygon_curve=polygon_curve,
+            dish_type=dish_type,
+            corner_radius=key_corner_radius,
+            corner_radius_curve=corner_radius_curve,
+            top_difference=top_difference,
+            depth=depth, dish_tilt=0,
+            top_thickness=top_thickness,
+            key_corner_radius=key_corner_radius,
+            wall_thickness=wall_thickness,
+            wall_extra=wall_extra, wall_inset=wall_inset, wall_tolerance=wall_tolerance,
+            top_x=top_x, top_y=top_y,
+            outside_tolerance_x=outside_tolerance_x,
+            outside_tolerance_y=outside_tolerance_y,
+            inside_tolerance=inside_tolerance,
+            inset=inset,
+            flat_support=flat_support,
+            locations=locations,
+            key_rotation=key_rotation,
+            side_support_thickness=side_support_thickness,
+            side_supports=side_supports,
+            hollow=hollow,
+            uniform_wall_thickness=uniform_wall_thickness);
     }
 }
 
-module DSS_keycap(row=1, length=18.24, width=18.24, height_extra=0, wall_thickness=1.35, dish_thickness=1.8, dish_fn=128, dish_invert=false, top_difference=5.54, key_rotation=[0,0,0], corner_radius=0.75, corner_radius_curve=1.5, legends=[""], legend_font_sizes=[6], legend_fonts=["Roboto"], legend_trans=[[0,0,0]], legend_trans2=[[0,0,0]], legend_rotation=[[0,0,0]], legend_rotation2=[[0,0,0]], legend_scale=[[0,0,0]], polygon_layers=20, legend_underset=[[0,0,0]], homing_dot_length=0, homing_dot_width=0, homing_dot_x=0, homing_dot_y=0, homing_dot_z=0, visualize_legends=false, debug=false) {
+module DSS_keycap(row=1, length=18.24, width=18.24, height_extra=0, wall_thickness=1.35, dish_thickness=1.8, dish_fn=128, dish_invert=false, stem_clips=false, stem_walls_inset=0, stem_walls_tolerance=0.25, top_difference=5.54, key_rotation=[0,0,0], corner_radius=0.75, corner_radius_curve=1.5, legends=[""], legend_font_sizes=[6], legend_fonts=["Roboto"], legend_trans=[[0,0,0]], legend_trans2=[[0,0,0]], legend_rotation=[[0,0,0]], legend_rotation2=[[0,0,0]], legend_scale=[[0,0,0]], polygon_layers=20, legend_underset=[[0,0,0]], homing_dot_length=0, homing_dot_width=0, homing_dot_x=0, homing_dot_y=0, homing_dot_z=0, visualize_legends=false, uniform_wall_thickness=false, debug=false) {
     // NOTE: The 0-index values are ignored (there's no row 0 in DSS)
     row_height = [
         0, 10.4, 8.7, 8.5, 10.6
@@ -230,9 +312,12 @@ module DSS_keycap(row=1, length=18.24, width=18.24, height_extra=0, wall_thickne
     dish_depth = 1;
     top_y = 0;
     poly_keycap(
-        height=adjusted_row_height, length=length, width=width, wall_thickness=wall_thickness,
-        top_difference=top_difference, dish_tilt=dish_tilt[row], dish_z=dish_z[row], dish_y=dish_y[row],
+        height=adjusted_row_height, length=length, width=width,
+        wall_thickness=wall_thickness,
+        top_difference=top_difference, dish_tilt=dish_tilt[row],
+        dish_z=dish_z[row], dish_y=dish_y[row],
         top_y=top_y, dish_depth=dish_depth, dish_type=dish_type,
+        stem_clips=stem_clips, stem_walls_inset=stem_walls_inset,
         dish_thickness=dish_thicknesses[row], dish_fn=dish_fn, dish_invert=dish_invert,
         legends=legends, legend_font_sizes=legend_font_sizes, legend_fonts=legend_fonts,
         legend_trans=legend_trans, legend_trans2=legend_trans2, legend_scale=legend_scale,
@@ -243,10 +328,11 @@ module DSS_keycap(row=1, length=18.24, width=18.24, height_extra=0, wall_thickne
         polygon_curve=4,
         homing_dot_length=homing_dot_length, homing_dot_width=homing_dot_width,
         homing_dot_x=homing_dot_x, homing_dot_y=homing_dot_y, homing_dot_z=homing_dot_z,
+        uniform_wall_thickness=uniform_wall_thickness,
         key_rotation=key_rotation, debug=debug);
 }
 
-module DSS_stem(row=2, stem_type="box_cherry", key_length=18.24, key_width=18.24, height_extra=0, depth=4, top_difference=5.54, wall_thickness=1.35, key_corner_radius=0.5, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=0, dish_thickness=0.6, dish_invert=false, top_thickness=0.6, side_support_thickness=0.8, side_supports=[0,0,0,0], flat_support=true, locations=[[0,0,0]], key_rotation=[0,0,0]) {
+module DSS_stem(row=2, stem_type="box_cherry", key_length=18.24, key_width=18.24, height_extra=0, depth=4, top_difference=5.54, wall_thickness=1.35, wall_extra=0.65, wall_inset=0, wall_tolerance=0.25,  key_corner_radius=0.5, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=0, dish_thickness=0.6, dish_invert=false, top_thickness=0.6, side_support_thickness=0.8, side_supports=[0,0,0,0], flat_support=true, locations=[[0,0,0]], key_rotation=[0,0,0], hollow=false, uniform_wall_thickness=false) {
     row_height = [
         0, 10.4, 8.7, 8.5, 10.6
     ];
@@ -273,6 +359,7 @@ module DSS_stem(row=2, stem_type="box_cherry", key_length=18.24, key_width=18.24
             top_thickness=top_thickness,
             key_corner_radius=key_corner_radius,
             wall_thickness=wall_thickness,
+            wall_extra=wall_extra, wall_inset=wall_inset, wall_tolerance=wall_tolerance,
             top_x=top_x, top_y=top_y,
             outside_tolerance_x=outside_tolerance_x,
             outside_tolerance_y=outside_tolerance_y,
@@ -282,7 +369,8 @@ module DSS_stem(row=2, stem_type="box_cherry", key_length=18.24, key_width=18.24
             locations=locations,
             key_rotation=key_rotation,
             side_support_thickness=side_support_thickness,
-            side_supports=side_supports);
+            side_supports=side_supports,
+            uniform_wall_thickness=uniform_wall_thickness);
     } else if (stem_type == "round_cherry") {
         stem_round_cherry(
             key_height=row_height[row]+height_extra,
@@ -295,6 +383,7 @@ module DSS_stem(row=2, stem_type="box_cherry", key_length=18.24, key_width=18.24
             top_thickness=top_thickness,
             key_corner_radius=key_corner_radius,
             wall_thickness=wall_thickness,
+            wall_extra=wall_extra, wall_inset=wall_inset, wall_tolerance=wall_tolerance,
             top_x=top_x, top_y=top_y,
             outside_tolerance=outside_tolerance_x,
             inside_tolerance=inside_tolerance,
@@ -303,14 +392,49 @@ module DSS_stem(row=2, stem_type="box_cherry", key_length=18.24, key_width=18.24
             locations=locations,
             key_rotation=key_rotation,
             side_support_thickness=side_support_thickness,
-            side_supports=side_supports);
+            side_supports=side_supports,
+            uniform_wall_thickness=uniform_wall_thickness);
+    } else if (stem_type == "alps") {
+        stem_alps(
+            key_height=adjusted_height+height_extra,
+            key_length=key_length,
+            key_width=key_width,
+            dish_depth=adjusted_dish_depth,
+            dish_thickness=dish_thickness,
+            dish_invert=dish_invert,
+            dish_x=dish_x, dish_y=dish_y, dish_z=dish_z,
+            polygon_layers=polygon_layers,
+            polygon_layer_rotation=polygon_layer_rotation,
+            polygon_edges=polygon_edges,
+            polygon_curve=polygon_curve,
+            dish_type=dish_type,
+            corner_radius=key_corner_radius,
+            corner_radius_curve=corner_radius_curve,
+            top_difference=top_difference,
+            depth=depth, dish_tilt=0,
+            top_thickness=top_thickness,
+            key_corner_radius=key_corner_radius,
+            wall_thickness=wall_thickness,
+            wall_extra=wall_extra, wall_inset=wall_inset, wall_tolerance=wall_tolerance,
+            top_x=top_x, top_y=top_y,
+            outside_tolerance_x=outside_tolerance_x,
+            outside_tolerance_y=outside_tolerance_y,
+            inside_tolerance=inside_tolerance,
+            inset=inset,
+            flat_support=flat_support,
+            locations=locations,
+            key_rotation=key_rotation,
+            side_support_thickness=side_support_thickness,
+            side_supports=side_supports,
+            hollow=hollow,
+            uniform_wall_thickness=uniform_wall_thickness);
     }
 }
 
 /* NOTES
 So here's the deal with the KAT profile:  The *dishes* are accurately-placed but the curve that goes up the side of the keycap (front and back) isn't *quite* right because whoever modeled the KAT profile probably started with DSA and then extruded/moved things up/down and forwards/backwards a bit until they had what they wanted.  This makes generating these keycaps via an algorithm difficult.  Having said that the curve is quite close to the original and you'd have to look *very* closely to be able to tell the difference in real life.  As long as the dishes are in the right place that's what matters most.
 */
-module KAT_keycap(row=1, length=18.2, width=18.2, height_extra=0, wall_thickness=1.658, dish_thickness=1.658, dish_fn=128, dish_depth=0.75, dish_invert=false, top_difference=6.5, key_rotation=[0,0,0], corner_radius=0.35, corner_radius_curve=2.75, legends=[""], legend_font_sizes=[6], legend_fonts=["Roboto"], legend_trans=[[0,0,0]], legend_trans2=[[0,0,0]], legend_rotation=[[0,0,0]], legend_rotation2=[[0,0,0]], legend_scale=[[0,0,0]], legend_underset=[[0,0,0]], homing_dot_length=0, homing_dot_width=0, homing_dot_x=0, homing_dot_y=0, homing_dot_z=0, polygon_layers=10, visualize_legends=false, debug=false) {
+module KAT_keycap(row=1, length=18.2, width=18.2, height_extra=0, wall_thickness=1.658, dish_thickness=1.658, dish_fn=128, dish_depth=0.75, dish_invert=false, stem_clips=false, stem_walls_inset=0, stem_walls_tolerance=0.25, top_difference=6.5, key_rotation=[0,0,0], corner_radius=0.35, corner_radius_curve=2.75, legends=[""], legend_font_sizes=[6], legend_fonts=["Roboto"], legend_trans=[[0,0,0]], legend_trans2=[[0,0,0]], legend_rotation=[[0,0,0]], legend_rotation2=[[0,0,0]], legend_scale=[[0,0,0]], legend_underset=[[0,0,0]], homing_dot_length=0, homing_dot_width=0, homing_dot_x=0, homing_dot_y=0, homing_dot_z=0, polygon_layers=10, visualize_legends=false, uniform_wall_thickness=false, debug=false) {
     // FYI: I know that the curve up the side of the keycap is a little off...  If anyone knows how to calculate the correct curve for KAT profile let me know and I'll fix it!
     if (row < 1) {
         warning("We only support rows 1-5 for KAT profile caps!");
@@ -338,12 +462,14 @@ module KAT_keycap(row=1, length=18.2, width=18.2, height_extra=0, wall_thickness
     // Official KAT keycaps have a cylindrical dish when inverted:
     dish_type = dish_invert ? "cylinder" : "sphere";
     poly_keycap(
-        height=row_height[row]+height_extra, length=length, width=width, wall_thickness=wall_thickness,
+        height=row_height[row]+height_extra, length=length, width=width,
+        wall_thickness=wall_thickness,
         top_difference=top_difference, dish_tilt=dish_tilt[row],
         dish_y=dish_y[row], dish_z=dish_z[row], dish_fn=dish_fn,
         dish_invert=dish_invert, top_y=top_y[row], dish_depth=dish_depth, dish_type=dish_type,
         dish_thickness=dish_thickness, corner_radius=corner_radius,
         corner_radius_curve=corner_radius_curve,
+        stem_clips=stem_clips, stem_walls_inset=stem_walls_inset,
         legends=legends, legend_font_sizes=legend_font_sizes, legend_fonts=legend_fonts,
         legend_trans=legend_trans, legend_trans2=legend_trans2, legend_scale=legend_scale,
         legend_rotation=legend_rotation, legend_rotation2=legend_rotation2,
@@ -352,11 +478,12 @@ module KAT_keycap(row=1, length=18.2, width=18.2, height_extra=0, wall_thickness
         key_rotation=key_rotation,
         homing_dot_length=homing_dot_length, homing_dot_width=homing_dot_width,
         homing_dot_x=homing_dot_x, homing_dot_y=homing_dot_y, homing_dot_z=homing_dot_z,
+        uniform_wall_thickness=uniform_wall_thickness,
         visualize_legends=visualize_legends, debug=debug);
 }
 
 // NOTE: I double-checked and KAT profile stems really *do* go all the way to the floor!  They're not inset at all (which is different)!
-module KAT_stem(row=1, stem_type="box_cherry", key_height=9.15, key_length=18.2, key_width=18.2, height_extra=0, dish_depth=0.75, dish_thickness=1, dish_invert=false, depth=4, top_difference=6, wall_thickness=1.658, key_corner_radius=0.35, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=0, top_thickness=0.6, side_support_thickness=0.8, side_supports=[0,0,0,0], flat_support=true, locations=[[0,0,0]], key_rotation=[0,0,0]) {
+module KAT_stem(row=1, stem_type="box_cherry", key_height=9.15, key_length=18.2, key_width=18.2, height_extra=0, dish_depth=0.75, dish_thickness=1, dish_invert=false, depth=4, top_difference=6, wall_thickness=1.658, wall_extra=0.65, wall_inset=0, wall_tolerance=0.25, key_corner_radius=0.35, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=0, top_thickness=0.6, side_support_thickness=0.8, side_supports=[0,0,0,0], flat_support=true, locations=[[0,0,0]], hollow=false, key_rotation=[0,0,0], uniform_wall_thickness=false) {
     if (inset > 0) {
         warning("FYI: Official KAT profile keycaps don't have an inset stem.  The stems go all the way to the floor (but you don't have to do that if you don't want).");
     }
@@ -382,6 +509,7 @@ module KAT_stem(row=1, stem_type="box_cherry", key_height=9.15, key_length=18.2,
             top_thickness=top_thickness,
             key_corner_radius=key_corner_radius,
             wall_thickness=wall_thickness,
+            wall_extra=wall_extra, wall_inset=wall_inset, wall_tolerance=wall_tolerance,
             top_x=top_x, top_y=kat_top_y[row],
             outside_tolerance_x=outside_tolerance_x,
             outside_tolerance_y=outside_tolerance_y,
@@ -391,7 +519,8 @@ module KAT_stem(row=1, stem_type="box_cherry", key_height=9.15, key_length=18.2,
             locations=locations,
             key_rotation=key_rotation,
             side_support_thickness=side_support_thickness,
-            side_supports=side_supports);
+            side_supports=side_supports,
+            uniform_wall_thickness=uniform_wall_thickness);
     } else if (stem_type == "round_cherry") {
         stem_round_cherry(
             key_height=row_height[row]+height_extra,
@@ -404,6 +533,7 @@ module KAT_stem(row=1, stem_type="box_cherry", key_height=9.15, key_length=18.2,
             top_thickness=top_thickness,
             key_corner_radius=key_corner_radius,
             wall_thickness=wall_thickness,
+            wall_extra=wall_extra, wall_inset=wall_inset, wall_tolerance=wall_tolerance,
             top_x=top_x, top_y=kat_top_y[row],
             outside_tolerance=outside_tolerance_x,
             inside_tolerance=inside_tolerance,
@@ -412,11 +542,46 @@ module KAT_stem(row=1, stem_type="box_cherry", key_height=9.15, key_length=18.2,
             locations=locations,
             key_rotation=key_rotation,
             side_support_thickness=side_support_thickness,
-            side_supports=side_supports);
+            side_supports=side_supports,
+            uniform_wall_thickness=uniform_wall_thickness);
+    } else if (stem_type == "alps") {
+        stem_alps(
+            key_height=adjusted_height+height_extra,
+            key_length=key_length,
+            key_width=key_width,
+            dish_depth=adjusted_dish_depth,
+            dish_thickness=dish_thickness,
+            dish_invert=dish_invert,
+            dish_x=dish_x, dish_y=dish_y, dish_z=dish_z,
+            polygon_layers=polygon_layers,
+            polygon_layer_rotation=polygon_layer_rotation,
+            polygon_edges=polygon_edges,
+            polygon_curve=polygon_curve,
+            dish_type=dish_type,
+            corner_radius=key_corner_radius,
+            corner_radius_curve=corner_radius_curve,
+            top_difference=top_difference,
+            depth=depth, dish_tilt=0,
+            top_thickness=top_thickness,
+            key_corner_radius=key_corner_radius,
+            wall_thickness=wall_thickness,
+            wall_extra=wall_extra, wall_inset=wall_inset, wall_tolerance=wall_tolerance,
+            top_x=top_x, top_y=top_y,
+            outside_tolerance_x=outside_tolerance_x,
+            outside_tolerance_y=outside_tolerance_y,
+            inside_tolerance=inside_tolerance,
+            inset=inset,
+            flat_support=flat_support,
+            locations=locations,
+            key_rotation=key_rotation,
+            side_support_thickness=side_support_thickness,
+            side_supports=side_supports,
+            hollow=hollow,
+            uniform_wall_thickness=uniform_wall_thickness);
     }
 }
 
-module KAM_keycap(row=1, length=18.3, width=18.3, height_extra=0, wall_thickness=1.65, dish_thickness=1, dish_fn=128, dish_depth=1, dish_invert=false, top_difference=6.35, key_rotation=[0,0,0], corner_radius=0.5, corner_radius_curve=1.5, legends=[""], legend_font_sizes=[6], legend_fonts=["Roboto"], legend_trans=[[0,0,0]], legend_trans2=[[0,0,0]], legend_rotation=[[0,0,0]], legend_rotation2=[[0,0,0]], legend_scale=[[0,0,0]], legend_underset=[[0,0,0]], homing_dot_length=0, homing_dot_width=0, homing_dot_x=0, homing_dot_y=0, homing_dot_z=0, polygon_layers=10, visualize_legends=false, debug=false) {
+module KAM_keycap(row=1, length=18.3, width=18.3, height_extra=0, wall_thickness=1.65, dish_thickness=1, dish_fn=128, dish_depth=1, dish_invert=false, stem_clips=false, stem_walls_inset=0, stem_walls_tolerance=0.25, top_difference=6.35, key_rotation=[0,0,0], corner_radius=0.5, corner_radius_curve=1.5, legends=[""], legend_font_sizes=[6], legend_fonts=["Roboto"], legend_trans=[[0,0,0]], legend_trans2=[[0,0,0]], legend_rotation=[[0,0,0]], legend_rotation2=[[0,0,0]], legend_scale=[[0,0,0]], legend_underset=[[0,0,0]], homing_dot_length=0, homing_dot_width=0, homing_dot_x=0, homing_dot_y=0, homing_dot_z=0, polygon_layers=10, visualize_legends=false, uniform_wall_thickness=false, debug=false) {
     row_height = dish_invert ? 8.05 : 9.05; // One less if we're generating a spacebar
     if (row < 1) {
         warning("We only support rows 1 for DSA profile caps!");
@@ -428,24 +593,28 @@ module KAM_keycap(row=1, length=18.3, width=18.3, height_extra=0, wall_thickness
     dish_z = 0;
     top_y = 0;
     poly_keycap(
-        height=row_height+height_extra, length=length, width=width, wall_thickness=wall_thickness,
+        height=row_height+height_extra, length=length, width=width,
+        wall_thickness=wall_thickness,
         top_difference=top_difference, dish_tilt=0, dish_z=dish_z, dish_fn=dish_fn,
         dish_invert=dish_invert, top_y=top_y, dish_depth=dish_depth, dish_type=dish_type,
         dish_thickness=dish_thickness, corner_radius=corner_radius,
         corner_radius_curve=corner_radius_curve,
+        stem_clips=stem_clips, stem_walls_inset=stem_walls_inset,
         legends=legends, legend_font_sizes=legend_font_sizes, legend_fonts=legend_fonts,
         legend_trans=legend_trans, legend_trans2=legend_trans2, legend_scale=legend_scale,
         legend_rotation=legend_rotation, legend_rotation2=legend_rotation2,
         legend_underset=legend_underset,
-        polygon_layers=polygon_layers, polygon_layer_rotation=0, polygon_edges=4, polygon_curve=4.5,
+        polygon_layers=polygon_layers, polygon_layer_rotation=0,
+        polygon_edges=4, polygon_curve=4.5,
         homing_dot_length=homing_dot_length, homing_dot_width=homing_dot_width,
         homing_dot_x=homing_dot_x, homing_dot_y=homing_dot_y, homing_dot_z=homing_dot_z,
         key_rotation=key_rotation,
+        uniform_wall_thickness=uniform_wall_thickness,
         visualize_legends=visualize_legends, debug=debug);
 }
 
 // KAM stems are pretty simple (don't need anything special)
-module KAM_stem(stem_type="box_cherry", key_height=9.05, key_length=18.3, key_width=18.3, height_extra=0, dish_depth=1, dish_thickness=1, dish_invert=false, depth=4, top_difference=6, wall_thickness=1.65, key_corner_radius=0.35, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=0, top_thickness=0.6, side_support_thickness=0.8, side_supports=[0,0,0,0], flat_support=true, locations=[[0,0,0]], key_rotation=[0,0,0]) {
+module KAM_stem(stem_type="box_cherry", key_height=9.05, key_length=18.3, key_width=18.3, height_extra=0, dish_depth=1, dish_thickness=1, dish_invert=false, depth=4, top_difference=6, wall_thickness=1.65, wall_extra=0.65, wall_inset=0, wall_tolerance=0.25, key_corner_radius=0.35, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=0, top_thickness=0.6, side_support_thickness=0.8, side_supports=[0,0,0,0], flat_support=true, locations=[[0,0,0]], key_rotation=[0,0,0], hollow=false, uniform_wall_thickness=false) {
     if (stem_type == "box_cherry") {
         stem_box_cherry(
             key_height=key_height+height_extra,
@@ -458,6 +627,7 @@ module KAM_stem(stem_type="box_cherry", key_height=9.05, key_length=18.3, key_wi
             top_thickness=top_thickness,
             key_corner_radius=key_corner_radius,
             wall_thickness=wall_thickness,
+            wall_extra=wall_extra, wall_inset=wall_inset, wall_tolerance=wall_tolerance,
             top_x=top_x, top_y=top_y,
             outside_tolerance_x=outside_tolerance_x,
             outside_tolerance_y=outside_tolerance_y,
@@ -467,7 +637,8 @@ module KAM_stem(stem_type="box_cherry", key_height=9.05, key_length=18.3, key_wi
             locations=locations,
             key_rotation=key_rotation,
             side_support_thickness=side_support_thickness,
-            side_supports=side_supports);
+            side_supports=side_supports,
+            uniform_wall_thickness=uniform_wall_thickness);
     } else if (stem_type == "round_cherry") {
         stem_round_cherry(
             key_height=key_height+height_extra,
@@ -480,6 +651,7 @@ module KAM_stem(stem_type="box_cherry", key_height=9.05, key_length=18.3, key_wi
             top_thickness=top_thickness,
             key_corner_radius=key_corner_radius,
             wall_thickness=wall_thickness,
+            wall_extra=wall_extra, wall_inset=wall_inset, wall_tolerance=wall_tolerance,
             top_x=top_x, top_y=top_y,
             outside_tolerance=outside_tolerance_x,
             inside_tolerance=inside_tolerance,
@@ -488,7 +660,42 @@ module KAM_stem(stem_type="box_cherry", key_height=9.05, key_length=18.3, key_wi
             locations=locations,
             key_rotation=key_rotation,
             side_support_thickness=side_support_thickness,
-            side_supports=side_supports);
+            side_supports=side_supports,
+            uniform_wall_thickness=uniform_wall_thickness);
+    } else if (stem_type == "alps") {
+        stem_alps(
+            key_height=adjusted_height+height_extra,
+            key_length=key_length,
+            key_width=key_width,
+            dish_depth=adjusted_dish_depth,
+            dish_thickness=dish_thickness,
+            dish_invert=dish_invert,
+            dish_x=dish_x, dish_y=dish_y, dish_z=dish_z,
+            polygon_layers=polygon_layers,
+            polygon_layer_rotation=polygon_layer_rotation,
+            polygon_edges=polygon_edges,
+            polygon_curve=polygon_curve,
+            dish_type=dish_type,
+            corner_radius=key_corner_radius,
+            corner_radius_curve=corner_radius_curve,
+            top_difference=top_difference,
+            depth=depth, dish_tilt=0,
+            top_thickness=top_thickness,
+            key_corner_radius=key_corner_radius,
+            wall_thickness=wall_thickness,
+            wall_extra=wall_extra, wall_inset=wall_inset, wall_tolerance=wall_tolerance,
+            top_x=top_x, top_y=top_y,
+            outside_tolerance_x=outside_tolerance_x,
+            outside_tolerance_y=outside_tolerance_y,
+            inside_tolerance=inside_tolerance,
+            inset=inset,
+            flat_support=flat_support,
+            locations=locations,
+            key_rotation=key_rotation,
+            side_support_thickness=side_support_thickness,
+            side_supports=side_supports,
+            hollow=hollow,
+            uniform_wall_thickness=uniform_wall_thickness);
     }
 }
 
@@ -500,8 +707,10 @@ module KAM_stem(stem_type="box_cherry", key_height=9.05, key_length=18.3, key_wi
     * Sides are flat so that it can be easily printed on its side.  This ensures that stems end up strong and the top will feel smooth right off the printer (no sanding required).
     * Stem is not inset so it can be printed flat if needed.
 */
-module riskeycap(row=1, length=18.25, width=18.25, height_extra=0, wall_thickness=1.8, dish_thickness=0.9, dish_fn=64, dish_depth=1.5, dish_invert=false, top_difference=6, key_rotation=[0,0,0], corner_radius=1.25, corner_radius_curve=1.5, legends=[""], legend_font_sizes=[6], legend_fonts=["Roboto"], legend_trans=[[0,0,0]], legend_trans2=[[0,0,0]], legend_rotation=[[0,0,0]], legend_rotation2=[[0,0,0]], legend_scale=[[0,0,0]], legend_underset=[[0,0,0]], homing_dot_length=0, homing_dot_width=0, homing_dot_x=0, homing_dot_y=0, homing_dot_z=0, polygon_layers=10, visualize_legends=false, debug=false) {
-    adjusted_height = dish_invert ? 6.5+height_extra : 8.2+height_extra; // A bit less if we're generating a spacebar because the dish_depth is bigger than is typical
+module riskeycap(row=1, length=18.25, width=18.25, height_extra=0, wall_thickness=1.8, dish_thickness=0.9, dish_fn=64, dish_depth=1.5, dish_invert=false, stem_clips=false, stem_walls_inset=0, stem_walls_tolerance=0.25, top_difference=6, key_rotation=[0,0,0], corner_radius=1.25, corner_radius_curve=1.5, legends=[""], legend_font_sizes=[6], legend_fonts=["Roboto"], legend_trans=[[0,0,0]], legend_trans2=[[0,0,0]], legend_rotation=[[0,0,0]], legend_rotation2=[[0,0,0]], legend_scale=[[0,0,0]], legend_underset=[[0,0,0]], homing_dot_length=0, homing_dot_width=0, homing_dot_x=0, homing_dot_y=0, homing_dot_z=0, polygon_layers=10, visualize_legends=false, debug=false, uniform_wall_thickness=false) {
+    // The height needs a smidge of adjustment based on the length of the keycap
+    adjusted_height_extra = length < KEY_UNIT*1.25 ? height_extra : height_extra+0.35;
+    adjusted_height = dish_invert ? 6.5+adjusted_height_extra : 8.2+adjusted_height_extra; // A bit less if we're generating a spacebar because the dish_depth is bigger than is typical
     adjusted_dish_depth = dish_invert ? 1 : dish_depth; // Make it a smaller for inverted dishes
     if (row < 1) {
         warning("We only support rows 1 for Riskeycap profile caps!");
@@ -514,10 +723,12 @@ module riskeycap(row=1, length=18.25, width=18.25, height_extra=0, wall_thicknes
     top_y = 0;
     poly_keycap(
         height=adjusted_height, length=length, width=width, wall_thickness=wall_thickness,
-        top_difference=top_difference, dish_tilt=0, dish_z=dish_z, dish_fn=dish_fn,
-        dish_invert=dish_invert, top_y=top_y, dish_depth=adjusted_dish_depth, dish_type=dish_type,
+        top_difference=top_difference, dish_tilt=0, dish_x=0, dish_z=dish_z,
+        dish_fn=dish_fn, dish_invert=dish_invert,
+        top_y=top_y, dish_depth=adjusted_dish_depth, dish_type=dish_type,
         dish_thickness=dish_thickness, corner_radius=corner_radius,
         corner_radius_curve=corner_radius_curve,
+        stem_clips=stem_clips, stem_walls_inset=stem_walls_inset,
         legends=legends, legend_font_sizes=legend_font_sizes, legend_fonts=legend_fonts,
         legend_trans=legend_trans, legend_trans2=legend_trans2, legend_scale=legend_scale,
         legend_rotation=legend_rotation, legend_rotation2=legend_rotation2,
@@ -526,11 +737,13 @@ module riskeycap(row=1, length=18.25, width=18.25, height_extra=0, wall_thicknes
         key_rotation=key_rotation,
         homing_dot_length=homing_dot_length, homing_dot_width=homing_dot_width,
         homing_dot_x=homing_dot_x, homing_dot_y=homing_dot_y, homing_dot_z=homing_dot_z,
-        visualize_legends=visualize_legends, debug=debug);
+        visualize_legends=visualize_legends,
+        uniform_wall_thickness=uniform_wall_thickness,
+        debug=debug);
 }
 
 // Riskeycap stems are very straightforward (nothing special required; mostly defaults)
-module riskeystem(stem_type="box_cherry", key_height=8.2, key_length=18.41, key_width=18.41, height_extra=0, dish_depth=1.5, dish_thickness=0.9, dish_invert=false, depth=4, top_difference=5.25, wall_thickness=1.8, key_corner_radius=1.15, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=1, top_thickness=0.6, side_support_thickness=0.8, side_supports=[0,0,0,0], flat_support=true, locations=[[0,0,0]], key_rotation=[0,0,0]) {
+module riskeystem(stem_type="box_cherry", key_height=8.2, key_length=18.41, key_width=18.41, height_extra=0, dish_type="sphere", dish_depth=1.5, dish_thickness=0.9, dish_x=0, dish_y=0, dish_z=0, dish_invert=false, depth=4, top_difference=5.25, wall_thickness=1.8, wall_extra=0.65, wall_inset=0, wall_tolerance=0.25, key_corner_radius=1.15, corner_radius_curve=1.5, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=1, top_thickness=0.6, side_support_thickness=0.8, side_supports=[0,0,0,0], flat_support=true, locations=[[0,0,0]], polygon_layers=10, polygon_layer_rotation=0, polygon_edges=4, polygon_curve=0, key_rotation=[0,0,0], hollow=false, uniform_wall_thickness=false) {
     adjusted_height = dish_invert ? 6.5+height_extra : 8.2+height_extra; // A bit less if we're generating a spacebar
     adjusted_dish_depth = dish_invert ? 1 : dish_depth; // Make it a smaller for inverted dishes
     if (stem_type == "box_cherry") {
@@ -540,11 +753,21 @@ module riskeystem(stem_type="box_cherry", key_height=8.2, key_length=18.41, key_
             key_width=key_width,
             dish_depth=adjusted_dish_depth,
             dish_thickness=dish_thickness,
+            dish_invert=dish_invert,
+            dish_x=dish_x, dish_y=dish_y, dish_z=dish_z,
+            polygon_layers=polygon_layers,
+            polygon_layer_rotation=polygon_layer_rotation,
+            polygon_edges=polygon_edges,
+            polygon_curve=polygon_curve,
+            dish_type=dish_type,
+            corner_radius=key_corner_radius,
+            corner_radius_curve=corner_radius_curve,
             top_difference=top_difference,
             depth=depth, dish_tilt=0,
             top_thickness=top_thickness,
             key_corner_radius=key_corner_radius,
             wall_thickness=wall_thickness,
+            wall_extra=wall_extra, wall_inset=wall_inset, wall_tolerance=wall_tolerance,
             top_x=top_x, top_y=top_y,
             outside_tolerance_x=outside_tolerance_x,
             outside_tolerance_y=outside_tolerance_y,
@@ -554,7 +777,8 @@ module riskeystem(stem_type="box_cherry", key_height=8.2, key_length=18.41, key_
             locations=locations,
             key_rotation=key_rotation,
             side_support_thickness=side_support_thickness,
-            side_supports=side_supports);
+            side_supports=side_supports,
+            uniform_wall_thickness=uniform_wall_thickness);
     } else if (stem_type == "round_cherry") {
         stem_round_cherry(
             key_height=key_height+height_extra,
@@ -562,11 +786,19 @@ module riskeystem(stem_type="box_cherry", key_height=8.2, key_length=18.41, key_
             key_width=key_width,
             dish_depth=dish_depth,
             dish_thickness=dish_thickness,
+            dish_invert=dish_invert,
+            dish_x=dish_x, dish_y=dish_y, dish_z=dish_z,
+            polygon_layers=polygon_layers,
+            polygon_layer_rotation=polygon_layer_rotation,
+            polygon_edges=polygon_edges,
+            polygon_curve=polygon_curve,
+            dish_type=dish_type,
+            corner_radius_curve=corner_radius_curve,
             top_difference=top_difference,
             depth=depth, dish_tilt=0,
             top_thickness=top_thickness,
-            key_corner_radius=key_corner_radius,
             wall_thickness=wall_thickness,
+            wall_extra=wall_extra, wall_inset=wall_inset, wall_tolerance=wall_tolerance,
             top_x=top_x, top_y=top_y,
             outside_tolerance=outside_tolerance_x,
             inside_tolerance=inside_tolerance,
@@ -575,7 +807,42 @@ module riskeystem(stem_type="box_cherry", key_height=8.2, key_length=18.41, key_
             locations=locations,
             key_rotation=key_rotation,
             side_support_thickness=side_support_thickness,
-            side_supports=side_supports);
+            side_supports=side_supports,
+            uniform_wall_thickness=uniform_wall_thickness);
+    } else if (stem_type == "alps") {
+        stem_alps(
+            key_height=adjusted_height+height_extra,
+            key_length=key_length,
+            key_width=key_width,
+            dish_depth=adjusted_dish_depth,
+            dish_thickness=dish_thickness,
+            dish_invert=dish_invert,
+            dish_x=dish_x, dish_y=dish_y, dish_z=dish_z,
+            polygon_layers=polygon_layers,
+            polygon_layer_rotation=polygon_layer_rotation,
+            polygon_edges=polygon_edges,
+            polygon_curve=polygon_curve,
+            dish_type=dish_type,
+            corner_radius=key_corner_radius,
+            corner_radius_curve=corner_radius_curve,
+            top_difference=top_difference,
+            depth=depth, dish_tilt=0,
+            top_thickness=top_thickness,
+            key_corner_radius=key_corner_radius,
+            wall_thickness=wall_thickness,
+            wall_extra=wall_extra, wall_inset=wall_inset, wall_tolerance=wall_tolerance,
+            top_x=top_x, top_y=top_y,
+            outside_tolerance_x=outside_tolerance_x,
+            outside_tolerance_y=outside_tolerance_y,
+            inside_tolerance=inside_tolerance,
+            inset=inset,
+            flat_support=flat_support,
+            locations=locations,
+            key_rotation=key_rotation,
+            side_support_thickness=side_support_thickness,
+            side_supports=side_supports,
+            hollow=hollow,
+            uniform_wall_thickness=uniform_wall_thickness);
     }
 }
 
