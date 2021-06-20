@@ -179,8 +179,8 @@ module stem_box_cherry(key_height, key_length, key_width, dish_depth, dish_thick
                                 key_length-wall_thickness*2-wall_tolerance*2-wall_extra*2,
                                 key_width-wall_thickness*2-wall_tolerance*2-wall_extra*2],
                             xy2=[
-                                key_length-wall_thickness*2-wall_tolerance*2-top_difference*1.15-wall_extra*2,
-                                key_width-wall_thickness*2-wall_tolerance*2-top_difference*1.15-wall_extra*2],
+                                key_length-wall_thickness*2-wall_tolerance*2-top_difference*1.333-wall_extra*2,
+                                key_width-wall_thickness*2-wall_tolerance*2-top_difference*1.333-wall_extra*2],
                             xy2_offset=[top_x,top_y],
                             h=key_height, r=key_corner_radius/2, center=false);
                         translate([0,0,key_height/2+key_height-dish_depth-dish_thickness-top_thickness]) // Cut off top

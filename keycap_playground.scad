@@ -110,7 +110,7 @@ STEM_TYPE = "box_cherry"; // "box_cherry" (default), "round_cherry" (harder to p
 STEM_HOLLOW = false; // Only applies to Alps: Whether or not the inside is hollow
 STEM_HEIGHT = 4; // How far into the keycap's stem the switch's stem can go (4 is "normal keycap")
 // NOTE: For Alps you typically want STEM_HEIGHT=3.5 (slightly shorter)
-STEM_TOP_THICKNESS = 0.4; // The part that resides under the keycap, connecting stems and keycap together
+STEM_TOP_THICKNESS = 0.5; // The part that resides under the keycap, connecting stems and keycap together
 STEM_INSIDE_TOLERANCE = 0.25; // Increases the size of the empty space(s) in the stem
 // NOTE: For Alps stems I recommend reducing these two values to something like 0.1 or 0.05:
 STEM_OUTSIDE_TOLERANCE_X = 0.05; // Shrinks the stem a bit on the X axis (both axis for round_cherry)
