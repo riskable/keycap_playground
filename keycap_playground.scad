@@ -1,7 +1,7 @@
 // Riskable's Keycap Playground -- Use this tool to try out all your cool keycap ideas.
 
 // AUTHOR: Riskable <riskable@youknowwhat.com>
-// VERSION: 1.5 (Changelog is at the bottom)
+// VERSION: 1.5.1 (Changelog is at the bottom)
 
 /* NOTES
     * Want to understand how to use this file? See: https://youtu.be/WDlRZMvisA4
@@ -920,6 +920,8 @@ module render_keycap(stuff_to_render) {
 render_keycap(RENDER);
 
 /* CHANGELOG:
+    1.5.1:
+        * Added a flared base to the box_cherry stem type.
     1.5:
         * Added preliminary support for a UNIFORM_WALL_THICKNESS feature (mostly useful for injection moulding).
         * Added support for having an interior wall that's part of the stem; separate from the keycap itself (STEM_SIDES_WALL_THICKNESS feature).  This is so that side-facing legends always have something to print on just like with STEM_TOP_THICKNESS.  It also makes it so you can print the stem as a separate unit from the keycap when making transparent legends (so you don't need a multi-material printer to get nice-looking transparent-legend keycaps).
