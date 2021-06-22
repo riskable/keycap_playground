@@ -290,7 +290,8 @@ module _stem_box_cherry(key_height, key_length, key_width, dish_depth, dish_thic
             } else {
                 translate([0,0,(key_height-dish_depth-dish_thickness-depth-inset)/2+depth+inset])
                     squarish_rpoly(
-                        xy=[length,width],
+                        xy1=[length,width],
+                        xy2=[length*1.5,width*1.5],
                         h=key_height-dish_depth-dish_thickness-depth-inset,
                         r=corner_radius, center=true);
             }
@@ -536,12 +537,19 @@ module stem_support(key_height, key_length, key_width, dish_depth, dish_thicknes
         // Cut out holes around the stem locations
         if (stem_type=="box_cherry") { // This is a box_cherry stem
             for (loc=[0:1:len(locations)-1]) {
-                translate([locations[loc][0],locations[loc][1],key_height/2+locations[loc][2]-0.01])
+                translate([locations[loc][0],locations[loc][1],key_height/2+locations[loc][2]-0.01]) union() {
                     squarish_rpoly(
                         xy=[
                             box_cherry_length+support_distance*2,
                             box_cherry_width+support_distance*2],
                         h=key_height, r=stem_corner_radius, center=true);
+                    translate([0,0,(key_height-dish_depth-dish_thickness-stem_depth-inset)/2+support_distance]) squarish_rpoly(
+                            xy1=[box_cherry_length,box_cherry_width],
+                            xy2=[
+                                box_cherry_length*1.5+support_distance*2,
+                                box_cherry_width*1.5+support_distance*2],
+                            h=key_height-dish_depth-dish_thickness-stem_depth-inset, r=key_corner_radius/2, center=true);
+                }
             }
         } else if (stem_type=="round_cherry") { // This is a round_cherry stem
             for (loc=[0:1:len(locations)-1]) {

@@ -1,4 +1,6 @@
-// This .scad demonstrates what you want to set/override in order to make a snap-fit keycap+stem
+// This .scad demonstrates what you want to set/override in order to make a snap-fit keycap+stem.
+
+// You *could* just use this to make your keycap but sometimes it's easier to just modify these values in keycap_playground.scad.
 
 include <keycap_playground.scad>
 
@@ -6,7 +8,7 @@ include <keycap_playground.scad>
 RENDER = ["keycap", "stem"]; // Supported values: keycap, stem, legends, row, row_stems, row_legends, custom
 // NOTE: You'll want to render the keycap and stem separately in reality
 
-KEY_PROFILE = "";
+KEY_PROFILE = "riskeycap";
 //KEY_ROTATION = [0,109.2,90]; // Use this amount of rotation for the stem (a little different than stock riskeycap rotation)
 // Clip-in stems take up some space so we need slightly thinner outside walls in most cases:
 WALL_THICKNESS = 0.45*1.85;
