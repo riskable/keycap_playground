@@ -379,16 +379,61 @@ module poly_keycap(height=9.0, length=18, width=18,
                     legend_underset[0] ? legend_underset[0]: [0,0,0]);
                 if (visualize_legends) {
                     %translate(underset) {
-                        translate(trans2) rotate(rotation2) translate(trans) rotate(rotation) scale(l_scale)
+                      translate(trans2) rotate(rotation2)
+                        translate(trans) rotate(rotation)
+                          scale(l_scale)
                             rotate([tilt_above_curved,0,0])
-                                draw_legend(legend, font_size, font, height);
+                                difference() {
+                                    draw_legend(legend, font_size, font, height);
+                                    // Make sure the preview matches the curve of the dish on the bottom
+                                    translate([0,0,-height+dish_depth-dish_z]) _poly_keycap(
+                                        height=height, length=length, width=width,
+                                        wall_thickness=wall_thickness,
+                                        top_difference=top_difference, dish_tilt=dish_tilt,
+                                        dish_tilt_curve=dish_tilt_curve, stem_clips=stem_clips,
+                                        stem_walls_inset=stem_walls_inset,
+                                        top_x=top_x, top_y=top_y, dish_depth=dish_depth,
+                                        dish_x=dish_x, dish_y=dish_y, dish_z=dish_z,
+                                        dish_division_x=dish_division_x,
+                                        dish_division_y=dish_division_y,
+                                        dish_thickness=dish_thickness+0.1, dish_fn=dish_fn,
+                                        polygon_layers=polygon_layers,
+                                        polygon_layer_rotation=polygon_layer_rotation,
+                                        polygon_edges=polygon_edges, polygon_curve=polygon_curve,
+                                        dish_type=dish_type, corner_radius=corner_radius,
+                                        corner_radius_curve=corner_radius_curve,
+                                        polygon_rotation=polygon_rotation,
+                                        dish_invert=dish_invert);
+                                }
                     }
                 } else {
                     // NOTE: This translate([0,0,0.001]) call is just to fix preview rendering
                     translate(underset) translate([0,0,0.001]) intersection() {
-                        translate(trans2) rotate(rotation2) translate(trans) rotate(rotation) scale(l_scale)
+                      translate(trans2) rotate(rotation2)
+                        translate(trans) rotate(rotation)
+                          scale(l_scale)
                             rotate([tilt_above_curved,0,0])
-                                draw_legend(legend, font_size, font, height);
+                                difference() {
+                                    draw_legend(legend, font_size, font, height);
+                                    translate([0,0,-height+dish_depth-dish_z]) _poly_keycap(
+                                        height=height, length=length, width=width,
+                                        wall_thickness=wall_thickness,
+                                        top_difference=top_difference, dish_tilt=dish_tilt,
+                                        dish_tilt_curve=dish_tilt_curve, stem_clips=stem_clips,
+                                        stem_walls_inset=stem_walls_inset,
+                                        top_x=top_x, top_y=top_y, dish_depth=dish_depth,
+                                        dish_x=dish_x, dish_y=dish_y, dish_z=dish_z,
+                                        dish_division_x=dish_division_x,
+                                        dish_division_y=dish_division_y,
+                                        dish_thickness=dish_thickness+0.1, dish_fn=dish_fn,
+                                        polygon_layers=polygon_layers,
+                                        polygon_layer_rotation=polygon_layer_rotation,
+                                        polygon_edges=polygon_edges, polygon_curve=polygon_curve,
+                                        dish_type=dish_type, corner_radius=corner_radius,
+                                        corner_radius_curve=corner_radius_curve,
+                                        polygon_rotation=polygon_rotation,
+                                        dish_invert=dish_invert);
+                                }
                                 _poly_keycap(
                                     height=height, length=length, width=width,
                                     wall_thickness=wall_thickness,
@@ -413,10 +458,10 @@ module poly_keycap(height=9.0, length=18, width=18,
             // Interior cutout (i.e. make room inside the keycap)
             // TODO: Add support for snap-fit stems with uniform_wall_thickness
             if (uniform_wall_thickness) { // Make the interior match the shape of the dish
-                translate([0,0,-wall_thickness]) {
+                translate([0,0,-0.0001]) {
                     _poly_keycap(
-                        height=height, length=length-wall_thickness*1.333,
-                        width=width-wall_thickness*1.333, wall_thickness=wall_thickness,
+                        height=height-wall_thickness, length=length-wall_thickness*2,
+                        width=width-wall_thickness*2, wall_thickness=wall_thickness,
                         top_difference=top_difference, dish_tilt=dish_tilt,
                         dish_tilt_curve=dish_tilt_curve, stem_clips=stem_clips,
                         stem_walls_inset=stem_walls_inset,
@@ -461,32 +506,36 @@ module poly_keycap(height=9.0, length=18, width=18,
                         if (stem_clips) {
                             echo(stem_clips=stem_clips);
                             echo(stem_walls_inset=stem_walls_inset);
-                            translate([length/6,-width/2+clip_width/2+wall_thickness,0]) difference() {
-                                cube([length/5,clip_width,clip_height], center=true);
-                                translate([0,0,-clip_height/1.333])
-                                    rotate([45,0,0])
-                                        cube([length,10,clip_height], center=true);
-                            }
-                            translate([-length/6,-width/2+clip_width/2+wall_thickness,0]) difference() {
-                                cube([length/5,clip_width,clip_height], center=true);
-                                translate([0,0,-clip_height/1.333])
-                                    rotate([45,0,0])
-                                        cube([length,10,clip_height], center=true);
-                            }
+                            translate([length/6,-width/2+clip_width/2+wall_thickness,0])
+                                difference() {
+                                    cube([length/5,clip_width,clip_height], center=true);
+                                    translate([0,0,-clip_height/1.333])
+                                        rotate([45,0,0])
+                                            cube([length,10,clip_height], center=true);
+                                }
+                            translate([-length/6,-width/2+clip_width/2+wall_thickness,0])
+                                difference() {
+                                    cube([length/5,clip_width,clip_height], center=true);
+                                    translate([0,0,-clip_height/1.333])
+                                        rotate([45,0,0])
+                                            cube([length,10,clip_height], center=true);
+                                }
                             // Mirror the clips on the other side
                             mirror([0,1,0]) {
-                                translate([length/6,-width/2+clip_width/2+wall_thickness,0]) difference() {
-                                    cube([length/5,clip_width,clip_height], center=true);
-                                    translate([0,0,-clip_height/1.333])
-                                        rotate([45,0,0])
-                                            cube([length,10,clip_height], center=true);
-                                }
-                                translate([-length/6,-width/2+clip_width/2+wall_thickness,0]) difference() {
-                                    cube([length/5,clip_width,clip_height], center=true);
-                                    translate([0,0,-clip_height/1.333])
-                                        rotate([45,0,0])
-                                            cube([length,10,clip_height], center=true);
-                                }
+                                translate([length/6,-width/2+clip_width/2+wall_thickness,0])
+                                    difference() {
+                                        cube([length/5,clip_width,clip_height], center=true);
+                                        translate([0,0,-clip_height/1.333])
+                                            rotate([45,0,0])
+                                                cube([length,10,clip_height], center=true);
+                                    }
+                                translate([-length/6,-width/2+clip_width/2+wall_thickness,0])
+                                    difference() {
+                                        cube([length/5,clip_width,clip_height], center=true);
+                                        translate([0,0,-clip_height/1.333])
+                                            rotate([45,0,0])
+                                                cube([length,10,clip_height], center=true);
+                                    }
                             }
                         }
                     }

@@ -35,7 +35,7 @@ module just_legends(height=9.0,
                     l_scale = legend_scale[i] ? legend_scale[i] : legend_scale[0];
                     underset = legend_underset[i] ? legend_underset[i] : (legend_underset[0] ? legend_underset[0]: [0,0,0]);
                     translate(underset) translate(trans2) rotate(rotation2) translate(trans) rotate(rotation)
-                        rotate([tilt_above_curved,0,0]) scale(l_scale)
+                        scale(l_scale) rotate([tilt_above_curved,0,0])
                             draw_legend(legend, font_size, font, height);
                 }
             }

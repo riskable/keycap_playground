@@ -55,24 +55,98 @@ module cherry_cross(depth=4, tolerance=0.1, flare_base=true) {
     }
 }
 
-// TODO: Make this work properly with polygon_rotation and whatnot
 // Generates *just* the top part of the stem that goes under the keycap (mostly for making underset legends)
-module stem_top(key_height, key_length, key_width, dish_depth, dish_thickness, top_difference, dish_tilt=0, wall_thickness=1.35, key_corner_radius=0.5, top_x=0, top_y=0, top_thickness=0.6, wall_extra=0.65, wall_inset=0, key_rotation=[0,0,0], uniform_wall_thickness=false) {
+module stem_top(key_height, key_length, key_width, dish_depth, dish_thickness, top_difference, dish_tilt=0, wall_thickness=1.35, key_corner_radius=0.5, top_x=0, top_y=0, top_thickness=0.6, wall_extra=0.65, wall_inset=0, wall_tolerance=0.25, key_rotation=[0,0,0], polygon_layers=5, polygon_layer_rotation=0, polygon_curve=0,
+    dish_tilt=0, dish_tilt_curve=false, dish_depth=1, dish_x=0, dish_y=0,
+    dish_z=-0.75, dish_thickness=2, dish_fn=32, dish_tilt_curve=false,  
+    polygon_edges=4, dish_type="cylinder", corner_radius=0.5, corner_radius_curve=0,
+    polygon_rotation=false, dish_invert=false, uniform_wall_thickness=false) {
     // Generate a top layer that spans the entire width of the keycap so we have something legends can print on
     // NOTE: We generate it similarly to poly_keycap()'s trapezoidal interior cutout so we have a precise fit
     // Give the "undershelf" a distinct color so you know it's there and not the same as the keycap:
     color("#620093") // Purple
-    rotate(key_rotation) difference() {
-        squarish_rpoly(
-            xy1=[key_length-wall_thickness*2,key_width-wall_thickness*2],
-            xy2=[key_length-wall_thickness*2-top_difference,
-                key_width-wall_thickness*2-top_difference],
-            xy2_offset=[top_x,top_y],
-            h=key_height, r=key_corner_radius/2, center=false);
-        translate([0,0,key_height/2+key_height-dish_depth-dish_thickness]) // Cut off top
-            cube([key_length*2, key_width*2, key_height], center=true);
-        translate([0,0,key_height/2-dish_depth-dish_thickness-top_thickness]) // Cut off bottom
-            cube([key_length*2,key_width*2,key_height], center=true);
+    rotate(key_rotation) if (uniform_wall_thickness) {
+            difference() {
+                translate([0,0,-0.001]) _poly_keycap(
+                // Since this is an interior cutout sort of thing we need to cut the height down slightly so there's some overlap
+                    height=key_height-wall_thickness/1.1, length=key_length-wall_thickness*2,
+                    width=key_width-wall_thickness*2, wall_thickness=wall_thickness,
+                    top_difference=top_difference, dish_tilt=dish_tilt,
+                    dish_tilt_curve=dish_tilt_curve,
+                    top_x=top_x, top_y=top_y, dish_depth=dish_depth,
+                    dish_x=dish_x, dish_y=dish_y, dish_z=dish_z,
+                    dish_thickness=dish_thickness, dish_fn=dish_fn,
+                    polygon_layers=polygon_layers,
+                    polygon_layer_rotation=polygon_layer_rotation,
+                    polygon_edges=polygon_edges, polygon_curve=polygon_curve,
+                    dish_type=dish_type, corner_radius=key_corner_radius/2,
+                    corner_radius_curve=corner_radius_curve,
+                    polygon_rotation=polygon_rotation,
+                    dish_invert=dish_invert);
+                if (wall_extra != 0) { // Stem will get its own walls
+                    translate([0,0,-top_thickness]) _poly_keycap(
+                        height=key_height-wall_thickness-top_thickness,
+                        length=key_length-wall_thickness*2-wall_extra*2,
+                        width=key_width-wall_thickness*2-wall_extra*2,
+                        wall_thickness=wall_thickness,
+                        top_difference=top_difference, dish_tilt=dish_tilt,
+                        dish_tilt_curve=dish_tilt_curve,
+                        top_x=top_x, top_y=top_y, dish_depth=dish_depth/2,
+                        dish_x=dish_x, dish_y=dish_y, dish_z=dish_z,
+                        dish_thickness=dish_thickness, dish_fn=dish_fn,
+                        polygon_layers=polygon_layers,
+                        polygon_layer_rotation=polygon_layer_rotation,
+                        polygon_edges=polygon_edges, polygon_curve=polygon_curve,
+                        dish_type=dish_type, corner_radius=key_corner_radius/2,
+                        corner_radius_curve=corner_radius_curve,
+                        polygon_rotation=polygon_rotation,
+                        dish_invert=dish_invert);
+                } else { // Cancel out the operation by removing the top/sides entirely
+                    translate([0,0,0]) _poly_keycap(
+                        height=key_height-wall_thickness-top_thickness,
+                        length=key_length,
+                        width=key_width,
+                        wall_thickness=wall_thickness,
+                        top_difference=top_difference, dish_tilt=dish_tilt,
+                        dish_tilt_curve=dish_tilt_curve,
+                        top_x=top_x, top_y=top_y, dish_depth=dish_depth,
+                        dish_x=dish_x, dish_y=dish_y, dish_z=dish_z,
+                        dish_thickness=dish_thickness, dish_fn=dish_fn,
+                        polygon_layers=polygon_layers,
+                        polygon_layer_rotation=polygon_layer_rotation,
+                        polygon_edges=polygon_edges, polygon_curve=polygon_curve,
+                        dish_type=dish_type, corner_radius=key_corner_radius/2,
+                        corner_radius_curve=corner_radius_curve,
+                        polygon_rotation=polygon_rotation,
+                        dish_invert=dish_invert);
+                }
+                translate([0,0,-key_height/2]) // Cut off bottom
+                    cube([key_length*2, key_width*2, key_height], center=true);
+                if (wall_inset) {
+                    translate([0,0,-key_height/2+wall_inset]) // Cut off the bottom of the walls
+                        difference() {
+                            cube([key_length*2, key_width*2, key_height], center=true);
+                            // Cut out a space in the middle for the stem so we don't end up cutting it off along with the walls
+                            cube([
+                                CHERRY_BOX_STEM_LENGTH,
+                                CHERRY_BOX_STEM_WIDTH,
+                                key_height*4], center=true);
+                        }
+                }
+            }
+        } else {
+            difference() {
+                squarish_rpoly(
+                    xy1=[key_length-wall_thickness*2,key_width-wall_thickness*2],
+                    xy2=[key_length-wall_thickness*2-top_difference,
+                        key_width-wall_thickness*2-top_difference],
+                    xy2_offset=[top_x,top_y],
+                    h=key_height, r=key_corner_radius/2, center=false);
+                translate([0,0,key_height/2+key_height-dish_depth-dish_thickness]) // Cut off top
+                    cube([key_length*2, key_width*2, key_height], center=true);
+                translate([0,0,key_height/2-dish_depth-dish_thickness-top_thickness]) // Cut off bottom
+                    cube([key_length*2,key_width*2,key_height], center=true);
+        }
     }
 }
 
@@ -97,9 +171,10 @@ module stem_box_cherry(key_height, key_length, key_width, dish_depth, dish_thick
     rotate(key_rotation) 
         if (uniform_wall_thickness) {
             difference() {
-                translate([0,0,-wall_thickness]) _poly_keycap(
-                    height=key_height, length=key_length-wall_thickness*1.33,
-                    width=key_width-wall_thickness*1.33, wall_thickness=wall_thickness,
+                translate([0,0,-0.001]) _poly_keycap(
+                // Since this is an interior cutout sort of thing we need to cut the height down slightly so there's some overlap
+                    height=key_height-wall_thickness/1.1, length=key_length-wall_thickness*2,
+                    width=key_width-wall_thickness*2, wall_thickness=wall_thickness,
                     top_difference=top_difference, dish_tilt=dish_tilt,
                     dish_tilt_curve=dish_tilt_curve,
                     top_x=top_x, top_y=top_y, dish_depth=dish_depth,
@@ -113,40 +188,41 @@ module stem_box_cherry(key_height, key_length, key_width, dish_depth, dish_thick
                     polygon_rotation=polygon_rotation,
                     dish_invert=dish_invert);
                 if (wall_extra != 0) { // Stem will get its own walls
-                    translate([0,0,-wall_thickness]) _poly_keycap(
-                            height=key_height, length=key_length-wall_thickness*1.333-wall_extra*2,
-                            width=key_width-wall_thickness*1.333-wall_extra*2,
-                            wall_thickness=wall_thickness,
-                            top_difference=top_difference, dish_tilt=dish_tilt,
-                            dish_tilt_curve=dish_tilt_curve,
-                            top_x=top_x, top_y=top_y, dish_depth=dish_depth,
-                            dish_x=dish_x, dish_y=dish_y, dish_z=dish_z,
-                            dish_thickness=dish_thickness, dish_fn=dish_fn,
-                            polygon_layers=polygon_layers,
-                            polygon_layer_rotation=polygon_layer_rotation,
-                            polygon_edges=polygon_edges, polygon_curve=polygon_curve,
-                            dish_type=dish_type, corner_radius=key_corner_radius/2,
-                            corner_radius_curve=corner_radius_curve,
-                            polygon_rotation=polygon_rotation,
-                            dish_invert=dish_invert);
+                    translate([0,0,-top_thickness]) _poly_keycap(
+                        height=key_height-wall_thickness-top_thickness,
+                        length=key_length-wall_thickness*2-wall_extra*2,
+                        width=key_width-wall_thickness*2-wall_extra*2,
+                        wall_thickness=wall_thickness,
+                        top_difference=top_difference, dish_tilt=dish_tilt,
+                        dish_tilt_curve=dish_tilt_curve,
+                        top_x=top_x, top_y=top_y, dish_depth=dish_depth/2,
+                        dish_x=dish_x, dish_y=dish_y, dish_z=dish_z,
+                        dish_thickness=dish_thickness, dish_fn=dish_fn,
+                        polygon_layers=polygon_layers,
+                        polygon_layer_rotation=polygon_layer_rotation,
+                        polygon_edges=polygon_edges, polygon_curve=polygon_curve,
+                        dish_type=dish_type, corner_radius=key_corner_radius/2,
+                        corner_radius_curve=corner_radius_curve,
+                        polygon_rotation=polygon_rotation,
+                        dish_invert=dish_invert);
                 } else { // Cancel out the operation by removing the top/sides entirely
-                    translate([0,0,-wall_thickness]) _poly_keycap(
-                            height=key_height,
-                            length=key_length-wall_thickness*1.33,
-                            width=key_width-wall_thickness*1.33,
-                            wall_thickness=wall_thickness,
-                            top_difference=top_difference, dish_tilt=dish_tilt,
-                            dish_tilt_curve=dish_tilt_curve,
-                            top_x=top_x, top_y=top_y, dish_depth=dish_depth,
-                            dish_x=dish_x, dish_y=dish_y, dish_z=dish_z,
-                            dish_thickness=dish_thickness, dish_fn=dish_fn,
-                            polygon_layers=polygon_layers,
-                            polygon_layer_rotation=polygon_layer_rotation,
-                            polygon_edges=polygon_edges, polygon_curve=polygon_curve,
-                            dish_type=dish_type, corner_radius=key_corner_radius/2,
-                            corner_radius_curve=corner_radius_curve,
-                            polygon_rotation=polygon_rotation,
-                            dish_invert=dish_invert);
+                    translate([0,0,0]) _poly_keycap(
+                        height=key_height-wall_thickness-top_thickness,
+                        length=key_length,
+                        width=key_width,
+                        wall_thickness=wall_thickness,
+                        top_difference=top_difference, dish_tilt=dish_tilt,
+                        dish_tilt_curve=dish_tilt_curve,
+                        top_x=top_x, top_y=top_y, dish_depth=dish_depth,
+                        dish_x=dish_x, dish_y=dish_y, dish_z=dish_z,
+                        dish_thickness=dish_thickness, dish_fn=dish_fn,
+                        polygon_layers=polygon_layers,
+                        polygon_layer_rotation=polygon_layer_rotation,
+                        polygon_edges=polygon_edges, polygon_curve=polygon_curve,
+                        dish_type=dish_type, corner_radius=key_corner_radius/2,
+                        corner_radius_curve=corner_radius_curve,
+                        polygon_rotation=polygon_rotation,
+                        dish_invert=dish_invert);
                 }
                 translate([0,0,-key_height/2]) // Cut off bottom
                     cube([key_length*2, key_width*2, key_height], center=true);
@@ -155,7 +231,10 @@ module stem_box_cherry(key_height, key_length, key_width, dish_depth, dish_thick
                         difference() {
                             cube([key_length*2, key_width*2, key_height], center=true);
                             // Cut out a space in the middle for the stem so we don't end up cutting it off along with the walls
-                            cube([CHERRY_BOX_STEM_LENGTH,CHERRY_BOX_STEM_WIDTH,key_height*4], center=true);
+                            cube([
+                                CHERRY_BOX_STEM_LENGTH,
+                                CHERRY_BOX_STEM_WIDTH,
+                                key_height*4], center=true);
                         }
                 }
             }
@@ -267,6 +346,7 @@ module _stem_box_cherry(key_height, key_length, key_width, dish_depth, dish_thic
     right_support = side_supports[1];
     front_support = side_supports[2];
     back_support = side_supports[3];
+    stem_rotation = (polygon_layer_rotation*polygon_layers)/1.25;
     rotate(key_rotation) {
         translate(location) { // Move the stem to it's designated location
             difference() {
@@ -276,23 +356,26 @@ module _stem_box_cherry(key_height, key_length, key_width, dish_depth, dish_thic
                     cherry_cross(tolerance=inside_tolerance, flare_base=true);
             }
             // Generate the top part of the stem that connects to the underside of the keycap
+            // TODO: Make this *actually* uniform:
             if (uniform_wall_thickness) {
-                translate([0,0,(key_height-dish_depth-depth-inset)/2+depth+inset])
+                translate([
+                  0,
+                  0,
+                  (key_height-dish_depth-depth-inset+dish_z-top_thickness)/2+depth+inset-wall_thickness/2])
                     difference() {
                         squarish_rpoly(
-                            xy1=[length,width],
-                            xy2=[length*1.5,width*1.5],
-                            h=key_height-dish_depth-depth-inset,
+                            xy=[length,width],
+                            h=key_height-dish_depth-depth-inset+dish_z-top_thickness,
                             r=corner_radius, center=true);
                         translate([0,0,-depth/2])
                             cherry_cross(tolerance=inside_tolerance, flare_base=false);
                     }
             } else {
-                translate([0,0,(key_height-dish_depth-dish_thickness-depth-inset)/2+depth+inset])
+                translate([0,0,(key_height-dish_depth-dish_thickness-depth-inset+dish_z)/2+depth+inset])
                     squarish_rpoly(
                         xy1=[length,width],
                         xy2=[length*1.5,width*1.5],
-                        h=key_height-dish_depth-dish_thickness-depth-inset,
+                        h=key_height-dish_depth-dish_thickness-depth-inset+dish_z,
                         r=corner_radius, center=true);
             }
           color("#005500") // Green
@@ -315,8 +398,8 @@ module _stem_box_cherry(key_height, key_length, key_width, dish_depth, dish_thic
                     cylinder(d=1.85, h=inset*4, center=true, $fn=32);
                 }
                 // Add a flat thing at the bottom that makes it easy to pull the supports off
-                translate([0,0,inset/4]) difference() {
-                    cube([support_dia,support_dia,inset/2], center=true);
+                translate([0,0,(inset/2+0.01)/2]) difference() { // 0.01 is to work around a bug
+                    cube([support_dia,support_dia,inset/2+0.01], center=true);
                     cylinder(d=3, h=inset/2, $fn=32, center=true); // Cut a hole out of the middle to ensure perimeters (strength)
                 }
             }
@@ -633,9 +716,9 @@ module stem_alps(key_height, key_length, key_width, dish_depth, dish_thickness, 
     rotate(key_rotation) 
         if (uniform_wall_thickness) {
             difference() {
-                translate([0,0,-wall_thickness]) _poly_keycap(
-                    height=key_height, length=key_length-wall_thickness*1.33,
-                    width=key_width-wall_thickness*1.33, wall_thickness=wall_thickness,
+                translate([0,0,0]) _poly_keycap(
+                    height=key_height-wall_Thickness, length=key_length-wall_thickness*2,
+                    width=key_width-wall_thickness*2, wall_thickness=wall_thickness,
                     top_difference=top_difference, dish_tilt=dish_tilt,
                     dish_tilt_curve=dish_tilt_curve,
                     top_x=top_x, top_y=top_y, dish_depth=dish_depth,
@@ -649,27 +732,27 @@ module stem_alps(key_height, key_length, key_width, dish_depth, dish_thickness, 
                     polygon_rotation=polygon_rotation,
                     dish_invert=dish_invert);
                 if (wall_extra != 0) { // Stem will get its own walls
-                    translate([0,0,-wall_thickness]) _poly_keycap(
-                            height=key_height, length=key_length-wall_thickness*1.333-wall_extra*2,
-                            width=key_width-wall_thickness*1.333-wall_extra*2,
-                            wall_thickness=wall_thickness,
-                            top_difference=top_difference, dish_tilt=dish_tilt,
-                            dish_tilt_curve=dish_tilt_curve,
-                            top_x=top_x, top_y=top_y, dish_depth=dish_depth,
-                            dish_x=dish_x, dish_y=dish_y, dish_z=dish_z,
-                            dish_thickness=dish_thickness, dish_fn=dish_fn,
-                            polygon_layers=polygon_layers,
-                            polygon_layer_rotation=polygon_layer_rotation,
-                            polygon_edges=polygon_edges, polygon_curve=polygon_curve,
-                            dish_type=dish_type, corner_radius=key_corner_radius/2,
-                            corner_radius_curve=corner_radius_curve,
-                            polygon_rotation=polygon_rotation,
-                            dish_invert=dish_invert);
+                    translate([0,0,0]) _poly_keycap(
+                        height=key_height-wall_thickness, length=key_length-wall_thickness*2-wall_extra*2,
+                        width=key_width-wall_thickness*2-wall_extra*2,
+                        wall_thickness=wall_thickness,
+                        top_difference=top_difference, dish_tilt=dish_tilt,
+                        dish_tilt_curve=dish_tilt_curve,
+                        top_x=top_x, top_y=top_y, dish_depth=dish_depth,
+                        dish_x=dish_x, dish_y=dish_y, dish_z=dish_z,
+                        dish_thickness=dish_thickness, dish_fn=dish_fn,
+                        polygon_layers=polygon_layers,
+                        polygon_layer_rotation=polygon_layer_rotation,
+                        polygon_edges=polygon_edges, polygon_curve=polygon_curve,
+                        dish_type=dish_type, corner_radius=key_corner_radius/2,
+                        corner_radius_curve=corner_radius_curve,
+                        polygon_rotation=polygon_rotation,
+                        dish_invert=dish_invert);
                 } else { // Cancel out the operation by removing the top/sides entirely
-                    translate([0,0,-wall_thickness]) _poly_keycap(
+                    translate([0,0,0]) _poly_keycap(
                             height=key_height,
-                            length=key_length-wall_thickness*1.33,
-                            width=key_width-wall_thickness*1.33,
+                            length=key_length-wall_thickness*2,
+                            width=key_width-wall_thickness*2,
                             wall_thickness=wall_thickness,
                             top_difference=top_difference, dish_tilt=dish_tilt,
                             dish_tilt_curve=dish_tilt_curve,
