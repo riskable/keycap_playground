@@ -57,8 +57,11 @@ module DSA_keycap(row=1, length=18.41, width=18.41, height_extra=0, wall_thickne
 }
 
 // DSA Stems are pretty simple (don't need anything special)
-module DSA_stem(stem_type="box_cherry", key_height=7.3914, key_length=18.41, key_width=18.41, height_extra=0, dish_depth=1, dish_thickness=1, dish_invert=false, depth=4, top_difference=6, wall_thickness=1.35, wall_extra=0.65, wall_inset=0, wall_tolerance=0.25, key_corner_radius=0.5, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=0, top_thickness=0.6, side_support_thickness=0.8, side_supports=[0,0,0,0], flat_support=true, locations=[[0,0,0]], key_rotation=[0,0,0], hollow=false, uniform_wall_thickness=false) {
+module DSA_stem(stem_type="box_cherry", key_height=7.3914, key_length=18.41, key_width=18.41, height_extra=0, dish_depth=1, dish_fn=128, dish_thickness=1, dish_invert=false, depth=4, top_difference=6, wall_thickness=1.35, wall_extra=0.65, wall_inset=0, wall_tolerance=0.25, key_corner_radius=0.5, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=0, top_thickness=0.6, side_support_thickness=0.8, side_supports=[0,0,0,0], flat_support=true, locations=[[0,0,0]], key_rotation=[0,0,0], polygon_layers=10, polygon_layer_rotation=0, hollow=false, uniform_wall_thickness=false) {
+    dish_type = "sphere";
+    dish_z = 0.111; // NOTE: Width of the top dish (at widest) should be ~12.7mm
 //    adjusted_dish_depth = dish_invert ? 0.5 : dish_depth; // Make it a smaller for inverted dishes
+    corner_radius_curve = 2;
     if (stem_type == "box_cherry") {
         stem_box_cherry(
             key_height=key_height+height_extra,
@@ -67,9 +70,15 @@ module DSA_stem(stem_type="box_cherry", key_height=7.3914, key_length=18.41, key
             dish_depth=dish_depth,
             dish_thickness=dish_thickness,
             top_difference=top_difference,
+            dish_type=dish_type,
+            dish_fn=dish_fn,
+            dish_z=dish_z,
+            dish_invert=dish_invert,
+            polygon_layers=polygon_layers,
             depth=depth, dish_tilt=0,
             top_thickness=top_thickness,
             key_corner_radius=key_corner_radius,
+            corner_radius_curve=corner_radius_curve,
             wall_thickness=wall_thickness,
             wall_extra=wall_extra, wall_inset=wall_inset, wall_tolerance=wall_tolerance,
             top_x=top_x, top_y=top_y,
@@ -91,9 +100,15 @@ module DSA_stem(stem_type="box_cherry", key_height=7.3914, key_length=18.41, key
             dish_depth=dish_depth,
             dish_thickness=dish_thickness,
             top_difference=top_difference,
+            dish_fn=dish_fn,
+            dish_z=dish_z,
+            polygon_layers=polygon_layers,
+            dish_invert=dish_invert,
+            dish_type=dish_type,
             depth=depth, dish_tilt=0,
             top_thickness=top_thickness,
             key_corner_radius=key_corner_radius,
+            corner_radius_curve=corner_radius_curve,
             wall_thickness=wall_thickness,
             wall_extra=wall_extra, wall_inset=wall_inset, wall_tolerance=wall_tolerance,
             top_x=top_x, top_y=top_y,
@@ -108,24 +123,20 @@ module DSA_stem(stem_type="box_cherry", key_height=7.3914, key_length=18.41, key
             uniform_wall_thickness=uniform_wall_thickness);
     } else if (stem_type == "alps") {
         stem_alps(
-            key_height=adjusted_height+height_extra,
+            key_height=key_height+height_extra,
             key_length=key_length,
             key_width=key_width,
-            dish_depth=adjusted_dish_depth,
+            dish_depth=dish_depth,
             dish_thickness=dish_thickness,
-            dish_invert=dish_invert,
-            dish_x=dish_x, dish_y=dish_y, dish_z=dish_z,
-            polygon_layers=polygon_layers,
-            polygon_layer_rotation=polygon_layer_rotation,
-            polygon_edges=polygon_edges,
-            polygon_curve=polygon_curve,
-            dish_type=dish_type,
-            corner_radius=key_corner_radius,
-            corner_radius_curve=corner_radius_curve,
             top_difference=top_difference,
+            dish_invert=dish_invert,
+            dish_z=dish_z,
+            polygon_layers=polygon_layers,
+            dish_type=dish_type,
+            key_corner_radius=key_corner_radius,
+            corner_radius_curve=corner_radius_curve,
             depth=depth, dish_tilt=0,
             top_thickness=top_thickness,
-            key_corner_radius=key_corner_radius,
             wall_thickness=wall_thickness,
             wall_extra=wall_extra, wall_inset=wall_inset, wall_tolerance=wall_tolerance,
             top_x=top_x, top_y=top_y,
@@ -139,6 +150,28 @@ module DSA_stem(stem_type="box_cherry", key_height=7.3914, key_length=18.41, key
             side_support_thickness=side_support_thickness,
             side_supports=side_supports,
             hollow=hollow,
+            uniform_wall_thickness=uniform_wall_thickness);
+    } else if (stem_type == "stem_top") {
+        stem_top(
+            key_height=key_height+height_extra,
+            key_length=key_length,
+            key_width=key_width,
+            dish_depth=dish_depth,
+            dish_thickness=dish_thickness,
+            top_difference=top_difference,
+            dish_type=dish_type,
+            dish_fn=dish_fn,
+            dish_invert=dish_invert,
+            dish_z=dish_z,
+            polygon_layers=polygon_layers,
+            corner_radius_curve=corner_radius_curve,
+            dish_tilt=0,
+            top_thickness=top_thickness,
+            key_corner_radius=key_corner_radius,
+            wall_thickness=wall_thickness,
+            wall_extra=wall_extra, wall_inset=wall_inset, wall_tolerance=wall_tolerance,
+            top_x=top_x, top_y=top_y,
+            key_rotation=key_rotation,
             uniform_wall_thickness=uniform_wall_thickness);
     }
 }
@@ -186,7 +219,8 @@ module DCS_keycap(row=2, length=18.15, width=18.15, height_extra=0, wall_thickne
 }
 
 // DCS stems are a pain in the ass so they need their own special fidding...
-module DCS_stem(row=2, stem_type="box_cherry", key_length=18.15, key_width=18.15, height_extra=0, depth=4, top_difference=6, wall_thickness=1.35, wall_extra=0.65, wall_inset=0, wall_tolerance=0.25,  key_corner_radius=0.5, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=0, dish_thickness=0.6, dish_invert=false, top_thickness=0.6, side_support_thickness=0.8, side_supports=[0,0,0,0], flat_support=true, locations=[[0,0,0]], key_rotation=[0,0,0], hollow=false, uniform_wall_thickness=false) {
+// TODO: Fix DCS it's all screwed up
+module DCS_stem(row=2, stem_type="box_cherry", key_length=18.15, key_width=18.15, height_extra=0, depth=4, top_difference=6, wall_thickness=1.35, wall_extra=0.65, wall_inset=0, wall_tolerance=0.25, key_corner_radius=0.5, top_x=0, top_y=-1.75, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=0, dish_thickness=0.6, dish_invert=false, dish_fn=32, top_thickness=0.6, polygon_layers=10, side_support_thickness=0.8, side_supports=[0,0,0,0], flat_support=true, locations=[[0,0,0]], key_rotation=[0,0,0], hollow=false, uniform_wall_thickness=false) {
     row_height = [
         0, 9.5, 7.39, 7.39, 9, 12.5
     ];
@@ -196,9 +230,13 @@ module DCS_stem(row=2, stem_type="box_cherry", key_length=18.15, key_width=18.15
     dish_tilt = [
         0, -1, 3, 7, 16, -6
     ];
+    dish_z = [ // Dish needs to cut into the top a unique amount depending on the height and angle
+        0, -0.11, -0.38, -0.78, 0.6, -0.75
+    ];
     if (row < 1) {
         warning("We only support rows 1-5 for DCS profile caps!");
     }
+    dish_type = "cylinder";
     row = row < 6 ? row : 5; // We only support rows 0-4 (5 total rows)
     adjusted_dish_thickness = dish_thicknesses[row] + dish_thickness;
     dish_depth = 1;
@@ -208,9 +246,13 @@ module DCS_stem(row=2, stem_type="box_cherry", key_length=18.15, key_width=18.15
             key_length=key_length,
             key_width=key_width,
             dish_depth=dish_depth,
-            dish_thickness=dish_thickness,
+            dish_thickness=adjusted_dish_thickness,
             top_difference=top_difference,
+            dish_invert=dish_invert,
+            polygon_layers=polygon_layers,
+            dish_type=dish_type,
             depth=depth, dish_tilt=dish_tilt[row],
+            dish_z=dish_z[row],
             top_thickness=top_thickness,
             key_corner_radius=key_corner_radius,
             wall_thickness=wall_thickness,
@@ -232,9 +274,13 @@ module DCS_stem(row=2, stem_type="box_cherry", key_length=18.15, key_width=18.15
             key_length=key_length,
             key_width=key_width,
             dish_depth=dish_depth,
-            dish_thickness=dish_thickness,
+            dish_thickness=adjusted_dish_thickness,
             top_difference=top_difference,
+            dish_invert=dish_invert,
+            polygon_layers=polygon_layers,
+            dish_type=dish_type,
             depth=depth, dish_tilt=dish_tilt[row],
+            dish_z=dish_z[row],
             top_thickness=top_thickness,
             key_corner_radius=key_corner_radius,
             wall_thickness=wall_thickness,
@@ -251,22 +297,18 @@ module DCS_stem(row=2, stem_type="box_cherry", key_length=18.15, key_width=18.15
             uniform_wall_thickness=uniform_wall_thickness);
     } else if (stem_type == "alps") {
         stem_alps(
-            key_height=adjusted_height+height_extra,
+            key_height=row_height[row]+height_extra,
             key_length=key_length,
             key_width=key_width,
-            dish_depth=adjusted_dish_depth,
-            dish_thickness=dish_thickness,
+            dish_depth=dish_depth,
+            dish_thickness=adjusted_dish_thickness,
+            top_difference=top_difference,
             dish_invert=dish_invert,
-            dish_x=dish_x, dish_y=dish_y, dish_z=dish_z,
             polygon_layers=polygon_layers,
-            polygon_layer_rotation=polygon_layer_rotation,
-            polygon_edges=polygon_edges,
-            polygon_curve=polygon_curve,
             dish_type=dish_type,
             corner_radius=key_corner_radius,
-            corner_radius_curve=corner_radius_curve,
-            top_difference=top_difference,
-            depth=depth, dish_tilt=0,
+            depth=depth, dish_tilt=dish_tilt[row],
+            dish_z=dish_z[row],
             top_thickness=top_thickness,
             key_corner_radius=key_corner_radius,
             wall_thickness=wall_thickness,
@@ -282,6 +324,27 @@ module DCS_stem(row=2, stem_type="box_cherry", key_length=18.15, key_width=18.15
             side_support_thickness=side_support_thickness,
             side_supports=side_supports,
             hollow=hollow,
+            uniform_wall_thickness=uniform_wall_thickness);
+    } else if (stem_type == "stem_top") {
+        stem_top(
+            key_height=row_height[row]+height_extra,
+            key_length=key_length,
+            key_width=key_width,
+            dish_depth=dish_depth,
+            dish_thickness=adjusted_dish_thickness,
+            top_difference=top_difference,
+            dish_type=dish_type,
+            dish_fn=dish_fn,
+            dish_invert=dish_invert,
+            polygon_layers=polygon_layers,
+            dish_tilt=dish_tilt[row],
+            dish_z=dish_z[row],
+            top_thickness=top_thickness,
+            key_corner_radius=key_corner_radius,
+            wall_thickness=wall_thickness,
+            wall_extra=wall_extra, wall_inset=wall_inset, wall_tolerance=wall_tolerance,
+            top_x=top_x, top_y=top_y,
+            key_rotation=key_rotation,
             uniform_wall_thickness=uniform_wall_thickness);
     }
 }
@@ -332,12 +395,19 @@ module DSS_keycap(row=1, length=18.24, width=18.24, height_extra=0, wall_thickne
         key_rotation=key_rotation, debug=debug);
 }
 
-module DSS_stem(row=2, stem_type="box_cherry", key_length=18.24, key_width=18.24, height_extra=0, depth=4, top_difference=5.54, wall_thickness=1.35, wall_extra=0.65, wall_inset=0, wall_tolerance=0.25,  key_corner_radius=0.5, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=0, dish_thickness=0.6, dish_invert=false, top_thickness=0.6, side_support_thickness=0.8, side_supports=[0,0,0,0], flat_support=true, locations=[[0,0,0]], key_rotation=[0,0,0], hollow=false, uniform_wall_thickness=false) {
+module DSS_stem(row=2, stem_type="box_cherry", key_length=18.24, key_width=18.24, height_extra=0, depth=4, top_difference=5.54, wall_thickness=1.35, wall_extra=0.65, wall_inset=0, wall_tolerance=0.25, dish_fn=128, key_corner_radius=0.5, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=0, dish_thickness=0.6, dish_invert=false, dish_fn=128, top_thickness=0.6, side_support_thickness=0.8, side_supports=[0,0,0,0], flat_support=true, locations=[[0,0,0]], key_rotation=[0,0,0], polygon_layers=10, hollow=false, uniform_wall_thickness=false) {
     row_height = [
         0, 10.4, 8.7, 8.5, 10.6
     ];
+    adjusted_row_height = dish_invert ? row_height[row]+height_extra-1 : row_height[row]+height_extra; // One less if we're generating a spacebar (which is always row 3 with DSS)
     dish_tilt = [
         0, -1, 3, 8, 16
+    ];
+    dish_y = [ // Dish needs to cut into the top a unique amount depending on the height and angle
+        0, 1.2, -2.5, -5.7, -11.4
+    ];
+    dish_z = [ // Dish needs to cut into the top a unique amount depending on the height and angle
+        0, 0, 0, 0, -1.1
     ];
     dish_thicknesses = [
         0, 2.5, 2.5, 2.5, 3.5
@@ -346,15 +416,20 @@ module DSS_stem(row=2, stem_type="box_cherry", key_length=18.24, key_width=18.24
         warning("We only support rows 1-5 for DCS profile caps!");
     }
     row = row < 6 ? row : 5; // We only support rows 0-4 (5 total rows)
+    dish_type = "sphere";
     dish_depth = 1;
     if (stem_type == "box_cherry") {
         stem_box_cherry(
-            key_height=row_height[row]+height_extra,
+            key_height=adjusted_row_height,
             key_length=key_length,
             key_width=key_width,
             dish_depth=dish_depth,
             dish_thickness=dish_thicknesses[row],
             top_difference=top_difference,
+            dish_type=dish_type,
+            dish_fn=dish_fn,
+            dish_invert=dish_invert,
+            dish_z=dish_z[row], dish_y=dish_y[row],
             depth=depth, dish_tilt=dish_tilt[row],
             top_thickness=top_thickness,
             key_corner_radius=key_corner_radius,
@@ -373,12 +448,16 @@ module DSS_stem(row=2, stem_type="box_cherry", key_length=18.24, key_width=18.24
             uniform_wall_thickness=uniform_wall_thickness);
     } else if (stem_type == "round_cherry") {
         stem_round_cherry(
-            key_height=row_height[row]+height_extra,
+            key_height=adjusted_row_height,
             key_length=key_length,
             key_width=key_width,
             dish_depth=dish_depth,
             dish_thickness=dish_thicknesses[row],
             top_difference=top_difference,
+            dish_type=dish_type,
+            dish_fn=dish_fn,
+            dish_invert=dish_invert,
+            dish_z=dish_z[row], dish_y=dish_y[row],
             depth=depth, dish_tilt=dish_tilt[row],
             top_thickness=top_thickness,
             key_corner_radius=key_corner_radius,
@@ -396,22 +475,19 @@ module DSS_stem(row=2, stem_type="box_cherry", key_length=18.24, key_width=18.24
             uniform_wall_thickness=uniform_wall_thickness);
     } else if (stem_type == "alps") {
         stem_alps(
-            key_height=adjusted_height+height_extra,
+            key_height=adjusted_row_height,
             key_length=key_length,
             key_width=key_width,
-            dish_depth=adjusted_dish_depth,
-            dish_thickness=dish_thickness,
-            dish_invert=dish_invert,
-            dish_x=dish_x, dish_y=dish_y, dish_z=dish_z,
-            polygon_layers=polygon_layers,
-            polygon_layer_rotation=polygon_layer_rotation,
-            polygon_edges=polygon_edges,
-            polygon_curve=polygon_curve,
-            dish_type=dish_type,
-            corner_radius=key_corner_radius,
-            corner_radius_curve=corner_radius_curve,
+            dish_depth=dish_depth,
+            dish_thickness=dish_thicknesses[row],
             top_difference=top_difference,
-            depth=depth, dish_tilt=0,
+            dish_type=dish_type,
+            dish_fn=dish_fn,
+            dish_invert=dish_invert,
+            dish_z=dish_z[row], dish_y=dish_y[row],
+            polygon_layers=polygon_layers,
+            corner_radius=key_corner_radius,
+            depth=depth, dish_tilt=dish_tilt[row],
             top_thickness=top_thickness,
             key_corner_radius=key_corner_radius,
             wall_thickness=wall_thickness,
@@ -427,6 +503,27 @@ module DSS_stem(row=2, stem_type="box_cherry", key_length=18.24, key_width=18.24
             side_support_thickness=side_support_thickness,
             side_supports=side_supports,
             hollow=hollow,
+            uniform_wall_thickness=uniform_wall_thickness);
+    } else if (stem_type == "stem_top") {
+        stem_top(
+            key_height=adjusted_row_height,
+            key_length=key_length,
+            key_width=key_width,
+            dish_depth=dish_depth,
+            dish_thickness=dish_thicknesses[row],
+            top_difference=top_difference,
+            dish_type=dish_type,
+            dish_fn=dish_fn,
+            dish_invert=dish_invert,
+            dish_z=dish_z[row], dish_y=dish_y[row],
+            polygon_layers=polygon_layers,
+            dish_tilt=dish_tilt[row],
+            top_thickness=top_thickness,
+            key_corner_radius=key_corner_radius,
+            wall_thickness=wall_thickness,
+            wall_extra=wall_extra, wall_inset=wall_inset, wall_tolerance=wall_tolerance,
+            top_x=top_x, top_y=top_y,
+            key_rotation=key_rotation,
             uniform_wall_thickness=uniform_wall_thickness);
     }
 }
@@ -483,7 +580,7 @@ module KAT_keycap(row=1, length=18.2, width=18.2, height_extra=0, wall_thickness
 }
 
 // NOTE: I double-checked and KAT profile stems really *do* go all the way to the floor!  They're not inset at all (which is different)!
-module KAT_stem(row=1, stem_type="box_cherry", key_height=9.15, key_length=18.2, key_width=18.2, height_extra=0, dish_depth=0.75, dish_thickness=1, dish_invert=false, depth=4, top_difference=6, wall_thickness=1.658, wall_extra=0.65, wall_inset=0, wall_tolerance=0.25, key_corner_radius=0.35, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=0, top_thickness=0.6, side_support_thickness=0.8, side_supports=[0,0,0,0], flat_support=true, locations=[[0,0,0]], hollow=false, key_rotation=[0,0,0], uniform_wall_thickness=false) {
+module KAT_stem(row=1, stem_type="box_cherry", key_height=9.15, key_length=18.2, key_width=18.2, height_extra=0, dish_depth=0.75, dish_fn=128, dish_thickness=1.658, dish_invert=false, depth=4, top_difference=6, wall_thickness=1.658, wall_extra=0.65, wall_inset=0, wall_tolerance=0.25, key_corner_radius=0.35, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=0, top_thickness=0.6, side_support_thickness=0.8, side_supports=[0,0,0,0], polygon_layers=10, flat_support=true, locations=[[0,0,0]], hollow=false, key_rotation=[0,0,0], uniform_wall_thickness=false) {
     if (inset > 0) {
         warning("FYI: Official KAT profile keycaps don't have an inset stem.  The stems go all the way to the floor (but you don't have to do that if you don't want).");
     }
@@ -497,6 +594,14 @@ module KAT_stem(row=1, stem_type="box_cherry", key_height=9.15, key_length=18.2,
     kat_top_y = [
         0, 0.75, 0.75, 0.75, 0.65, 0
     ];
+    dish_y = [
+        0, 4, 0.25, -3.75, -1.65, -6
+    ];
+    dish_z = [
+        0, -0.25, 0, -0.25, -0.25, -0.5
+    ];
+    // Official KAT keycaps have a cylindrical dish when inverted:
+    dish_type = dish_invert ? "cylinder" : "sphere";
     if (stem_type == "box_cherry") {
         stem_box_cherry(
             key_height=row_height[row]+height_extra,
@@ -505,6 +610,10 @@ module KAT_stem(row=1, stem_type="box_cherry", key_height=9.15, key_length=18.2,
             dish_depth=dish_depth,
             dish_thickness=dish_thickness,
             top_difference=top_difference,
+            dish_type=dish_type,
+            dish_fn=dish_fn,
+            dish_invert=dish_invert,
+            dish_y=dish_y[row], dish_z=dish_z[row],
             depth=depth, dish_tilt=dish_tilt[row],
             top_thickness=top_thickness,
             key_corner_radius=key_corner_radius,
@@ -529,6 +638,10 @@ module KAT_stem(row=1, stem_type="box_cherry", key_height=9.15, key_length=18.2,
             dish_depth=dish_depth,
             dish_thickness=dish_thickness,
             top_difference=top_difference,
+            dish_type=dish_type,
+            dish_fn=dish_fn,
+            dish_invert=dish_invert,
+            dish_y=dish_y[row], dish_z=dish_z[row],
             depth=depth, dish_tilt=dish_tilt[row],
             top_thickness=top_thickness,
             key_corner_radius=key_corner_radius,
@@ -546,27 +659,23 @@ module KAT_stem(row=1, stem_type="box_cherry", key_height=9.15, key_length=18.2,
             uniform_wall_thickness=uniform_wall_thickness);
     } else if (stem_type == "alps") {
         stem_alps(
-            key_height=adjusted_height+height_extra,
+            key_height=row_height[row]+height_extra,
             key_length=key_length,
             key_width=key_width,
-            dish_depth=adjusted_dish_depth,
+            dish_depth=dish_depth,
             dish_thickness=dish_thickness,
+            top_difference=top_difference,
             dish_invert=dish_invert,
-            dish_x=dish_x, dish_y=dish_y, dish_z=dish_z,
+            dish_y=dish_y[row], dish_z=dish_z[row],
             polygon_layers=polygon_layers,
-            polygon_layer_rotation=polygon_layer_rotation,
-            polygon_edges=polygon_edges,
-            polygon_curve=polygon_curve,
             dish_type=dish_type,
             corner_radius=key_corner_radius,
-            corner_radius_curve=corner_radius_curve,
-            top_difference=top_difference,
-            depth=depth, dish_tilt=0,
+            depth=depth, dish_tilt=dish_tilt[row],
             top_thickness=top_thickness,
             key_corner_radius=key_corner_radius,
             wall_thickness=wall_thickness,
             wall_extra=wall_extra, wall_inset=wall_inset, wall_tolerance=wall_tolerance,
-            top_x=top_x, top_y=top_y,
+            top_x=top_x, top_y=kat_top_y[row],
             outside_tolerance_x=outside_tolerance_x,
             outside_tolerance_y=outside_tolerance_y,
             inside_tolerance=inside_tolerance,
@@ -577,6 +686,27 @@ module KAT_stem(row=1, stem_type="box_cherry", key_height=9.15, key_length=18.2,
             side_support_thickness=side_support_thickness,
             side_supports=side_supports,
             hollow=hollow,
+            uniform_wall_thickness=uniform_wall_thickness);
+    } else if (stem_type == "stem_top") {
+        stem_top(
+            key_height=row_height[row]+height_extra,
+            key_length=key_length,
+            key_width=key_width,
+            dish_depth=dish_depth,
+            dish_thickness=dish_thickness,
+            top_difference=top_difference,
+            dish_type=dish_type,
+            dish_fn=dish_fn,
+            dish_invert=dish_invert,
+            dish_y=dish_y[row], dish_z=dish_z[row],
+            polygon_layers=polygon_layers,
+            dish_tilt=dish_tilt[row],
+            top_thickness=top_thickness,
+            key_corner_radius=key_corner_radius,
+            wall_thickness=wall_thickness,
+            wall_extra=wall_extra, wall_inset=wall_inset, wall_tolerance=wall_tolerance,
+            top_x=top_x, top_y=kat_top_y[row],
+            key_rotation=key_rotation,
             uniform_wall_thickness=uniform_wall_thickness);
     }
 }
@@ -613,19 +743,36 @@ module KAM_keycap(row=1, length=18.3, width=18.3, height_extra=0, wall_thickness
         visualize_legends=visualize_legends, debug=debug);
 }
 
+// TODO: Figure out why underset mask (stem_top()) isn't at the correct height with KAM stems
 // KAM stems are pretty simple (don't need anything special)
-module KAM_stem(stem_type="box_cherry", key_height=9.05, key_length=18.3, key_width=18.3, height_extra=0, dish_depth=1, dish_thickness=1, dish_invert=false, depth=4, top_difference=6, wall_thickness=1.65, wall_extra=0.65, wall_inset=0, wall_tolerance=0.25, key_corner_radius=0.35, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=0, top_thickness=0.6, side_support_thickness=0.8, side_supports=[0,0,0,0], flat_support=true, locations=[[0,0,0]], key_rotation=[0,0,0], hollow=false, uniform_wall_thickness=false) {
+module KAM_stem(stem_type="box_cherry", key_height=9.05, key_length=18.3, key_width=18.3, height_extra=0, dish_depth=1, dish_thickness=1, dish_invert=false, dish_fn=128, depth=4, top_difference=6.35, wall_thickness=1.65, wall_extra=0.65, wall_inset=0, wall_tolerance=0.25, key_corner_radius=0.5, corner_radius_curve=1.5, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=0, top_thickness=0.6, side_support_thickness=0.8, side_supports=[0,0,0,0], polygon_layers=10, flat_support=true, locations=[[0,0,0]], key_rotation=[0,0,0], hollow=false, uniform_wall_thickness=false) {
+    row_height = dish_invert ? 8.05 : 9.05; // One less if we're generating a spacebar
+    dish_type = dish_invert ? "cylinder" : "sphere"; // KAM spacebars actually use cylindrical tops
+    dish_z = 0;
+    echo(row_height=row_height);
+    echo(dish_depth=dish_depth);
+    echo(dish_thickness=dish_thickness);
+    echo(top_difference=top_difference);
+    echo(dish_type=dish_type);
+    echo(depth=depth);
+    echo(top_thickness=top_thickness);
+    echo(dish_type=dish_type);
     if (stem_type == "box_cherry") {
         stem_box_cherry(
-            key_height=key_height+height_extra,
+            key_height=row_height+height_extra,
             key_length=key_length,
             key_width=key_width,
             dish_depth=dish_depth,
             dish_thickness=dish_thickness,
             top_difference=top_difference,
+            dish_type=dish_type,
+            corner_radius=key_corner_radius,
+            dish_invert=dish_invert,
+            polygon_layers=polygon_layers,
             depth=depth, dish_tilt=0,
             top_thickness=top_thickness,
             key_corner_radius=key_corner_radius,
+            corner_radius_curve=corner_radius_curve,
             wall_thickness=wall_thickness,
             wall_extra=wall_extra, wall_inset=wall_inset, wall_tolerance=wall_tolerance,
             top_x=top_x, top_y=top_y,
@@ -641,15 +788,19 @@ module KAM_stem(stem_type="box_cherry", key_height=9.05, key_length=18.3, key_wi
             uniform_wall_thickness=uniform_wall_thickness);
     } else if (stem_type == "round_cherry") {
         stem_round_cherry(
-            key_height=key_height+height_extra,
+            key_height=row_height+height_extra,
             key_length=key_length,
             key_width=key_width,
             dish_depth=dish_depth,
             dish_thickness=dish_thickness,
             top_difference=top_difference,
+            dish_invert=dish_invert,
+            polygon_layers=polygon_layers,
+            dish_type=dish_type,
             depth=depth, dish_tilt=0,
             top_thickness=top_thickness,
             key_corner_radius=key_corner_radius,
+            corner_radius_curve=corner_radius_curve,
             wall_thickness=wall_thickness,
             wall_extra=wall_extra, wall_inset=wall_inset, wall_tolerance=wall_tolerance,
             top_x=top_x, top_y=top_y,
@@ -664,21 +815,17 @@ module KAM_stem(stem_type="box_cherry", key_height=9.05, key_length=18.3, key_wi
             uniform_wall_thickness=uniform_wall_thickness);
     } else if (stem_type == "alps") {
         stem_alps(
-            key_height=adjusted_height+height_extra,
+            key_height=row_height+height_extra,
             key_length=key_length,
             key_width=key_width,
-            dish_depth=adjusted_dish_depth,
+            dish_depth=dish_depth,
             dish_thickness=dish_thickness,
+            top_difference=top_difference,
             dish_invert=dish_invert,
-            dish_x=dish_x, dish_y=dish_y, dish_z=dish_z,
             polygon_layers=polygon_layers,
-            polygon_layer_rotation=polygon_layer_rotation,
-            polygon_edges=polygon_edges,
-            polygon_curve=polygon_curve,
             dish_type=dish_type,
             corner_radius=key_corner_radius,
             corner_radius_curve=corner_radius_curve,
-            top_difference=top_difference,
             depth=depth, dish_tilt=0,
             top_thickness=top_thickness,
             key_corner_radius=key_corner_radius,
@@ -695,6 +842,27 @@ module KAM_stem(stem_type="box_cherry", key_height=9.05, key_length=18.3, key_wi
             side_support_thickness=side_support_thickness,
             side_supports=side_supports,
             hollow=hollow,
+            uniform_wall_thickness=uniform_wall_thickness);
+    } else if (stem_type == "stem_top") {
+        stem_top(
+            key_height=row_height+height_extra,
+            key_length=key_length,
+            key_width=key_width,
+            dish_depth=dish_depth,
+            dish_thickness=dish_thickness,
+            top_difference=top_difference,
+            dish_invert=dish_invert,
+            polygon_layers=polygon_layers,
+            dish_type=dish_type,
+            corner_radius=key_corner_radius,
+            corner_radius_curve=corner_radius_curve,
+            dish_tilt=0,
+            top_thickness=top_thickness,
+            key_corner_radius=key_corner_radius,
+            wall_thickness=wall_thickness,
+            wall_extra=wall_extra, wall_inset=wall_inset, wall_tolerance=wall_tolerance,
+            top_x=top_x, top_y=top_y,
+            key_rotation=key_rotation,
             uniform_wall_thickness=uniform_wall_thickness);
     }
 }
@@ -743,7 +911,7 @@ module riskeycap(row=1, length=18.25, width=18.25, height_extra=0, wall_thicknes
 }
 
 // Riskeycap stems are very straightforward (nothing special required; mostly defaults)
-module riskeystem(stem_type="box_cherry", key_height=8.2, key_length=18.41, key_width=18.41, height_extra=0, dish_type="sphere", dish_depth=1.5, dish_thickness=0.9, dish_x=0, dish_y=0, dish_z=0, dish_invert=false, depth=4, top_difference=5.25, wall_thickness=1.8, wall_extra=0.65, wall_inset=0, wall_tolerance=0.25, key_corner_radius=1.15, corner_radius_curve=1.5, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=1, top_thickness=0.6, side_support_thickness=0.8, side_supports=[0,0,0,0], flat_support=true, locations=[[0,0,0]], polygon_layers=10, polygon_layer_rotation=0, polygon_edges=4, polygon_curve=0, key_rotation=[0,0,0], hollow=false, uniform_wall_thickness=false) {
+module riskeystem(stem_type="box_cherry", key_height=8.2, key_length=18.41, key_width=18.41, height_extra=0, dish_type="sphere", dish_depth=1.5, dish_thickness=0.9, dish_fn=128, dish_x=0, dish_y=0, dish_z=0, dish_invert=false, depth=4, top_difference=5.25, wall_thickness=1.8, wall_extra=0.65, wall_inset=0, wall_tolerance=0.25, key_corner_radius=1.15, corner_radius_curve=1.5, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=1, top_thickness=0.6, side_support_thickness=0.8, side_supports=[0,0,0,0], polygon_layers=10, flat_support=true, locations=[[0,0,0]], polygon_layers=10, polygon_layer_rotation=0, polygon_edges=4, polygon_curve=0, key_rotation=[0,0,0], hollow=false, uniform_wall_thickness=false) {
     adjusted_height = dish_invert ? 6.5+height_extra : 8.2+height_extra; // A bit less if we're generating a spacebar
     adjusted_dish_depth = dish_invert ? 1 : dish_depth; // Make it a smaller for inverted dishes
     if (stem_type == "box_cherry") {
@@ -753,6 +921,7 @@ module riskeystem(stem_type="box_cherry", key_height=8.2, key_length=18.41, key_
             key_width=key_width,
             dish_depth=adjusted_dish_depth,
             dish_thickness=dish_thickness,
+            top_difference=top_difference,
             dish_invert=dish_invert,
             dish_x=dish_x, dish_y=dish_y, dish_z=dish_z,
             polygon_layers=polygon_layers,
@@ -762,7 +931,6 @@ module riskeystem(stem_type="box_cherry", key_height=8.2, key_length=18.41, key_
             dish_type=dish_type,
             corner_radius=key_corner_radius,
             corner_radius_curve=corner_radius_curve,
-            top_difference=top_difference,
             depth=depth, dish_tilt=0,
             top_thickness=top_thickness,
             key_corner_radius=key_corner_radius,
@@ -781,11 +949,12 @@ module riskeystem(stem_type="box_cherry", key_height=8.2, key_length=18.41, key_
             uniform_wall_thickness=uniform_wall_thickness);
     } else if (stem_type == "round_cherry") {
         stem_round_cherry(
-            key_height=key_height+height_extra,
+            key_height=adjusted_height+height_extra,
             key_length=key_length,
             key_width=key_width,
-            dish_depth=dish_depth,
+            dish_depth=adjusted_dish_depth,
             dish_thickness=dish_thickness,
+            top_difference=top_difference,
             dish_invert=dish_invert,
             dish_x=dish_x, dish_y=dish_y, dish_z=dish_z,
             polygon_layers=polygon_layers,
@@ -794,7 +963,6 @@ module riskeystem(stem_type="box_cherry", key_height=8.2, key_length=18.41, key_
             polygon_curve=polygon_curve,
             dish_type=dish_type,
             corner_radius_curve=corner_radius_curve,
-            top_difference=top_difference,
             depth=depth, dish_tilt=0,
             top_thickness=top_thickness,
             wall_thickness=wall_thickness,
@@ -816,6 +984,7 @@ module riskeystem(stem_type="box_cherry", key_height=8.2, key_length=18.41, key_
             key_width=key_width,
             dish_depth=adjusted_dish_depth,
             dish_thickness=dish_thickness,
+            top_difference=top_difference,
             dish_invert=dish_invert,
             dish_x=dish_x, dish_y=dish_y, dish_z=dish_z,
             polygon_layers=polygon_layers,
@@ -825,7 +994,6 @@ module riskeystem(stem_type="box_cherry", key_height=8.2, key_length=18.41, key_
             dish_type=dish_type,
             corner_radius=key_corner_radius,
             corner_radius_curve=corner_radius_curve,
-            top_difference=top_difference,
             depth=depth, dish_tilt=0,
             top_thickness=top_thickness,
             key_corner_radius=key_corner_radius,
@@ -842,6 +1010,31 @@ module riskeystem(stem_type="box_cherry", key_height=8.2, key_length=18.41, key_
             side_support_thickness=side_support_thickness,
             side_supports=side_supports,
             hollow=hollow,
+            uniform_wall_thickness=uniform_wall_thickness);
+    } else if (stem_type == "stem_top") {
+        stem_top(
+            key_height=adjusted_height+height_extra,
+            key_length=key_length,
+            key_width=key_width,
+            dish_depth=adjusted_dish_depth,
+            dish_thickness=dish_thickness,
+            top_difference=top_difference,
+            dish_type=dish_type,
+            dish_fn=dish_fn,
+            dish_invert=dish_invert,
+            dish_x=dish_x, dish_y=dish_y, dish_z=dish_z,
+            polygon_layers=polygon_layers,
+            polygon_layer_rotation=polygon_layer_rotation,
+            polygon_edges=polygon_edges,
+            polygon_curve=polygon_curve,
+            corner_radius_curve=corner_radius_curve,
+            dish_tilt=0,
+            top_thickness=top_thickness,
+            key_corner_radius=key_corner_radius,
+            wall_thickness=wall_thickness,
+            wall_extra=wall_extra, wall_inset=wall_inset, wall_tolerance=wall_tolerance,
+            top_x=top_x, top_y=top_y,
+            key_rotation=key_rotation,
             uniform_wall_thickness=uniform_wall_thickness);
     }
 }
