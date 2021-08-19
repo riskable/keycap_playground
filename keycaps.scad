@@ -9,7 +9,7 @@ use <legends.scad>
 module _poly_keycap(height=9.0, length=18, width=18,
   wall_thickness=1.25, top_difference=6, top_x=0, top_y=0, dish_type="cylinder", 
   dish_tilt=-4, dish_depth=1, dish_x=0, dish_y=0, dish_z=-0.75, dish_thickness=2,
-  dish_fn=32, dish_tilt_curve=false, stem_clips=false,
+  dish_fn=32, dish_corner_fn=64, dish_tilt_curve=false, stem_clips=false,
   stem_walls_inset=0, stem_walls_tolerance=0.25,
   polygon_layers=5, polygon_layer_rotation=10, polygon_curve=0, polygon_edges=4,
   corner_radius=0.5, corner_radius_curve=0, polygon_rotation=false,
@@ -51,12 +51,13 @@ module _poly_keycap(height=9.0, length=18, width=18,
                             rotate([tilt_below_straight,0,0]) {
                                 if (polygon_edges==4) { // Normal key
                                     xy = [length-curve_val_below,width-curve_val_below];
-                                    squarish_rpoly(xy=xy, h=0.01, r=corner_radius_below, center=false);
+                                    squarish_rpoly(xy=xy, h=0.01, r=corner_radius_below, center=false, $fn=dish_corner_fn);
                                 } else { // We're doing something funky!
                                     rpoly(
                                         d=length-curve_val_below,
                                         h=0.01, r=corner_radius_below,
-                                        edges=polygon_edges, center=false);
+                                        edges=polygon_edges, center=false,
+                                        $fn=dish_corner_fn);
                                 }
                             }
                     }
@@ -68,12 +69,15 @@ module _poly_keycap(height=9.0, length=18, width=18,
                             rotate([tilt_above_straight,0,0]) {
                                 if (polygon_edges==4) { // Normal key
                                     xy = [length-curve_val_above,width-curve_val_above];
-                                    squarish_rpoly(xy=xy, h=0.01, r=corner_radius_above, center=false);
+                                    squarish_rpoly(
+                                        xy=xy, h=0.01, r=corner_radius_above,
+                                        center=false, $fn=dish_corner_fn);
                                 } else { // We're doing something funky!
                                     rpoly(
                                         d=length-curve_val_above,
                                         h=0.01, r=corner_radius_above,
-                                        edges=polygon_edges, center=false);
+                                        edges=polygon_edges, center=false,
+                                        $fn=dish_corner_fn);
                                 }
                             }
                     }
@@ -89,12 +93,16 @@ module _poly_keycap(height=9.0, length=18, width=18,
                                 rotate([tilt_below_straight,0,0]) {
                                     if (polygon_edges==4) { // Normal key
                                         xy = [length-curve_val_below,width-curve_val_below];
-                                        squarish_rpoly(xy=xy, h=0.01, r=corner_radius_below, center=false);
+                                        squarish_rpoly(
+                                            xy=xy, h=0.01,
+                                            r=corner_radius_below, center=false,
+                                            $fn=dish_corner_fn);
                                     } else { // We're doing something funky!
                                         rpoly(
                                             d=length-curve_val_below,
                                             h=0.01, r=corner_radius_below,
-                                            edges=polygon_edges, center=false);
+                                            edges=polygon_edges, center=false,
+                                            $fn=dish_corner_fn);
                                     }
                                 }
                         }
@@ -106,12 +114,16 @@ module _poly_keycap(height=9.0, length=18, width=18,
                                 rotate([tilt_above_straight,0,0]) {
                                     if (polygon_edges==4) { // Normal key
                                         xy = [length-curve_val_above,width-curve_val_above];
-                                        squarish_rpoly(xy=xy, h=0.01, r=corner_radius_above, center=false);
+                                        squarish_rpoly(
+                                            xy=xy, h=0.01,
+                                            r=corner_radius_above, center=false,
+                                            $fn=dish_corner_fn);
                                     } else { // We're doing something funky!
                                         rpoly(
                                             d=length-curve_val_above,
                                             h=0.01, r=corner_radius_above,
-                                            edges=polygon_edges, center=false);
+                                            edges=polygon_edges, center=false,
+                                            $fn=dish_corner_fn);
                                     }
                                 }
                         }
@@ -129,12 +141,14 @@ module _poly_keycap(height=9.0, length=18, width=18,
                                             xy = [length-curve_val_below,width-curve_val_below];
                                             squarish_rpoly(
                                                 xy=xy, h=0.01,
-                                                r=corner_radius_below, center=false);
+                                                r=corner_radius_below, center=false,
+                                                $fn=dish_corner_fn);
                                         } else { // We're doing something funky!
                                             rpoly(
                                                 d=length-curve_val_below,
                                                 h=0.01, r=corner_radius_below,
-                                                edges=polygon_edges, center=false);
+                                                edges=polygon_edges, center=false,
+                                                $fn=dish_corner_fn);
                                         }
                                     }
                             }
@@ -149,12 +163,14 @@ module _poly_keycap(height=9.0, length=18, width=18,
                                             xy = [length-curve_val_below,width-curve_val_below];
                                             squarish_rpoly(
                                                 xy=xy, h=0.01,
-                                                r=corner_radius_below, center=false);
+                                                r=corner_radius_below, center=false,
+                                                $fn=dish_corner_fn);
                                         } else { // We're doing something funky!
                                             rpoly(
                                                 d=length-curve_val_below,
                                                 h=0.01, r=corner_radius_below,
-                                                edges=polygon_edges, center=false);
+                                                edges=polygon_edges, center=false,
+                                                $fn=dish_corner_fn);
                                         }
                                     }
                             }
@@ -167,12 +183,16 @@ module _poly_keycap(height=9.0, length=18, width=18,
                                 rotate([tilt_above_straight,0,0]) {
                                     if (polygon_edges==4) { // Normal key
                                         xy = [length-curve_val_above,width-curve_val_above];
-                                        squarish_rpoly(xy=xy, h=0.01, r=corner_radius_above, center=false);
+                                        squarish_rpoly(
+                                            xy=xy, h=0.01,
+                                            r=corner_radius_above, center=false,
+                                            $fn=dish_corner_fn);
                                     } else { // We're doing something funky!
                                         rpoly(
                                             d=length-curve_val_above,
                                             h=0.01, r=corner_radius_above,
-                                            edges=polygon_edges, center=false);
+                                            edges=polygon_edges, center=false,
+                                            $fn=dish_corner_fn);
                                     }
                                 }
                         }
@@ -190,11 +210,16 @@ module _poly_keycap(height=9.0, length=18, width=18,
                                 xy = [
                                     length-curve_val_above-top_difference,
                                     width-curve_val_above-top_difference];
-                                squarish_rpoly(xy=xy, h=0.1, r=corner_radius_above, center=false);
+                                squarish_rpoly(
+                                    xy=xy, h=0.1,
+                                    r=corner_radius_above, center=false,
+                                    $fn=dish_corner_fn);
                             } else { // We're doing something funky!
                                 rpoly(
-                                    d=length-curve_val_above-top_difference, h=0.05,
-                                    r=corner_radius_above, edges=polygon_edges, center=false);
+                                    d=length-curve_val_above-top_difference,
+                                    h=0.05, r=corner_radius_above,
+                                    edges=polygon_edges, center=false,
+                                    $fn=dish_corner_fn);
                             }
                             depth_step = dish_depth/polygon_layers;
                             depth_curve_factor = -dish_depth*4; // For this we use a fixed curve
@@ -216,11 +241,16 @@ module _poly_keycap(height=9.0, length=18, width=18,
                                     depth_curve_val]) {
                                     if (polygon_edges==4) { // Normal key
                                         xy = [layer_length,layer_width];
-                                        squarish_rpoly(xy=xy, h=0.01, r=corner_radius_above*(1-ratio), center=false);
+                                        squarish_rpoly(
+                                            xy=xy, h=0.01,
+                                            r=corner_radius_above*(1-ratio), center=false,
+                                            $fn=dish_corner_fn);
                                     } else { // We're doing something funky!
                                         rpoly(
                                             d=layer_length, h=0.01,
-                                            r=corner_radius_above, edges=polygon_edges, center=false);
+                                            r=corner_radius_above,
+                                            edges=polygon_edges, center=false,
+                                            $fn=dish_corner_fn);
                                     }
                                 }
                             }
@@ -229,11 +259,15 @@ module _poly_keycap(height=9.0, length=18, width=18,
                         hull() {
                             if (polygon_edges==4) { // Normal key
                                 xy = [length-curve_val_above-top_difference,width-curve_val_above-top_difference];
-                                squarish_rpoly(xy=xy, h=0.1, r=corner_radius_above, center=false);
+                                squarish_rpoly(
+                                    xy=xy, h=0.1,
+                                    r=corner_radius_above, center=false,
+                                    $fn=dish_corner_fn);
                             } else { // We're doing something funky!
                                 rpoly(
                                     d=length-curve_val_above-top_difference, h=0.1,
-                                    r=corner_radius_above, edges=polygon_edges, center=false);
+                                    r=corner_radius_above, edges=polygon_edges,
+                                    center=false, $fn=dish_corner_fn);
                             }
                             depth_step = dish_depth/polygon_layers;
                             depth_curve_factor = -dish_depth*4; // For this we use a fixed curve
@@ -255,11 +289,16 @@ module _poly_keycap(height=9.0, length=18, width=18,
                                     depth_curve_val]) {
                                     if (polygon_edges==4) { // Normal key
                                         xy = [layer_length,layer_width];
-                                        squarish_rpoly(xy=xy, h=0.01, r=corner_radius_above*(1-ratio), center=false);
+                                        squarish_rpoly(
+                                            xy=xy, h=0.01,
+                                            r=corner_radius_above*(1-ratio), center=false,
+                                            $fn=dish_corner_fn);
                                     } else { // We're doing something funky!
                                         rpoly(
                                             d=layer_length, h=0.01,
-                                            r=corner_radius_above, edges=polygon_edges, center=false);
+                                            r=corner_radius_above,
+                                            edges=polygon_edges, center=false,
+                                            $fn=dish_corner_fn);
                                     }
                                 }
                             }
@@ -285,7 +324,8 @@ module _poly_keycap(height=9.0, length=18, width=18,
                             squarish_rpoly(
                                 xy1=[0.01,0.01],
                                 xy2=[length-top_difference+0.5,width-top_difference+0.5],
-                                h=dish_depth+0.1, r=corner_radius_up_top, center=false, $fn=dish_fn);
+                                h=dish_depth+0.1, r=corner_radius_up_top,
+                                center=false, $fn=dish_fn);
                     // Cut off everything above the pyramid
                     translate([0,0,height/2+height+dish_z-0.02])
                         cube([length*2,width*2,height], center=true);
@@ -322,7 +362,8 @@ module poly_keycap(height=9.0, length=18, width=18,
   dish_tilt=-4, dish_tilt_curve=false, stem_clips=false,
   stem_walls_inset=0, stem_walls_tolerance=0.25,
   dish_depth=1, dish_x=0, dish_y=0,
-  dish_z=-0.75, dish_thickness=2, dish_fn=32, dish_tilt_curve=false,
+  dish_z=-0.75, dish_thickness=2,
+  dish_fn=32, dish_corner_fn=64, dish_tilt_curve=false,
   dish_division_x=4, dish_division_y=1, // Fancy schmancy control over spherical inverted dishes
   legends=[""], legend_font_sizes=[6], legend_fonts=["Roboto"],
   legend_trans=[[0,0,0]], legend_trans2=[[0,0,0]], legend_scale=[[1,1,1]],
@@ -358,6 +399,7 @@ module poly_keycap(height=9.0, length=18, width=18,
                 top_x=top_x, top_y=top_y, dish_depth=dish_depth,
                 dish_x=dish_x, dish_y=dish_y, dish_z=dish_z,
                 dish_thickness=dish_thickness, dish_fn=dish_fn,
+                dish_corner_fn=dish_corner_fn,
                 polygon_layers=polygon_layers, polygon_layer_rotation=polygon_layer_rotation,
                 polygon_edges=polygon_edges, polygon_curve=polygon_curve,
                 dish_type=dish_type, corner_radius=corner_radius,
@@ -397,6 +439,7 @@ module poly_keycap(height=9.0, length=18, width=18,
                                         dish_division_x=dish_division_x,
                                         dish_division_y=dish_division_y,
                                         dish_thickness=dish_thickness+0.1, dish_fn=dish_fn,
+                                        dish_corner_fn=dish_corner_fn,
                                         polygon_layers=polygon_layers,
                                         polygon_layer_rotation=polygon_layer_rotation,
                                         polygon_edges=polygon_edges, polygon_curve=polygon_curve,
@@ -426,6 +469,7 @@ module poly_keycap(height=9.0, length=18, width=18,
                                         dish_division_x=dish_division_x,
                                         dish_division_y=dish_division_y,
                                         dish_thickness=dish_thickness+0.1, dish_fn=dish_fn,
+                                        dish_corner_fn=dish_corner_fn,
                                         polygon_layers=polygon_layers,
                                         polygon_layer_rotation=polygon_layer_rotation,
                                         polygon_edges=polygon_edges, polygon_curve=polygon_curve,
@@ -445,6 +489,7 @@ module poly_keycap(height=9.0, length=18, width=18,
                                     dish_division_x=dish_division_x,
                                     dish_division_y=dish_division_y,
                                     dish_thickness=dish_thickness+0.1, dish_fn=dish_fn,
+                                    dish_corner_fn=dish_corner_fn,
                                     polygon_layers=polygon_layers,
                                     polygon_layer_rotation=polygon_layer_rotation,
                                     polygon_edges=polygon_edges, polygon_curve=polygon_curve,
@@ -468,12 +513,14 @@ module poly_keycap(height=9.0, length=18, width=18,
                         top_x=top_x, top_y=top_y, dish_depth=dish_depth,
                         dish_x=dish_x, dish_y=dish_y, dish_z=dish_z,
                         dish_thickness=dish_thickness, dish_fn=dish_fn,
+                        dish_corner_fn=dish_corner_fn,
                         polygon_layers=polygon_layers,
                         polygon_layer_rotation=polygon_layer_rotation,
                         polygon_edges=polygon_edges, polygon_curve=polygon_curve,
                         dish_type=dish_type, corner_radius=corner_radius/2,
                         dish_division_x=dish_division_x, dish_division_y=dish_division_y,
-                        corner_radius_curve=corner_radius_curve, polygon_rotation=polygon_rotation,
+                        corner_radius_curve=corner_radius_curve,
+                        polygon_rotation=polygon_rotation,
                         dish_invert=dish_invert);
                 }
                 if (stem_clips) {
@@ -487,7 +534,8 @@ module poly_keycap(height=9.0, length=18, width=18,
                             xy2=[length-wall_thickness*2-top_difference*1.03,
                                  width-wall_thickness*2-top_difference*1.03],
                             xy2_offset=[top_x,top_y],
-                            h=height, r=corner_radius/2, center=false);
+                            h=height, r=corner_radius/2, center=false,
+                            $fn=dish_corner_fn);
                 // TEMPORARILY DISABLED NORTHEAST INDICATOR SINCE IT WAS CAUSING PROBLEMS:
                 // This adds a northeast (back right) indicator so you can tell which side is which with symmetrical keycaps
 //                        if (wall_thickness > 0) {

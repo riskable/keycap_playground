@@ -93,3 +93,5 @@ function polygon_slice_reverse(step, amplitude, total_steps=10) = (1 - (total_st
 
 // Examples:
 //squarish_rpoly(xy1=[0.1,0.1], xy2=[40,40], h=10, r=0.2, center=true);
+// Flat sides example:
+//squarish_rpoly(xy1=[10,10], xy2=[18,18], h=10, r=1, center=true, $fn=4);
