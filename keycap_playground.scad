@@ -1,7 +1,7 @@
 // Riskable's Keycap Playground -- Use this tool to try out all your cool keycap ideas.
 
 // AUTHOR: Riskable <riskable@youknowwhat.com>
-// VERSION: 1.7 (Changelog is at the bottom)
+// VERSION: 1.8 (Changelog is at the bottom)
 
 /* NOTES
     * Want to understand how to use this file? See: https://youtu.be/WDlRZMvisA4
@@ -31,7 +31,7 @@ use <legends.scad>
 use <utils.scad>
 use <profiles.scad>
 
-$fn = 64; // Mostly only applies to legends/fonts but increase as needed for greater resolution
+$fn = 32; // Mostly only applies to legends/fonts but increase as needed for greater resolution
 
 // Pick what you want to render (you can put a '%' in front of the name to make it transparent)
 RENDER = ["keycap", "stem"]; // Supported values: keycap, stem, legends, row, row_stems, row_legends, custom
@@ -69,7 +69,8 @@ KEY_WIDTH = (KEY_UNIT*1-BETWEENSPACE); // The Y (NOTE: If using POLYGON_EGDES>4 
 // NOTE: Spacebars don't seem to use BETWEENSPACE (for whatever reason).  So to make a spacebar just use "KEY_UNIT*<spacebar unit length>" and omit the "-BETWEENSPACE" part.  Or just be precise and give it a value like 119.0625 (19.05*6.25)
 // NOTE: When making longer keycaps you may need to increase KEY_HEIGHT slightly in order for the height to be accurate.  I recommend giving it an extra 0.3mm per extra unit of length so 2U would be +0.3, 3U would be +0.6, etc BUT DOUBLE CHECK IT.  Do a side profile view and look at the ruler or render it and double-check the height in your slicer.
 //KEY_ROTATION = [0,0,0]; // I *highly* recommend 3D printing keycaps on their front/back/sides! Try this:
-KEY_ROTATION = [0,110.1,90]; // An example of how you'd rotate a keycap on its side.  Make sure to zoom in on the bottom to make sure it's *actually* going to print flat! This should be the correct rotation for riskeycap and GEM profile.
+KEY_ROTATION = [0,110.1,90]; // An example of how you'd rotate a keycap on its side.  Make sure to zoom in on the bottom to make sure it's *actually* going to print flat! This should be the correct rotation for riskeycap profile.  For GEM use:
+//KEY_ROTATION = [0,108.6,90];
 // NOTE: If you rotate a keycap to print on its side don't forget to add a built-in support via STEM_SIDE_SUPPORTS! [0,1,0,0] is what you want if you rotated to print on the right side.
 KEY_TOP_DIFFERENCE = 5; // How much skinnier the key is at the top VS the bottom [x,y]
 KEY_TOP_X = 0; // Move the keycap's top on the X axis (controls skew left/right)
@@ -97,7 +98,7 @@ DISH_INVERT_DIVISION_X = 4;
 DISH_INVERT_DIVISION_Y = 1;
 // TIP: If you're making a 1U keycap and want a truly rounded (spherical) top set DISH_INVERT_DIVISION_X to 1 
 // NOTE: Don't forget to increase DISH_FN if you make a longer/wider keycap!
-DISH_FN = $preview ? 64 : 256; // If you want to increase or decrease the resolution of the shapes used to make the dish (Tip: Don't go <64 for "cylinder" dish types and don't go <128 for "sphere")
+DISH_FN = $preview ? 24 : 256; // If you want to increase or decrease the resolution of the shapes used to make the dish (Tip: Don't go <64 for "cylinder" dish types and don't go <128 for "sphere")
 // NOTE: DISH_FN does not apply if DISH_INVERT==true (because it would be too much; inverted dish doesn't need as much resolution)
 DISH_CORNER_FN = $preview ? 16 : 64;
 // COOL TRICK: Set DISH_CORNER_FN to 4 to get flattened/chamfered corners (low-poly look!)
@@ -119,7 +120,7 @@ STEM_HEIGHT = 4; // How far into the keycap's stem the switch's stem can go (4 i
 // NOTE: For Alps you typically want STEM_HEIGHT=3.5 (slightly shorter)
 STEM_TOP_THICKNESS = 0.5; // The part that resides under the keycap, connecting stems and keycap together
 // TIP: Increase STEM_TOP_THICKNESS when generating underset masks; makes them easier to use as a modifier in your slicer.
-STEM_INSIDE_TOLERANCE = 0.25; // Increases the size of the empty space(s) in the stem
+STEM_INSIDE_TOLERANCE = 0.2; // Increases the size of the empty space(s) in the stem
 // NOTE: For Alps stems I recommend reducing these two values to something like 0.1 or 0.05:
 STEM_OUTSIDE_TOLERANCE_X = 0.05; // Shrinks the stem a bit on the X axis (both axis for round_cherry)
 STEM_OUTSIDE_TOLERANCE_Y = 0.05; // Shrinks the stem a bit on th Y axix (unused with round_cherry)
@@ -132,7 +133,7 @@ STEM_CORNER_RADIUS = STEM_TYPE=="alps" ? ALPS_STEM_CORNER_RADIUS : BOX_CHERRY_ST
 // NOTE ABOUT STEM STRENGTH AND ACCURACY: Printing stems upright/flat with a 0.4mm nozzle is troublesome.  They work OK but they're usually quite tight.  It's better to print keys on their side (front or left/right) so that the layer lines run at an angle to the switch stem; they end up more accurate *and* much, much stronger.
 STEM_INSET = 1; // How far to inset the stem (set to 0 to have the stem rest on the build plate which means you won't need supports when printing flat)
 STEM_FLAT_SUPPORT = false; // Add built-in support for the stem when printing flat (if inset)
-STEM_SIDE_SUPPORT_THICKNESS = 0.8; // 0.8 works well for most things
+STEM_SIDE_SUPPORT_THICKNESS = 1; // 1 works well for most things
 // This controls which sides get (internal, under-the-top) stem supports (for printing on the side):
 STEM_SIDE_SUPPORTS = [0,1,0,0]; // Left, right, front, back
 // NOTE: You can only enable left/right supports *or* front/back supports.  Not both at the same time. (TODO: Fix that...  Maybe?  Why would you ever need *both* say, a left support *and* a top support at the same time?)
@@ -173,9 +174,10 @@ LEGEND_FONTS = [ // Each legend can use its own font. If not specified the first
     // Favorite fonts for legends: Roboto, Aharoni, Ubuntu, Cabin, Noto, Code2000, Franklin Gothic Medium
 ]; // Tip: "Noto" and "Code2000" have nearly every emoji/special/funky unicode chars
 LEGEND_FONT_SIZES = [ // Each legend can have its own font size
-    6.5, // Position/index must match the index in LEGENDS (this is the first legend)
+    5.5, // Position/index must match the index in LEGENDS (this is the first legend)
     4, // Second legend...  etc
 ];
+LEGEND_CARVED = false; // Makes it so the bottom of the legend matches the shape of the dish (in case you want to translate() it up to the top of the keycap to finely control its depth).  Slows down rendering quite a bit so unless you have a specific need you'd best keep it set to false.
 /* NOTES ABOUT LEGEND TRANSLATION AND ROTATION
     * Legends are translated and rotated in the following order:
         translate(trans2) rotate(rotation2) translate(trans) rotate(rotation)
@@ -183,7 +185,7 @@ LEGEND_FONT_SIZES = [ // Each legend can have its own font size
     * LEGEND_TRANS2 is probably unnecessary but may make a few folks lives easier by not having to think as much :)
 */
 LEGEND_TRANS = [ // You can translate() legends around however you like.
-    [-0.1,-0.1,0], // A good default (FYI: -0.15mm works around OpenSCAD's often-broken font centering)
+    [-0.1,0,0], // A good default (FYI: -0.1-0.15mm works around OpenSCAD's often-broken font centering)
     [4.15,3,1],
     [4.40,KEY_TOP_Y+2.25,0], // Top right (mostly)
 ];
@@ -252,13 +254,16 @@ module key_using_globals(legends) {
         dish_thickness=DISH_THICKNESS, dish_fn=DISH_FN,
         dish_corner_fn=DISH_CORNER_FN,
         legends=_legends, legend_font_sizes=LEGEND_FONT_SIZES,
+        legend_carved=LEGEND_CARVED,
         legend_fonts=LEGEND_FONTS, legend_trans=LEGEND_TRANS,
         legend_trans2=LEGEND_TRANS2, legend_scale=LEGEND_SCALE,
         legend_rotation=LEGEND_ROTATION, legend_rotation2=LEGEND_ROTATION2,
         legend_underset=LEGEND_UNDERSET,
         polygon_layers=POLYGON_LAYERS, polygon_layer_rotation=POLYGON_LAYER_ROTATION,
         polygon_edges=POLYGON_EDGES, polygon_curve=POLYGON_CURVE,
-        dish_type=DISH_TYPE, corner_radius=CORNER_RADIUS, corner_radius_curve=CORNER_RADIUS_CURVE,
+        dish_type=DISH_TYPE,
+        dish_division_x=DISH_INVERT_DIVISION_X, dish_division_y=DISH_INVERT_DIVISION_Y,
+        corner_radius=CORNER_RADIUS, corner_radius_curve=CORNER_RADIUS_CURVE,
         visualize_legends=VISUALIZE_LEGENDS, polygon_rotation=POLYGON_ROTATION,
         homing_dot_length=HOMING_DOT_LENGTH, homing_dot_width=HOMING_DOT_WIDTH,
         homing_dot_x=HOMING_DOT_X, homing_dot_y=HOMING_DOT_Y, homing_dot_z=HOMING_DOT_Z,
@@ -281,7 +286,9 @@ module key_without_legends() {
         dish_corner_fn=DISH_CORNER_FN,
         polygon_layers=POLYGON_LAYERS, polygon_layer_rotation=POLYGON_LAYER_ROTATION,
         polygon_edges=POLYGON_EDGES, polygon_curve=POLYGON_CURVE,
-        dish_type=DISH_TYPE, corner_radius=CORNER_RADIUS,
+        dish_type=DISH_TYPE,
+        dish_division_x=DISH_INVERT_DIVISION_X, dish_division_y=DISH_INVERT_DIVISION_Y,
+        corner_radius=CORNER_RADIUS,
         corner_radius_curve=CORNER_RADIUS_CURVE,
         homing_dot_length=HOMING_DOT_LENGTH, homing_dot_width=HOMING_DOT_WIDTH,
         homing_dot_x=HOMING_DOT_X, homing_dot_y=HOMING_DOT_Y, homing_dot_z=HOMING_DOT_Z,
@@ -326,6 +333,8 @@ module stem_using_globals() {
             dish_fn=DISH_FN,
             dish_corner_fn=DISH_CORNER_FN,
             dish_tilt_curve=DISH_TILT_CURVE,
+            dish_division_x=DISH_INVERT_DIVISION_X,
+            dish_division_y=DISH_INVERT_DIVISION_Y,
             corner_radius=BOX_CHERRY_STEM_CORNER_RADIUS,
             key_corner_radius=CORNER_RADIUS,
             corner_radius_curve=CORNER_RADIUS_CURVE,
@@ -884,7 +893,7 @@ module handle_render(what, legends) {
                 legends=legends, legend_font_sizes=LEGEND_FONT_SIZES,
                 legend_fonts=LEGEND_FONTS,
                 legend_trans=LEGEND_TRANS, legend_trans2=LEGEND_TRANS2,
-                legend_scale=LEGEND_SCALE,
+                legend_scale=LEGEND_SCALE, legend_carved=LEGEND_CARVED,
                 legend_rotation=LEGEND_ROTATION, legend_rotation2=LEGEND_ROTATION2,
                 polygon_layers=POLYGON_LAYERS, dish_fn=DISH_FN,
                 dish_corner_fn=DISH_CORNER_FN, dish_thickness=DISH_THICKNESS,
@@ -902,7 +911,7 @@ module handle_render(what, legends) {
                 legends=legends, legend_font_sizes=LEGEND_FONT_SIZES,
                 legend_fonts=LEGEND_FONTS,
                 legend_trans=LEGEND_TRANS, legend_trans2=LEGEND_TRANS2,
-                legend_scale=LEGEND_SCALE,
+                legend_scale=LEGEND_SCALE, legend_carved=LEGEND_CARVED,
                 legend_rotation=LEGEND_ROTATION, legend_rotation2=LEGEND_ROTATION2,
                 corner_radius=CORNER_RADIUS, polygon_layers=POLYGON_LAYERS,
                 dish_fn=DISH_FN, dish_corner_fn=DISH_CORNER_FN,
@@ -921,7 +930,7 @@ module handle_render(what, legends) {
                 legends=legends, legend_font_sizes=LEGEND_FONT_SIZES,
                 legend_fonts=LEGEND_FONTS,
                 legend_trans=LEGEND_TRANS, legend_trans2=LEGEND_TRANS2,
-                legend_scale=LEGEND_SCALE,
+                legend_scale=LEGEND_SCALE, legend_carved=LEGEND_CARVED,
                 legend_rotation=LEGEND_ROTATION, legend_rotation2=LEGEND_ROTATION2,
                 corner_radius=CORNER_RADIUS, polygon_layers=POLYGON_LAYERS,
                 dish_fn=DISH_FN, dish_corner_fn=DISH_CORNER_FN,
@@ -940,14 +949,15 @@ module handle_render(what, legends) {
                 legends=legends, legend_font_sizes=LEGEND_FONT_SIZES,
                 legend_fonts=LEGEND_FONTS,
                 legend_trans=LEGEND_TRANS, legend_trans2=LEGEND_TRANS2,
-                legend_scale=LEGEND_SCALE,
+                legend_scale=LEGEND_SCALE, legend_carved=LEGEND_CARVED,
                 legend_rotation=LEGEND_ROTATION, legend_rotation2=LEGEND_ROTATION2,
                 polygon_layers=POLYGON_LAYERS,
                 dish_fn=DISH_FN, dish_corner_fn=DISH_CORNER_FN,
                 dish_thickness=DISH_THICKNESS,
                 visualize_legends=VISUALIZE_LEGENDS, legend_underset=LEGEND_UNDERSET,
                 homing_dot_length=HOMING_DOT_LENGTH, homing_dot_width=HOMING_DOT_WIDTH,
-                homing_dot_x=HOMING_DOT_X, homing_dot_y=HOMING_DOT_Y, homing_dot_z=HOMING_DOT_Z,
+                homing_dot_x=HOMING_DOT_X, homing_dot_y=HOMING_DOT_Y,
+                homing_dot_z=HOMING_DOT_Z,
                 key_rotation=KEY_ROTATION, dish_invert=DISH_INVERT,
                 uniform_wall_thickness=UNIFORM_WALL_THICKNESS, debug=DEBUG);
         } else if (KEY_PROFILE == "kam") {
@@ -958,7 +968,7 @@ module handle_render(what, legends) {
                 legends=legends, legend_font_sizes=LEGEND_FONT_SIZES,
                 legend_fonts=LEGEND_FONTS,
                 legend_trans=LEGEND_TRANS, legend_trans2=LEGEND_TRANS2,
-                legend_scale=LEGEND_SCALE,
+                legend_scale=LEGEND_SCALE, legend_carved=LEGEND_CARVED,
                 legend_rotation=LEGEND_ROTATION, legend_rotation2=LEGEND_ROTATION2,
                 polygon_layers=POLYGON_LAYERS,
                 dish_fn=DISH_FN, dish_corner_fn=DISH_CORNER_FN,
@@ -977,7 +987,7 @@ module handle_render(what, legends) {
                 legends=legends, legend_font_sizes=LEGEND_FONT_SIZES,
                 legend_fonts=LEGEND_FONTS,
                 legend_trans=LEGEND_TRANS, legend_trans2=LEGEND_TRANS2,
-                legend_scale=LEGEND_SCALE,
+                legend_scale=LEGEND_SCALE, legend_carved=LEGEND_CARVED,
                 legend_rotation=LEGEND_ROTATION, legend_rotation2=LEGEND_ROTATION2,
                 polygon_layers=POLYGON_LAYERS,
                 dish_fn=DISH_FN, dish_corner_fn=DISH_CORNER_FN,
@@ -996,7 +1006,7 @@ module handle_render(what, legends) {
                 legends=legends, legend_font_sizes=LEGEND_FONT_SIZES,
                 legend_fonts=LEGEND_FONTS,
                 legend_trans=LEGEND_TRANS, legend_trans2=LEGEND_TRANS2,
-                legend_scale=LEGEND_SCALE,
+                legend_scale=LEGEND_SCALE, legend_carved=LEGEND_CARVED,
                 legend_rotation=LEGEND_ROTATION, legend_rotation2=LEGEND_ROTATION2,
                 polygon_layers=POLYGON_LAYERS,
                 dish_fn=DISH_FN, dish_corner_fn=DISH_CORNER_FN,
@@ -1019,7 +1029,7 @@ module handle_render(what, legends) {
                 legends=legends, legend_font_sizes=LEGEND_FONT_SIZES,
                 legend_fonts=LEGEND_FONTS,
                 legend_trans=LEGEND_TRANS, legend_trans2=LEGEND_TRANS2,
-                legend_scale=LEGEND_SCALE,
+                legend_scale=LEGEND_SCALE, legend_carved=LEGEND_CARVED,
                 legend_rotation=LEGEND_ROTATION, legend_rotation2=LEGEND_ROTATION2,
                 polygon_layers=POLYGON_LAYERS, dish_fn=DISH_FN,
                 dish_corner_fn=DISH_CORNER_FN, dish_thickness=DISH_THICKNESS,
@@ -1037,7 +1047,7 @@ module handle_render(what, legends) {
                 legends=legends, legend_font_sizes=LEGEND_FONT_SIZES,
                 legend_fonts=LEGEND_FONTS,
                 legend_trans=LEGEND_TRANS, legend_trans2=LEGEND_TRANS2,
-                legend_scale=LEGEND_SCALE,
+                legend_scale=LEGEND_SCALE, legend_carved=LEGEND_CARVED,
                 legend_rotation=LEGEND_ROTATION, legend_rotation2=LEGEND_ROTATION2,
                 corner_radius=CORNER_RADIUS, polygon_layers=POLYGON_LAYERS,
                 dish_fn=DISH_FN, dish_corner_fn=DISH_CORNER_FN,
@@ -1056,14 +1066,15 @@ module handle_render(what, legends) {
                 legends=legends, legend_font_sizes=LEGEND_FONT_SIZES,
                 legend_fonts=LEGEND_FONTS,
                 legend_trans=LEGEND_TRANS, legend_trans2=LEGEND_TRANS2,
-                legend_scale=LEGEND_SCALE,
+                legend_scale=LEGEND_SCALE, legend_carved=LEGEND_CARVED,
                 legend_rotation=LEGEND_ROTATION, legend_rotation2=LEGEND_ROTATION2,
                 corner_radius=CORNER_RADIUS, polygon_layers=POLYGON_LAYERS,
                 dish_fn=DISH_FN, dish_corner_fn=DISH_CORNER_FN,
                 dish_thickness=DISH_THICKNESS,
                 visualize_legends=VISUALIZE_LEGENDS, legend_underset=LEGEND_UNDERSET,
                 homing_dot_length=HOMING_DOT_LENGTH, homing_dot_width=HOMING_DOT_WIDTH,
-                homing_dot_x=HOMING_DOT_X, homing_dot_y=HOMING_DOT_Y, homing_dot_z=HOMING_DOT_Z,
+                homing_dot_x=HOMING_DOT_X, homing_dot_y=HOMING_DOT_Y,
+                homing_dot_z=HOMING_DOT_Z,
                 key_rotation=KEY_ROTATION, dish_invert=DISH_INVERT,
                 uniform_wall_thickness=UNIFORM_WALL_THICKNESS, debug=DEBUG);
         } else if (KEY_PROFILE == "kat") {
@@ -1074,9 +1085,9 @@ module handle_render(what, legends) {
                 legends=legends, legend_font_sizes=LEGEND_FONT_SIZES,
                 legend_fonts=LEGEND_FONTS,
                 legend_trans=LEGEND_TRANS, legend_trans2=LEGEND_TRANS2,
-                legend_scale=LEGEND_SCALE,
+                legend_scale=LEGEND_SCALE, legend_carved=LEGEND_CARVED,
                 legend_rotation=LEGEND_ROTATION, legend_rotation2=LEGEND_ROTATION2,
-                corner_radius=CORNER_RADIUS, polygon_layers=POLYGON_LAYERS,
+                polygon_layers=POLYGON_LAYERS,
                 dish_fn=DISH_FN, dish_corner_fn=DISH_CORNER_FN,
                 dish_thickness=DISH_THICKNESS,
                 visualize_legends=VISUALIZE_LEGENDS, legend_underset=LEGEND_UNDERSET,
@@ -1093,9 +1104,9 @@ module handle_render(what, legends) {
                 legends=legends, legend_font_sizes=LEGEND_FONT_SIZES,
                 legend_fonts=LEGEND_FONTS,
                 legend_trans=LEGEND_TRANS, legend_trans2=LEGEND_TRANS2,
-                legend_scale=LEGEND_SCALE,
+                legend_scale=LEGEND_SCALE, legend_carved=LEGEND_CARVED,
                 legend_rotation=LEGEND_ROTATION, legend_rotation2=LEGEND_ROTATION2,
-                corner_radius=CORNER_RADIUS, polygon_layers=POLYGON_LAYERS,
+                polygon_layers=POLYGON_LAYERS,
                 dish_fn=DISH_FN, dish_corner_fn=DISH_CORNER_FN,
                 dish_thickness=DISH_THICKNESS,
                 visualize_legends=VISUALIZE_LEGENDS, legend_underset=LEGEND_UNDERSET,
@@ -1112,9 +1123,9 @@ module handle_render(what, legends) {
                 legends=legends, legend_font_sizes=LEGEND_FONT_SIZES,
                 legend_fonts=LEGEND_FONTS,
                 legend_trans=LEGEND_TRANS, legend_trans2=LEGEND_TRANS2,
-                legend_scale=LEGEND_SCALE,
+                legend_scale=LEGEND_SCALE, legend_carved=LEGEND_CARVED,
                 legend_rotation=LEGEND_ROTATION, legend_rotation2=LEGEND_ROTATION2,
-                corner_radius=CORNER_RADIUS, polygon_layers=POLYGON_LAYERS,
+                polygon_layers=POLYGON_LAYERS,
                 dish_fn=DISH_FN, dish_corner_fn=DISH_CORNER_FN,
                 dish_thickness=DISH_THICKNESS,
                 visualize_legends=VISUALIZE_LEGENDS, legend_underset=LEGEND_UNDERSET,
@@ -1131,9 +1142,9 @@ module handle_render(what, legends) {
                 legends=legends, legend_font_sizes=LEGEND_FONT_SIZES,
                 legend_fonts=LEGEND_FONTS,
                 legend_trans=LEGEND_TRANS, legend_trans2=LEGEND_TRANS2,
-                legend_scale=LEGEND_SCALE,
+                legend_scale=LEGEND_SCALE, legend_carved=LEGEND_CARVED,
                 legend_rotation=LEGEND_ROTATION, legend_rotation2=LEGEND_ROTATION2,
-                corner_radius=CORNER_RADIUS, polygon_layers=POLYGON_LAYERS,
+                polygon_layers=POLYGON_LAYERS,
                 dish_fn=DISH_FN, dish_corner_fn=DISH_CORNER_FN,
                 dish_thickness=DISH_THICKNESS,
                 visualize_legends=VISUALIZE_LEGENDS, legend_underset=LEGEND_UNDERSET,
@@ -1345,7 +1356,7 @@ module handle_render(what, legends) {
 }
 
 module render_keycap(stuff_to_render) {
-    for (what_to_render=RENDER) {
+    for (what_to_render=stuff_to_render) {
         if (what_to_render=="row") { // For rendering a whole row of keys (use ROW variable)
             note("HAVE PATIENCE! Rendering all keycaps in ROW variable...");
             for (i=[0:1:len(ROW)-1]) {
@@ -1403,6 +1414,17 @@ module render_keycap(stuff_to_render) {
 render_keycap(RENDER);
 
 /* CHANGELOG:
+    1.8:
+        * NEW FEATURE: LEGEND_CARVED.  It controls whether or not the underside of legends will match the shape of the dish.  Previously this was done automatically so that if you translate()'d your legends up on the Z it would match the shape of the dish; this allowed you to finely tune how deep the legends would go.  Unfortunately this considerably increases the rendering complexity slowing it down a non-trivial amount for every single legend.  Since that's kind of an obscure feature I've added this boolean to control whether or not the legends get carved out like that and it's disabled by default.  FYI: This minor change can shave *minutes* off of final rendering times!
+        * Fixed DISH_INVERT_DIVISION_Y and DISH_INVERT_DIVISION_X so they work properly now (they weren't being passed as arguments to anything! Oops).
+        * STEM_INSIDE_TOLERANCE has been changed from 0.25 to 0.2 because people were reporting keycaps as slightly too loose.
+        * DISH_FN has been modified so that when previewing it uses 24 instead of the previous 64.  It doesn't look as nice but it sure speeds up preview rendering by a ton!
+        * GEM profile has been adjusted to give it slightly wider corners (because it looks cool).  It also got a few other minor tweaks/fixes.
+        * Minor fix to the render_keycap() module.
+        * Lots of fixes to stem supports and the parts of stems that touch the undersides of keycaps.
+        * Interior trapezoidal cutouts of keycaps (i.e. when NOT using UNIFORM_WALL_THICKNESS) now take the CORNER_RADIUS_CURVE into account so there shouldn't be holes in the top corners of keycaps (from that) anymore (if they're not twisted).
+        * STEM_SIDE_SUPPORT_THICKNESS has been changed from 0.8 to 1 because having it slightly thicker reduces the likelihood of it failing to stick under certain circumstances (i.e when it's too short as a result of printing at certain angles).
+        * Fixed a bug where '%keycap' wasn't quite matching 'keycap'.
     1.7:
         * NEW FEATURE: DISH_CORNER_FN.  It lets you control the polygon count that goes into the corner radius. So if you set it to something like 4 you'll that, "gem cut" (i.e. an octagonal shape with flat corners).
         * Riskeycap profile is now version 6.1:
