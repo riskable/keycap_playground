@@ -188,9 +188,10 @@ module stem_box_cherry(key_height, key_length, key_width, dish_depth, dish_thick
             difference() {
                 translate([0,0,0]) _poly_keycap(
                 // Since this is an interior cutout sort of thing we need to cut the height down slightly so there's some overlap
-                    height=key_height-wall_extra+inverted_dish_adjustment-wall_thickness,
+                    height=key_height+inverted_dish_adjustment-wall_thickness,
                     length=key_length-wall_thickness*2,
-                    width=key_width-wall_thickness*2, wall_thickness=wall_thickness,
+                    width=key_width-wall_thickness*2,
+                    wall_thickness=wall_thickness,
                     top_difference=top_difference, dish_tilt=dish_tilt,
                     dish_tilt_curve=dish_tilt_curve,
                     top_x=top_x, top_y=top_y, dish_depth=dish_depth,
@@ -208,13 +209,13 @@ module stem_box_cherry(key_height, key_length, key_width, dish_depth, dish_thick
                     dish_invert=dish_invert);
                 if (wall_extra != 0) { // Stem will get its own walls
                     translate([0,0,-0.001]) _poly_keycap(
-                        height=key_height-wall_thickness-wall_extra*2+inverted_dish_adjustment,
+                        height=key_height-wall_thickness*2-wall_extra+inverted_dish_adjustment,
                         length=key_length-wall_thickness*2-wall_extra*2,
                         width=key_width-wall_thickness*2-wall_extra*2,
                         wall_thickness=wall_thickness,
                         top_difference=top_difference, dish_tilt=dish_tilt,
                         dish_tilt_curve=dish_tilt_curve,
-                        top_x=top_x, top_y=top_y, dish_depth=dish_depth/2,
+                        top_x=top_x, top_y=top_y, dish_depth=dish_depth,
                         dish_x=dish_x, dish_y=dish_y, dish_z=dish_z,
                         dish_thickness=dish_thickness, dish_fn=dish_fn,
                         dish_corner_fn=dish_corner_fn,
@@ -400,15 +401,16 @@ module _stem_box_cherry(key_height, key_length, key_width, dish_depth, dish_thic
                 translate([
                   0,
                   0,
-                  key_height-dish_depth-wall_thickness+dish_z-0.15])
+                  key_height-dish_depth-wall_thickness-wall_extra+dish_z+inverted_dish_adjustment])
                 // No idea where the 0.15 comes from but it's necessary (LOL)
                     difference() {
                         squarish_rpoly(
                             xy=[length,width],
-                            h=key_height-dish_depth-depth-inset+dish_z+inverted_dish_adjustment,
+                            h=key_height-dish_depth-depth-inset+dish_z-wall_extra+inverted_dish_adjustment,
                             r=corner_radius, center=true);
-                        translate([0,0,-depth/2])
-                            cherry_cross(tolerance=inside_tolerance, flare_base=false);
+                // Commented this out because it seems totally unnecessary:
+//                        translate([0,0,-depth/2])
+//                            cherry_cross(tolerance=inside_tolerance, flare_base=false);
                     }
             } else { // Non-uniform wall thickness
                 stem_topper_height = key_height-dish_depth-top_thickness-dish_thickness-inset-depth+dish_z;

@@ -1,7 +1,7 @@
 // Riskable's Keycap Playground -- Use this tool to try out all your cool keycap ideas.
 
 // AUTHOR: Riskable <riskable@youknowwhat.com>
-// VERSION: 1.8.1 (Changelog is at the bottom)
+// VERSION: 1.8.2 (Changelog is at the bottom)
 
 /* NOTES
     * Want to understand how to use this file? See: https://youtu.be/WDlRZMvisA4
@@ -1414,6 +1414,8 @@ module render_keycap(stuff_to_render) {
 render_keycap(RENDER);
 
 /* CHANGELOG:
+    1.8.2:
+        * Additional fixes to stems when UNIFORM_WALL_THICKNESS is enabled.
     1.8.1:
         * Minor bugfix to stems when UNIFORM_WALL_THICKNESS is enabled.
     1.8:
