@@ -188,7 +188,7 @@ module stem_box_cherry(key_height, key_length, key_width, dish_depth, dish_thick
             difference() {
                 translate([0,0,0]) _poly_keycap(
                 // Since this is an interior cutout sort of thing we need to cut the height down slightly so there's some overlap
-                    height=key_height-wall_extra+inverted_dish_adjustment,
+                    height=key_height-wall_extra+inverted_dish_adjustment-wall_thickness,
                     length=key_length-wall_thickness*2,
                     width=key_width-wall_thickness*2, wall_thickness=wall_thickness,
                     top_difference=top_difference, dish_tilt=dish_tilt,

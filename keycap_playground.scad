@@ -1,7 +1,7 @@
 // Riskable's Keycap Playground -- Use this tool to try out all your cool keycap ideas.
 
 // AUTHOR: Riskable <riskable@youknowwhat.com>
-// VERSION: 1.8 (Changelog is at the bottom)
+// VERSION: 1.8.1 (Changelog is at the bottom)
 
 /* NOTES
     * Want to understand how to use this file? See: https://youtu.be/WDlRZMvisA4
@@ -87,7 +87,7 @@ DISH_TYPE = "sphere"; // "inv_pyramid", "cylinder", "sphere" (aka "domed"), anyt
 // NOTE: inv_pyramid doesn't work for making spacbars (kinda, "duh")
 DISH_DEPTH = 1; // Distance between the top sides and the bottommost point in the dish (set to 0 for flat top)
 // NOTE: When DISH_INVERT is true DISH_DEPTH becomes more like, "how far dish protrudes upwards"
-DISH_THICKNESS = 1.0; // Amount of material that will be placed under the bottommost part of the dish
+DISH_THICKNESS = 0.0; // Amount of material that will be placed under the bottommost part of the dish
 // NOTE: If you make DISH_THICKNESS too small legends might not print properly--even with a tiny nozzle.  In other words, a thick keycap top makes for nice clean (3D printed) legends.
 // NOTE: Also, if you're printing white keycaps with transparent legends you want a thick dish (1.2+) to darken the non-transparent parts of the keycap
 DISH_TILT = 0; // How to rotate() the dish of the key (on the Y axis)
@@ -148,7 +148,7 @@ STEM_LOCATIONS = [ // Where to place stems/stabilizers
 ];
 // SNAP-FIT STEM STUFF (see snap_fit.scad for more details)
 STEM_SNAP_FIT = false; // If you want to print the stem as a separate part
-STEM_SIDES_WALL_THICKNESS = 0.0; // This will add additional thickness to the interior walls of the keycap that's rendered/exported with the "stem".  If you have legends on the front/back/sides of your keycap setting this to something like 0.65 will give those legends something to "sit" on when doing multi-material prints (so there's no mid-air printing or drooping).
+STEM_SIDES_WALL_THICKNESS = 0.0; // This will add additional thickness to the interior walls of the keycap that's rendered/exported with the "stem".  If you have legends on the front/back/sides of your keycap setting this to something like 0.65 will give those legends something to "sit" on when printing (so there's no mid-air printing or drooping).
 STEM_WALLS_INSET = 0; // Makes it so the stem walls don't go all the way to the bottom of the keycap; works just like STEM_INSET but for the walls (1.05 is good for snap-fit stems)
 STEM_WALLS_TOLERANCE = 0.0; // How much wiggle room the stem sides will get inside the keycap (0.2 is good for snap-fit stems)
 
@@ -1414,17 +1414,19 @@ module render_keycap(stuff_to_render) {
 render_keycap(RENDER);
 
 /* CHANGELOG:
+    1.8.1:
+        * Minor bugfix to stems when UNIFORM_WALL_THICKNESS is enabled.
     1.8:
-        * NEW FEATURE: LEGEND_CARVED.  It controls whether or not the underside of legends will match the shape of the dish.  Previously this was done automatically so that if you translate()'d your legends up on the Z it would match the shape of the dish; this allowed you to finely tune how deep the legends would go.  Unfortunately this considerably increases the rendering complexity slowing it down a non-trivial amount for every single legend.  Since that's kind of an obscure feature I've added this boolean to control whether or not the legends get carved out like that and it's disabled by default.  FYI: This minor change can shave *minutes* off of final rendering times!
-        * Fixed DISH_INVERT_DIVISION_Y and DISH_INVERT_DIVISION_X so they work properly now (they weren't being passed as arguments to anything! Oops).
-        * STEM_INSIDE_TOLERANCE has been changed from 0.25 to 0.2 because people were reporting keycaps as slightly too loose.
-        * DISH_FN has been modified so that when previewing it uses 24 instead of the previous 64.  It doesn't look as nice but it sure speeds up preview rendering by a ton!
-        * GEM profile has been adjusted to give it slightly wider corners (because it looks cool).  It also got a few other minor tweaks/fixes.
-        * Minor fix to the render_keycap() module.
-        * Lots of fixes to stem supports and the parts of stems that touch the undersides of keycaps.
-        * Interior trapezoidal cutouts of keycaps (i.e. when NOT using UNIFORM_WALL_THICKNESS) now take the CORNER_RADIUS_CURVE into account so there shouldn't be holes in the top corners of keycaps (from that) anymore (if they're not twisted).
-        * STEM_SIDE_SUPPORT_THICKNESS has been changed from 0.8 to 1 because having it slightly thicker reduces the likelihood of it failing to stick under certain circumstances (i.e when it's too short as a result of printing at certain angles).
-        * Fixed a bug where '%keycap' wasn't quite matching 'keycap'.
+* NEW FEATURE: LEGEND_CARVED.  It controls whether or not the underside of legends will match the shape of the dish.  Previously this was done automatically so that if you translate()'d your legends up on the Z it would match the shape of the dish; this allowed you to finely tune how deep the legends would go.  Unfortunately this considerably increases the rendering complexity slowing it down a non-trivial amount for every single legend.  Since that's kind of an obscure feature I've added this boolean to control whether or not the legends get carved out like that and it's disabled by default.  FYI: This minor change can shave *minutes* off of final rendering times!
+* Fixed DISH_INVERT_DIVISION_Y and DISH_INVERT_DIVISION_X so they work properly now (they weren't being passed as arguments to anything! Oops).
+* STEM_INSIDE_TOLERANCE has been changed from 0.25 to 0.2 because people were reporting keycaps as slightly too loose.
+* DISH_FN has been modified so that when previewing it uses 24 instead of the previous 64.  It doesn't look as nice but it sure speeds up preview rendering by a ton!
+* GEM profile has been adjusted to give it slightly wider corners (because it looks cool).  It also got a few other minor tweaks/fixes.
+* Minor fix to the render_keycap() module.
+* Lots of fixes to stem supports and the parts of stems that touch the undersides of keycaps.
+* Interior trapezoidal cutouts of keycaps (i.e. when NOT using UNIFORM_WALL_THICKNESS) now take the CORNER_RADIUS_CURVE into account so there shouldn't be holes in the top corners of keycaps (from that) anymore (if they're not twisted).
+* STEM_SIDE_SUPPORT_THICKNESS has been changed from 0.8 to 1 because having it slightly thicker reduces the likelihood of it failing to stick under certain circumstances (i.e when it's too short as a result of printing at certain angles).
+* Fixed a bug where '%keycap' wasn't quite matching 'keycap'.
     1.7:
         * NEW FEATURE: DISH_CORNER_FN.  It lets you control the polygon count that goes into the corner radius. So if you set it to something like 4 you'll that, "gem cut" (i.e. an octagonal shape with flat corners).
         * Riskeycap profile is now version 6.1:
