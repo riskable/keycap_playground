@@ -3,7 +3,8 @@
 use <utils.scad>
 use <legends.scad>
 
-// TODO: Add support for uniform wall thickness
+// CONSTANTS
+KEY_UNIT = 19.05; // Square that makes up the entire space of a key
 
 // Draws the keycap without legends (because we need to do an intersection() of the keycap+legends to make sure legends conform to the correct shape)
 module _poly_keycap(height=9.0, length=18, width=18,
@@ -375,6 +376,9 @@ module poly_keycap(height=9.0, length=18, width=18,
   visualize_legends=false, polygon_rotation=false, key_rotation=[0,0,0],
   dish_invert=false, uniform_wall_thickness=true, debug=false) {
     layer_tilt_adjust = dish_tilt/polygon_layers;
+    // Inverted dish means we need to make the legend a little taller
+    legend_inverted_dish_adjustment = dish_invert ? dish_depth*1.25 : 0;
+    inverted_dish_adjustment = dish_invert ? dish_depth : 0;
     if (debug) {
         // NOTE: Tried to divide these up into logical sections; all related elements should be on one line
         echo(height=height, length=length, width=width);
@@ -426,7 +430,7 @@ module poly_keycap(height=9.0, length=18, width=18,
                           scale(l_scale)
                             rotate([tilt_above_curved,0,0])
                                 difference() {
-                                    draw_legend(legend, font_size, font, height);
+                                    draw_legend(legend, font_size, font, height+legend_inverted_dish_adjustment);
                                     // Make sure the preview matches the curve of the dish on the bottom
                                     if (legend_carved) {
                                         translate([0,0,-height+dish_depth-dish_z]) _poly_keycap(
@@ -459,7 +463,7 @@ module poly_keycap(height=9.0, length=18, width=18,
                           scale(l_scale)
                             rotate([tilt_above_curved,0,0])
                                 difference() {
-                                    draw_legend(legend, font_size, font, height);
+                                    draw_legend(legend, font_size, font, height+legend_inverted_dish_adjustment);
                                     if (legend_carved) {
                                         translate([0,0,-height+dish_depth-dish_z]) _poly_keycap(
                                             height=height, length=length, width=width,
@@ -532,12 +536,12 @@ module poly_keycap(height=9.0, length=18, width=18,
                 }
             } else { // Trapezoidal interior cutout (keeps things simple)
                 difference() {
-                    corner_radius_factor = ((corner_radius*corner_radius_curve/polygon_layers)*polygon_layers)/10+1; // Yes that + 1 is important =)
+                    corner_radius_factor = ((corner_radius*corner_radius_curve/polygon_layers)*polygon_layers)/1.5;
                     translate([0,0,-0.001]) difference() {
                         squarish_rpoly(
                             xy1=[length-wall_thickness*2,width-wall_thickness*2],
-                            xy2=[(length-wall_thickness*2-top_difference)/corner_radius_factor,
-                                 (width-wall_thickness*2-top_difference)/corner_radius_factor],
+                            xy2=[length-wall_thickness*2-top_difference-corner_radius_factor,
+                                 width-wall_thickness*2-top_difference-corner_radius_factor],
                             xy2_offset=[top_x,top_y],
                             h=height, r=corner_radius/2, center=false,
                             $fn=dish_corner_fn);
@@ -557,8 +561,6 @@ module poly_keycap(height=9.0, length=18, width=18,
                         clip_height = 2;
 // NOTE: The top half of the clip gets cut off so the clip_height is really 1 (when set to 2)
                         if (stem_clips) {
-                            echo(stem_clips=stem_clips);
-                            echo(stem_walls_inset=stem_walls_inset);
                             translate([length/6,-width/2+clip_width/2+wall_thickness,0])
                                 difference() {
                                     cube([length/5,clip_width,clip_height], center=true);
@@ -593,7 +595,7 @@ module poly_keycap(height=9.0, length=18, width=18,
                         }
                     }
                     // Cut off the top (of the interior--to make it the right height)
-                    translate([0,0,height/2+height-dish_depth-dish_thickness])
+                    translate([0,0,height/2+height-dish_depth-dish_thickness+inverted_dish_adjustment])
                         cube([length*2,width*2,height], center=true);
                 }
             }

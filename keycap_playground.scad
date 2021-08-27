@@ -1,7 +1,7 @@
 // Riskable's Keycap Playground -- Use this tool to try out all your cool keycap ideas.
 
 // AUTHOR: Riskable <riskable@youknowwhat.com>
-// VERSION: 1.8.2 (Changelog is at the bottom)
+// VERSION: 1.9 (Changelog is at the bottom)
 
 /* NOTES
     * Want to understand how to use this file? See: https://youtu.be/WDlRZMvisA4
@@ -10,7 +10,7 @@
     * TIP: If you're making changes but nothing's happening when you hit F5: Did you forget to change the KEY_PROFILE to "" (an empty string)?
     * The default rendering mode (["keycap", "stem"]) will include inset (non-multi-material) legends automatically.  Adding "legends" to RENDER is something you only want to do if you're making multi-material keycaps...
     * To make a multi-material print just render and export "keycap", "stem", and "legends" as separate .stl files.  To save time you can render ["keycap", "stem"] and then just ["legends"].
-    * TIP: Want to make a keycap that works (looks cool) with backlit/RGB LED keyboards?  Print the stem and legends in a transparent material (clear PETG is a very effective light pipe!).  You can also render the stem and legends as a single file: ["stem", "legends"] which will save time importing into your slicer later.
+    * TIP: Want to make a keycap that works great (looks cool) with backlit/RGB LED keyboards?  Print the stem and legends in a transparent material (clear PETG is a very effective light pipe!).  You can also render the stem and legends as a single file: ["stem", "legends"] which will save time importing into your slicer later.  Alternatively, just make the dish kinda thick, use UNIFORM_WALL_THICKNESS, and print in white PETG (most white PETGs seem to be transparent enough for it to look pretty good!).
     * Have a lot of different legends/keycaps to render?  You can add all your legends to the ROW variable and then render ["row", "row_stems"] and ["row_legends"].
     * Having trouble lining up your legends?  Try setting VISUALIZE_LEGENDS=1!  It'll show you where they all are, their angles, etc.
     * The part of the stem that goes under the top (STEM_TOP_THICKNESS) is colored purple so you can easily see where the keycap ends and the stem begins.
@@ -75,7 +75,7 @@ KEY_ROTATION = [0,110.1,90]; // An example of how you'd rotate a keycap on its s
 KEY_TOP_DIFFERENCE = 5; // How much skinnier the key is at the top VS the bottom [x,y]
 KEY_TOP_X = 0; // Move the keycap's top on the X axis (controls skew left/right)
 KEY_TOP_Y = 0; // Move the keycap's top on the Y axis (controls skew forward/backward)
-WALL_THICKNESS = 0.45*2.5; // Default: 0.45 extrusion width * 2.5 (nice and thick; feels/sounds good)
+WALL_THICKNESS = 0.45*2.25; // Default: 0.45 extrusion width * 2.25 (nice and thick; feels/sounds good). NOTE: STEM_SIDES_WALL_THICKNESS gets added to this.
 UNIFORM_WALL_THICKNESS = true; // Much more expensive rendering but the material under the dish will match the sides (even the shape of the dish will be matched)
 // NOTE: UNIFORM_WALL_THICKNESS uses WALL_THICKNESS instead of DISH_THICKNESS. So DISH_THICKNESS will be ignored if you enable this option.
 
@@ -87,7 +87,7 @@ DISH_TYPE = "sphere"; // "inv_pyramid", "cylinder", "sphere" (aka "domed"), anyt
 // NOTE: inv_pyramid doesn't work for making spacbars (kinda, "duh")
 DISH_DEPTH = 1; // Distance between the top sides and the bottommost point in the dish (set to 0 for flat top)
 // NOTE: When DISH_INVERT is true DISH_DEPTH becomes more like, "how far dish protrudes upwards"
-DISH_THICKNESS = 0.0; // Amount of material that will be placed under the bottommost part of the dish
+DISH_THICKNESS = 0.6; // Amount of material that will be placed under the bottommost part of the dish (Note: only used if UNIFORM_WALL_THICKNESS is false)
 // NOTE: If you make DISH_THICKNESS too small legends might not print properly--even with a tiny nozzle.  In other words, a thick keycap top makes for nice clean (3D printed) legends.
 // NOTE: Also, if you're printing white keycaps with transparent legends you want a thick dish (1.2+) to darken the non-transparent parts of the keycap
 DISH_TILT = 0; // How to rotate() the dish of the key (on the Y axis)
@@ -98,7 +98,7 @@ DISH_INVERT_DIVISION_X = 4;
 DISH_INVERT_DIVISION_Y = 1;
 // TIP: If you're making a 1U keycap and want a truly rounded (spherical) top set DISH_INVERT_DIVISION_X to 1 
 // NOTE: Don't forget to increase DISH_FN if you make a longer/wider keycap!
-DISH_FN = $preview ? 24 : 256; // If you want to increase or decrease the resolution of the shapes used to make the dish (Tip: Don't go <64 for "cylinder" dish types and don't go <128 for "sphere")
+DISH_FN = $preview ? 28 : 256; // If you want to increase or decrease the resolution of the shapes used to make the dish (Tip: Don't go <64 for "cylinder" dish types and don't go <128 for "sphere")
 // NOTE: DISH_FN does not apply if DISH_INVERT==true (because it would be too much; inverted dish doesn't need as much resolution)
 DISH_CORNER_FN = $preview ? 16 : 64;
 // COOL TRICK: Set DISH_CORNER_FN to 4 to get flattened/chamfered corners (low-poly look!)
@@ -111,14 +111,14 @@ POLYGON_ROTATION = true; // If false, each layer will ALTERNATE it's rotation CW
 // NOTE: If you're using POLYGON_ROTATION and you end up with holes in your keycap walls you may just need to increase WALL_THICKNESS
 POLYGON_CURVE = 0; // If you want a "bowed" keycap (e.g. like DSA), increase this value
 CORNER_RADIUS = 1; // Radius of the outside corners of the keycap
-CORNER_RADIUS_CURVE = 1.5; // If you want the corner radius to get bigger as it goes up (WARNING: Set this too high and you'll end up with missing bits of your keycap! Check the height when messing with this)
+CORNER_RADIUS_CURVE = 3; // If you want the corner radius to get bigger as it goes up (WARNING: Set this too high and you'll end up with missing bits of your keycap! Check the height when messing with this)
 
 // STEM STUFF
 STEM_TYPE = "box_cherry"; // "box_cherry" (default), "round_cherry" (harder to print... strong), "alps"
 STEM_HOLLOW = false; // Only applies to Alps: Whether or not the inside is hollow
 STEM_HEIGHT = 4; // How far into the keycap's stem the switch's stem can go (4 is "normal keycap")
 // NOTE: For Alps you typically want STEM_HEIGHT=3.5 (slightly shorter)
-STEM_TOP_THICKNESS = 0.5; // The part that resides under the keycap, connecting stems and keycap together
+STEM_TOP_THICKNESS = 0.5; // The part that resides under the keycap, connecting stems and keycap together (Note: Only used if UNIFORM_WALL_THICKNESS is false)
 // TIP: Increase STEM_TOP_THICKNESS when generating underset masks; makes them easier to use as a modifier in your slicer.
 STEM_INSIDE_TOLERANCE = 0.2; // Increases the size of the empty space(s) in the stem
 // NOTE: For Alps stems I recommend reducing these two values to something like 0.1 or 0.05:
@@ -138,6 +138,7 @@ STEM_SIDE_SUPPORT_THICKNESS = 1; // 1 works well for most things
 STEM_SIDE_SUPPORTS = [0,1,0,0]; // Left, right, front, back
 // NOTE: You can only enable left/right supports *or* front/back supports.  Not both at the same time. (TODO: Fix that...  Maybe?  Why would you ever need *both* say, a left support *and* a top support at the same time?)
 STEM_SUPPORT_DISTANCE = 0.2; // Controls the air gap between the stem and its support
+// NOTE: If printing with a small nozzle like 0.25mm you might want to set the support distance to 0 to prevent "misses".
 STEM_LOCATIONS = [ // Where to place stems/stabilizers
     [0,0,0], // Dead center (don't comment this out when uncommenting below)
     // Standard examples (uncomment to use them):
@@ -148,7 +149,7 @@ STEM_LOCATIONS = [ // Where to place stems/stabilizers
 ];
 // SNAP-FIT STEM STUFF (see snap_fit.scad for more details)
 STEM_SNAP_FIT = false; // If you want to print the stem as a separate part
-STEM_SIDES_WALL_THICKNESS = 0.0; // This will add additional thickness to the interior walls of the keycap that's rendered/exported with the "stem".  If you have legends on the front/back/sides of your keycap setting this to something like 0.65 will give those legends something to "sit" on when printing (so there's no mid-air printing or drooping).
+STEM_SIDES_WALL_THICKNESS = 0.5; // This will add additional thickness to the interior walls of the keycap that's rendered/exported with the "stem".  If you have legends on the front/back/sides of your keycap setting this to something like 0.65 will give those legends something to "sit" on when printing (so there's no mid-air printing or drooping).
 STEM_WALLS_INSET = 0; // Makes it so the stem walls don't go all the way to the bottom of the keycap; works just like STEM_INSET but for the walls (1.05 is good for snap-fit stems)
 STEM_WALLS_TOLERANCE = 0.0; // How much wiggle room the stem sides will get inside the keycap (0.2 is good for snap-fit stems)
 
@@ -310,7 +311,6 @@ module stem_using_globals() {
             top_difference=KEY_TOP_DIFFERENCE,
             depth=STEM_HEIGHT, dish_tilt=DISH_TILT,
             top_thickness=STEM_TOP_THICKNESS,
-            key_corner_radius=CORNER_RADIUS,
             wall_thickness=WALL_THICKNESS,
             wall_extra=STEM_SIDES_WALL_THICKNESS,
             wall_inset=STEM_WALLS_INSET,
@@ -1413,7 +1413,26 @@ module render_keycap(stuff_to_render) {
 
 render_keycap(RENDER);
 
+//difference() {
+////    translate([55,0,0]) render_keycap(RENDER);
+//    render_keycap(RENDER);
+////    translate([10,0,0]) cube([20,50,20], center=true);
+////    translate([0,0,37]) cube([150,150,20], center=true);
+//    translate([0,0,8]) cube([150,150,20], center=true);
+//}
+
+
 /* CHANGELOG:
+    1.9:
+        * More fixes to stems when UNIFORM_WALL_THICKNESS is enabled.  Hopefully this is the last fix =)
+        * When not using UNIFORM_WALL_THICKNESS the CORNER_RADIUS/CORNER_RADIUS_CURVE were not being approximated correctly with both keycaps and stems.  I changed the math to use a (hopefully) better method that works better with longer keycaps.
+        * The round_cherry stem type now supports UNIFORM_WALL_THICKNESS and all the fancy schmancy new interior wall stuff, snap-fit stem stuff, etc.
+        * DISH_FN has been changed from 24 to 28 because that's the minimum necessary to show the tops of stems connecting properly to the keycap (which is the reason why stem generation got messed up in the first place haha).
+        * Updated the snap_fit.scad example to include more variables like UNIFORM_WALL_THICKNESS (since snap-fit stems don't work with that feature... yet).
+        * Moved the stem generation modules to the bottom of stems.scad just to keep things organized/logical: Stem top stuff, various stem types, stem support stuff.
+        * Underset masks are now a bit less fiddly, better-positioned, and have a more appropriate thickness.
+        * Fixed a bug where legends weren't working quite right with inverted dishes.
+        * Fixed a bug where the interior of keycaps wasn't *quite* getting carved out correctly when UNIFORM_WALL_THICKNESS was disabled.
     1.8.2:
         * Additional fixes to stems when UNIFORM_WALL_THICKNESS is enabled.
     1.8.1:

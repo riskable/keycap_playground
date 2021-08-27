@@ -6,10 +6,17 @@ include <keycap_playground.scad>
 
 // Pick what you want to render (you can put a '%' in front of the name to make it transparent)
 RENDER = ["keycap", "stem"]; // Supported values: keycap, stem, legends, row, row_stems, row_legends, custom
-// NOTE: You'll want to render the keycap and stem separately in reality
+// NOTE: You'll want to render the keycap and stem separately in reality like so:
+//RENDER = ["stem"]; // Render the stem and print it upside down
+//RENDER = ["keycap"]; // Render the stem and print it on its side (90% of the time)
 
 KEY_PROFILE = "riskeycap";
 //KEY_ROTATION = [0,109.2,90]; // Use this amount of rotation for the stem (a little different than stock riskeycap rotation)
+KEY_LENGTH = (KEY_UNIT*1-BETWEENSPACE);
+KEY_WIDTH = (KEY_UNIT*1-BETWEENSPACE);
+// Neat little trick to print the stem upside down and the keycap on its side:
+KEY_ROTATION = (RENDER==["stem"]) ? [180,0,0] : [0,109.2,90];
+UNIFORM_WALL_THICKNESS = false;
 // Clip-in stems take up some space so we need slightly thinner outside walls in most cases:
 WALL_THICKNESS = 0.45*1.85;
 STEM_TOP_THICKNESS = 0.5; // This is the minimum you want for a 0.45mm nozzle
@@ -18,5 +25,3 @@ STEM_SIDES_WALL_THICKNESS = 0.65; // Any thinner than 0.65 is not recommended
 STEM_WALLS_INSET = 1.15; // Makes it so the stem walls don't go all the way to the bottom of the keycap; works just like STEM_INSET but for the walls
 // NOTE: The clips take up about 1mm of "inset space" so you need to set STEM_WALLS_INSET to some value greater than that.
 STEM_WALLS_TOLERANCE = 0.2; // How much wiggle room the stem sides will get inside the keycap
-
-render_keycap(RENDER);
