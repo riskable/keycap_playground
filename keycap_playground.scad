@@ -1,7 +1,7 @@
 // Riskable's Keycap Playground -- Use this tool to try out all your cool keycap ideas.
 
 // AUTHOR: Riskable <riskable@youknowwhat.com>
-// VERSION: 1.9 (Changelog is at the bottom)
+// VERSION: 1.9.1 (Changelog is at the bottom)
 
 /* NOTES
     * Want to understand how to use this file? See: https://youtu.be/WDlRZMvisA4
@@ -1413,16 +1413,10 @@ module render_keycap(stuff_to_render) {
 
 render_keycap(RENDER);
 
-//difference() {
-////    translate([55,0,0]) render_keycap(RENDER);
-//    render_keycap(RENDER);
-////    translate([10,0,0]) cube([20,50,20], center=true);
-////    translate([0,0,37]) cube([150,150,20], center=true);
-//    translate([0,0,8]) cube([150,150,20], center=true);
-//}
-
 
 /* CHANGELOG:
+    1.9.1:
+        * Yet more fixes to stems when UNIFORM_WALL_THICKNESS is enabled.
     1.9:
         * More fixes to stems when UNIFORM_WALL_THICKNESS is enabled.  Hopefully this is the last fix =)
         * When not using UNIFORM_WALL_THICKNESS the CORNER_RADIUS/CORNER_RADIUS_CURVE were not being approximated correctly with both keycaps and stems.  I changed the math to use a (hopefully) better method that works better with longer keycaps.

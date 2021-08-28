@@ -190,7 +190,7 @@ module stem_box_cherry(key_height, key_length, key_width, dish_depth, dish_thick
             difference() {
                 translate([0,0,0]) _poly_keycap(
                 // Since this is an interior cutout sort of thing we need to cut the height down slightly so there's some overlap
-                    height=key_height-wall_thickness,
+                    height=key_height-wall_thickness/2,
                     length=key_length-wall_thickness*2,
                     width=key_width-wall_thickness*2,
                     wall_thickness=wall_thickness,
@@ -211,7 +211,7 @@ module stem_box_cherry(key_height, key_length, key_width, dish_depth, dish_thick
                     dish_invert=dish_invert);
                 if (wall_extra != 0) { // Stem will get its own walls
                     translate([0,0,-0.001]) _poly_keycap(
-                        height=key_height-wall_thickness-wall_extra,
+                        height=key_height-wall_thickness/2-wall_extra,
                         length=key_length-wall_thickness*2-wall_extra*2,
                         width=key_width-wall_thickness*2-wall_extra*2,
                         wall_thickness=wall_thickness,
@@ -404,7 +404,7 @@ module _stem_box_cherry(key_height, key_length, key_width, dish_depth, dish_thic
                 // Inverted dish means we have more area above the stem
                 // under the keycap to fill...
                 inverted_dish_adjustment = dish_invert ? wall_thickness : 0;
-                stem_topper_height = key_height-dish_depth-depth+dish_z+inverted_dish_adjustment;
+                stem_topper_height = key_height-wall_thickness-dish_depth-depth+dish_z+inverted_dish_adjustment;
                 intersection() {
                     translate([
                       0,
@@ -510,7 +510,7 @@ module stem_round_cherry(key_height, key_length, key_width, dish_depth, dish_thi
             difference() {
                 translate([0,0,0]) _poly_keycap(
                 // Since this is an interior cutout sort of thing we need to cut the height down slightly so there's some overlap
-                    height=key_height-wall_thickness,
+                    height=key_height-wall_thickness/2,
                     length=key_length-wall_thickness*2,
                     width=key_width-wall_thickness*2,
                     wall_thickness=wall_thickness,
@@ -531,7 +531,7 @@ module stem_round_cherry(key_height, key_length, key_width, dish_depth, dish_thi
                     dish_invert=dish_invert);
                 if (wall_extra != 0) { // Stem will get its own walls
                     translate([0,0,-0.001]) _poly_keycap(
-                        height=key_height-wall_thickness-wall_extra,
+                        height=key_height-wall_thickness/2-wall_extra,
                         length=key_length-wall_thickness*2-wall_extra*2,
                         width=key_width-wall_thickness*2-wall_extra*2,
                         wall_thickness=wall_thickness,
@@ -717,7 +717,7 @@ module _stem_round_cherry(key_height, key_length, key_width, dish_depth, dish_th
                 // Inverted dish means we have more area above the stem
                 // under the keycap to fill...
                 inverted_dish_adjustment = dish_invert ? wall_thickness : 0;
-                stem_topper_height = key_height-dish_depth-depth+dish_z+inverted_dish_adjustment;
+                stem_topper_height = key_height-wall_thickness-dish_depth-depth+dish_z+inverted_dish_adjustment;
                 intersection() {
                     translate([
                       0,
@@ -825,7 +825,7 @@ module stem_alps(key_height, key_length, key_width, dish_depth, dish_thickness, 
             difference() {
                 translate([0,0,0]) _poly_keycap(
                 // Since this is an interior cutout sort of thing we need to cut the height down slightly so there's some overlap
-                    height=key_height-wall_thickness,
+                    height=key_height-wall_thickness/2,
                     length=key_length-wall_thickness*2,
                     width=key_width-wall_thickness*2,
                     wall_thickness=wall_thickness,
@@ -846,7 +846,7 @@ module stem_alps(key_height, key_length, key_width, dish_depth, dish_thickness, 
                     dish_invert=dish_invert);
                 if (wall_extra != 0) { // Stem will get its own walls
                     translate([0,0,-0.001]) _poly_keycap(
-                        height=key_height-wall_thickness-wall_extra*2,
+                        height=key_height-wall_thickness/2-wall_extra*2,
                         length=key_length-wall_thickness*2-wall_extra*2,
                         width=key_width-wall_thickness*2-wall_extra*2,
                         wall_thickness=wall_thickness,
@@ -1049,19 +1049,20 @@ module _stem_alps(key_height, key_length, key_width, dish_depth, dish_thickness,
                 // Inverted dish means we have more area above the stem
                 // under the keycap to fill...
                 inverted_dish_adjustment = dish_invert ? wall_thickness : 0;
-                stem_topper_height = key_height-dish_depth-depth+dish_z+inverted_dish_adjustment;
+                stem_topper_height = key_height-wall_thickness-dish_depth-depth+dish_z+inverted_dish_adjustment;
                 intersection() {
                     translate([
                       0,
                       0,
-                      stem_topper_height/2+inset+depth])
+                      stem_topper_height/2+inset+depth]) {
                         squarish_rpoly(
                             xy1=[length,width],
                             xy2=[
                                 length*1.5,
                                 width*2.5],
-                            h=stem_stopper_height,
+                            h=stem_topper_height,
                             r=corner_radius, center=true);
+                      }
                     _poly_keycap(
                         // Carve out the top of the little stem topper bit so that it matches the keycap precisely:
                         height=key_height-wall_thickness+inverted_dish_adjustment,
