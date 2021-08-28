@@ -945,7 +945,9 @@ module riskeycap(row=1, length=18.25, width=18.25, height_extra=0, wall_thicknes
 
 // Riskeycap stems are very straightforward (nothing special required; mostly defaults)
 module riskeystem(stem_type="box_cherry", key_height=8.2, key_length=18.25, key_width=18.25, height_extra=0, dish_type="sphere", dish_depth=1.5, dish_thickness=0.9, dish_fn=128, dish_corner_fn=64, dish_x=0, dish_y=0, dish_z=0, dish_invert=false, depth=4, top_difference=6, wall_thickness=1.8, wall_extra=0.65, wall_inset=0, wall_tolerance=0.25, corner_radius=0.5, key_corner_radius=0.5, corner_radius_curve=0.75, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=1, top_thickness=0.6, side_support_thickness=0.8, side_supports=[0,0,0,0], flat_support=true, locations=[[0,0,0]], polygon_layers=10, polygon_layer_rotation=0, polygon_edges=4, polygon_curve=0, key_rotation=[0,0,0], hollow=false, uniform_wall_thickness=false) {
-    adjusted_height = dish_invert ? 6.5+height_extra : 8.2+height_extra; // A bit less if we're generating a spacebar
+    // The height needs a smidge of adjustment based on the length of the keycap
+    adjusted_height_extra = key_length < KEY_UNIT*1.25 ? height_extra : height_extra+0.35;
+    adjusted_height = dish_invert ? 6.5+adjusted_height_extra : 8.2+adjusted_height_extra; // A bit less if we're generating a spacebar because the dish_depth is bigger than is typical
     adjusted_dish_depth = dish_invert ? 1 : dish_depth; // Make it a smaller for inverted dishes
     if (stem_type == "box_cherry") {
         stem_box_cherry(
@@ -1121,7 +1123,9 @@ module GEM_keycap(row=1, length=18.25, width=18.25, height_extra=0, wall_thickne
 
 // GEM stems are very straightforward (pretty much the same as riskeystem)
 module GEM_stem(stem_type="box_cherry", key_height=8.2, key_length=18.25, key_width=18.25, height_extra=0, dish_type="sphere", dish_depth=1.5, dish_thickness=0.9, dish_fn=128, dish_corner_fn=4, dish_x=0, dish_y=0, dish_z=0, dish_invert=false, depth=4, top_difference=5.5, wall_thickness=1.8, wall_extra=0.65, wall_inset=0, wall_tolerance=0.25, corner_radius=0.5, key_corner_radius=0.5, corner_radius_curve=6, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=1, top_thickness=0.6, side_support_thickness=0.8, side_supports=[0,0,0,0], flat_support=true, locations=[[0,0,0]], polygon_layers=10, polygon_layer_rotation=0, polygon_edges=4, polygon_curve=0, key_rotation=[0,0,0], hollow=false, uniform_wall_thickness=false) {
-    adjusted_height = dish_invert ? 6.5+height_extra : 8.2+height_extra; // A bit less if we're generating a spacebar
+    // The height needs a smidge of adjustment based on the length of the keycap
+    adjusted_height_extra = key_length < KEY_UNIT*1.25 ? height_extra : height_extra+0.35;
+    adjusted_height = dish_invert ? 6.5+adjusted_height_extra : 8.2+adjusted_height_extra; // A bit less if we're generating a spacebar because the dish_depth is bigger than is typical
     adjusted_dish_depth = dish_invert ? 1 : dish_depth; // Make it a smaller for inverted dishes
     adjusted_dish_type = "sphere"; // We ignore the parameter
     adjusted_dish_corner_fn = 4; // We ignore the parameter
@@ -1207,7 +1211,7 @@ module GEM_stem(stem_type="box_cherry", key_height=8.2, key_length=18.25, key_wi
             polygon_layer_rotation=polygon_layer_rotation,
             polygon_edges=polygon_edges,
             polygon_curve=polygon_curve,
-            dish_type=dish_type,
+            dish_type=adjusted_dish_type,
             dish_fn=dish_fn,
             dish_corner_fn=adjusted_dish_corner_fn,
             corner_radius=corner_radius, // Of the stem
@@ -1237,7 +1241,7 @@ module GEM_stem(stem_type="box_cherry", key_height=8.2, key_length=18.25, key_wi
             dish_depth=adjusted_dish_depth,
             dish_thickness=dish_thickness,
             top_difference=top_difference,
-            dish_type=dish_type,
+            dish_type=adjusted_dish_type,
             dish_fn=dish_fn,
             dish_corner_fn=adjusted_dish_corner_fn,
             dish_invert=dish_invert,

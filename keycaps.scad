@@ -433,25 +433,26 @@ module poly_keycap(height=9.0, length=18, width=18,
                                     draw_legend(legend, font_size, font, height+legend_inverted_dish_adjustment);
                                     // Make sure the preview matches the curve of the dish on the bottom
                                     if (legend_carved) {
-                                        translate([0,0,-height+dish_depth-dish_z]) _poly_keycap(
-                                            height=height, length=length, width=width,
-                                            wall_thickness=wall_thickness,
-                                            top_difference=top_difference, dish_tilt=dish_tilt,
-                                            dish_tilt_curve=dish_tilt_curve, stem_clips=stem_clips,
-                                            stem_walls_inset=stem_walls_inset,
-                                            top_x=top_x, top_y=top_y, dish_depth=dish_depth,
-                                            dish_x=dish_x, dish_y=dish_y, dish_z=dish_z,
-                                            dish_division_x=dish_division_x,
-                                            dish_division_y=dish_division_y,
-                                            dish_thickness=dish_thickness+0.1, dish_fn=dish_fn,
-                                            dish_corner_fn=dish_corner_fn,
-                                            polygon_layers=polygon_layers,
-                                            polygon_layer_rotation=polygon_layer_rotation,
-                                            polygon_edges=polygon_edges, polygon_curve=polygon_curve,
-                                            dish_type=dish_type, corner_radius=corner_radius,
-                                            corner_radius_curve=corner_radius_curve,
-                                            polygon_rotation=polygon_rotation,
-                                            dish_invert=dish_invert);
+                                        translate([0,0,-height+dish_depth-dish_z])
+                                            _poly_keycap(
+                                                height=height, length=length, width=width,
+                                                wall_thickness=wall_thickness,
+                                                top_difference=top_difference, dish_tilt=dish_tilt,
+                                                dish_tilt_curve=dish_tilt_curve, stem_clips=stem_clips,
+                                                stem_walls_inset=stem_walls_inset,
+                                                top_x=top_x, top_y=top_y, dish_depth=dish_depth,
+                                                dish_x=dish_x, dish_y=dish_y, dish_z=dish_z,
+                                                dish_division_x=dish_division_x,
+                                                dish_division_y=dish_division_y,
+                                                dish_thickness=dish_thickness+0.1, dish_fn=dish_fn,
+                                                dish_corner_fn=dish_corner_fn,
+                                                polygon_layers=polygon_layers,
+                                                polygon_layer_rotation=polygon_layer_rotation,
+                                                polygon_edges=polygon_edges, polygon_curve=polygon_curve,
+                                                dish_type=dish_type, corner_radius=corner_radius,
+                                                corner_radius_curve=corner_radius_curve,
+                                                polygon_rotation=polygon_rotation,
+                                                dish_invert=dish_invert);
                                     }
                                 }
                     }
@@ -465,25 +466,26 @@ module poly_keycap(height=9.0, length=18, width=18,
                                 difference() {
                                     draw_legend(legend, font_size, font, height+legend_inverted_dish_adjustment);
                                     if (legend_carved) {
-                                        translate([0,0,-height+dish_depth-dish_z]) _poly_keycap(
-                                            height=height, length=length, width=width,
-                                            wall_thickness=wall_thickness,
-                                            top_difference=top_difference, dish_tilt=dish_tilt,
-                                            dish_tilt_curve=dish_tilt_curve, stem_clips=stem_clips,
-                                            stem_walls_inset=stem_walls_inset,
-                                            top_x=top_x, top_y=top_y, dish_depth=dish_depth,
-                                            dish_x=dish_x, dish_y=dish_y, dish_z=dish_z,
-                                            dish_division_x=dish_division_x,
-                                            dish_division_y=dish_division_y,
-                                            dish_thickness=dish_thickness+0.1, dish_fn=dish_fn,
-                                            dish_corner_fn=dish_corner_fn,
-                                            polygon_layers=polygon_layers,
-                                            polygon_layer_rotation=polygon_layer_rotation,
-                                            polygon_edges=polygon_edges, polygon_curve=polygon_curve,
-                                            dish_type=dish_type, corner_radius=corner_radius,
-                                            corner_radius_curve=corner_radius_curve,
-                                            polygon_rotation=polygon_rotation,
-                                            dish_invert=dish_invert);
+                                        translate([0,0,-height+dish_depth-dish_z])
+                                            _poly_keycap(
+                                                height=height, length=length, width=width,
+                                                wall_thickness=wall_thickness,
+                                                top_difference=top_difference, dish_tilt=dish_tilt,
+                                                dish_tilt_curve=dish_tilt_curve, stem_clips=stem_clips,
+                                                stem_walls_inset=stem_walls_inset,
+                                                top_x=top_x, top_y=top_y, dish_depth=dish_depth,
+                                                dish_x=dish_x, dish_y=dish_y, dish_z=dish_z,
+                                                dish_division_x=dish_division_x,
+                                                dish_division_y=dish_division_y,
+                                                dish_thickness=dish_thickness+0.1, dish_fn=dish_fn,
+                                                dish_corner_fn=dish_corner_fn,
+                                                polygon_layers=polygon_layers,
+                                                polygon_layer_rotation=polygon_layer_rotation,
+                                                polygon_edges=polygon_edges, polygon_curve=polygon_curve,
+                                                dish_type=dish_type, corner_radius=corner_radius,
+                                                corner_radius_curve=corner_radius_curve,
+                                                polygon_rotation=polygon_rotation,
+                                                dish_invert=dish_invert);
                                     }
                                 }
                                 _poly_keycap(

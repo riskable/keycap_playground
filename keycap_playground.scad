@@ -1,7 +1,7 @@
 // Riskable's Keycap Playground -- Use this tool to try out all your cool keycap ideas.
 
 // AUTHOR: Riskable <riskable@youknowwhat.com>
-// VERSION: 1.9.1 (Changelog is at the bottom)
+// VERSION: 1.9.2 (Changelog is at the bottom)
 
 /* NOTES
     * Want to understand how to use this file? See: https://youtu.be/WDlRZMvisA4
@@ -114,7 +114,7 @@ CORNER_RADIUS = 1; // Radius of the outside corners of the keycap
 CORNER_RADIUS_CURVE = 3; // If you want the corner radius to get bigger as it goes up (WARNING: Set this too high and you'll end up with missing bits of your keycap! Check the height when messing with this)
 
 // STEM STUFF
-STEM_TYPE = "box_cherry"; // "box_cherry" (default), "round_cherry" (harder to print... strong), "alps"
+STEM_TYPE = "box_cherry"; // "box_cherry" (default), "round_cherry" (harder to print and not as strong), "alps"
 STEM_HOLLOW = false; // Only applies to Alps: Whether or not the inside is hollow
 STEM_HEIGHT = 4; // How far into the keycap's stem the switch's stem can go (4 is "normal keycap")
 // NOTE: For Alps you typically want STEM_HEIGHT=3.5 (slightly shorter)
@@ -1413,8 +1413,10 @@ module render_keycap(stuff_to_render) {
 
 render_keycap(RENDER);
 
-
 /* CHANGELOG:
+    1.9.2:
+        * Fixed a bug in the GEM and riskeycap profiles where the adjusted_height in *keycap() didn't match the adjusted_height in *stem() (which is why I've been having such a hard time figuring out these bugs/non-bugs with stems! Arg!).
+        * Fixed some issues with stem toppers (part that connects the stem to the keycap) weren't being generated properly in certain situations.  I also made them tapered again since the issues that lead me to turn that feature off are no longer present.
     1.9.1:
         * Yet more fixes to stems when UNIFORM_WALL_THICKNESS is enabled.
     1.9:
