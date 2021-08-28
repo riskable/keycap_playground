@@ -25,3 +25,11 @@ STEM_SIDES_WALL_THICKNESS = 0.65; // Any thinner than 0.65 is not recommended
 STEM_WALLS_INSET = 1.15; // Makes it so the stem walls don't go all the way to the bottom of the keycap; works just like STEM_INSET but for the walls
 // NOTE: The clips take up about 1mm of "inset space" so you need to set STEM_WALLS_INSET to some value greater than that.
 STEM_WALLS_TOLERANCE = 0.2; // How much wiggle room the stem sides will get inside the keycap
+STEM_LOCATIONS = [ // Where to place stems/stabilizers
+    [0,0,0], // Dead center (don't comment this out when uncommenting below)
+    // Standard examples (uncomment to use them):
+//    [12,0,0], [-12,0,0], // Standard 2U, 2.25U, and 2.5U shift key
+//    [0,12,0], [0,-12,0], // Standard 2U Numpad + or Enter
+//    [50,0,0], [-50,0,0], // Cherry style 6.25U spacebar (most common)
+//    [57,0,0], [-57,0,0], // Cherry style 7U spacebar
+];

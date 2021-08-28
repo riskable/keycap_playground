@@ -384,7 +384,8 @@ module _stem_box_cherry(key_height, key_length, key_width, dish_depth, dish_thic
                   0,
                   stem_topper_height/2+inset+depth])
                     squarish_rpoly(
-                        xy=[length,width],
+                        xy1=[length,width],
+                        xy2=[length*2,width*2],
                         h=stem_topper_height,
                         r=corner_radius, center=true);
                 // Carve out the top of the little stem topper bit so that it matches the keycap more precisely:

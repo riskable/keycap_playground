@@ -1,7 +1,7 @@
 // Riskable's Keycap Playground -- Use this tool to try out all your cool keycap ideas.
 
 // AUTHOR: Riskable <riskable@youknowwhat.com>
-// VERSION: 1.9.2 (Changelog is at the bottom)
+// VERSION: 1.9.3 (Changelog is at the bottom)
 
 /* NOTES
     * Want to understand how to use this file? See: https://youtu.be/WDlRZMvisA4
@@ -1414,6 +1414,9 @@ module render_keycap(stuff_to_render) {
 render_keycap(RENDER);
 
 /* CHANGELOG:
+    1.9.3:
+        * Added STEM_LOCATIONS to snap_fit.scad because it simplified testing.
+        * Added a taper to the box_cherry stem type when UNIFORM_WALL_THICKNESS is enabled.
     1.9.2:
         * Fixed a bug in the GEM and riskeycap profiles where the adjusted_height in *keycap() didn't match the adjusted_height in *stem() (which is why I've been having such a hard time figuring out these bugs/non-bugs with stems! Arg!).
         * Fixed some issues with stem toppers (part that connects the stem to the keycap) weren't being generated properly in certain situations.  I also made them tapered again since the issues that lead me to turn that feature off are no longer present.
