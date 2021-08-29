@@ -181,9 +181,6 @@ module stem_box_cherry(key_height, key_length, key_width, dish_depth, dish_thick
     right_support = side_supports[1];
     front_support = side_supports[2];
     back_support = side_supports[3];
-        echo(corner_radius=corner_radius);
-        echo(corner_radius_curve=corner_radius_curve);
-        echo(polygon_layers=polygon_layers);
     // Generate a top layer that spans the entire width of the keycap so we have something legends can print on
     // NOTE: We generate it similarly to poly_keycap()'s trapezoidal interior cutout so we have a precise fit
     // Give the "undershelf" a distinct color so you know it's there and not the same as the keycap:
@@ -249,7 +246,6 @@ module stem_box_cherry(key_height, key_length, key_width, dish_depth, dish_thick
         } else { // Non-uniform wall thickness
             // Take the corner radius into account when generating the interior shape
             corner_radius_factor = ((key_corner_radius*corner_radius_curve/polygon_layers)*polygon_layers)/1.5;
-            echo(corner_radius_factor=corner_radius_factor);
             // Inverted dish needs to go up a bit
             inverted_dish_adjustment = dish_invert ? (dish_depth+top_thickness) : 0;
             difference() {
@@ -775,9 +771,6 @@ module stem_alps(key_height, key_length, key_width, dish_depth, dish_thickness, 
     right_support = side_supports[1];
     front_support = side_supports[2];
     back_support = side_supports[3];
-        echo(corner_radius=corner_radius);
-        echo(corner_radius_curve=corner_radius_curve);
-        echo(polygon_layers=polygon_layers);
     // Generate a top layer that spans the entire width of the keycap so we have something legends can print on
     // NOTE: We generate it similarly to poly_keycap()'s trapezoidal interior cutout so we have a precise fit
     // Give the "undershelf" a distinct color so you know it's there and not the same as the keycap:
@@ -843,7 +836,6 @@ module stem_alps(key_height, key_length, key_width, dish_depth, dish_thickness, 
         } else { // Non-uniform wall thickness
             // Take the corner radius into account when generating the interior shape
             corner_radius_factor = ((key_corner_radius*corner_radius_curve/polygon_layers)*polygon_layers)/1.5;
-            echo(corner_radius_factor=corner_radius_factor);
             // Inverted dish needs to go up a bit
             inverted_dish_adjustment = dish_invert ? (dish_depth+top_thickness) : 0;
             difference() {
