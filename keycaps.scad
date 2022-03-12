@@ -335,7 +335,7 @@ module _poly_keycap(height=9.0, length=18, width=18,
                 adjusted_key_length = length - top_difference;
                 adjusted_key_width = width - top_difference;
                 adjusted_dimension = length > width ? adjusted_key_length : adjusted_key_width;
-                chord_length = (pow(adjusted_dimension,2) - 4 * pow(dish_depth,2)) / (8 * dish_depth);
+                chord_length = dish_depth > 0 ? (pow(adjusted_dimension,2) - 4 * pow(dish_depth,2)) / (8 * dish_depth) : 0;
                 rad = (pow(adjusted_dimension, 2) + 4 * pow(dish_depth, 2)) / (8 * dish_depth);
                 rotate([tilt_above_curved,0,0])
                     translate([dish_x+top_x,dish_y+top_y,chord_length+height+dish_z-z_adjust]) 
@@ -346,7 +346,7 @@ module _poly_keycap(height=9.0, length=18, width=18,
                 adjusted_key_length = length - top_difference;
                 adjusted_key_width = width - top_difference;
                 adjusted_dimension = length > width ? adjusted_key_length : adjusted_key_width;
-                rad = (pow(adjusted_dimension, 2) + 4 * pow(dish_depth, 2)) / (8 * dish_depth);
+                rad = dish_depth > 0 ? (pow(adjusted_dimension, 2) + 4 * pow(dish_depth, 2)) / (8 * dish_depth) : 0;
                 rotate([tilt_above_curved,0,0])
                     translate([dish_x+top_x,dish_y+top_y,rad*2+height-dish_depth+dish_z-z_adjust])
                         rotate([tilt_above_straight,0,0])

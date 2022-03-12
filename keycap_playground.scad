@@ -1,7 +1,7 @@
 // Riskable's Keycap Playground -- Use this tool to try out all your cool keycap ideas.
 
 // AUTHOR: Riskable <riskable@youknowwhat.com>
-// VERSION: 1.9.3 (Changelog is at the bottom)
+// VERSION: 1.9.4 (Changelog is at the bottom)
 
 /* NOTES
     * Want to understand how to use this file? See: https://youtu.be/WDlRZMvisA4
@@ -1414,6 +1414,8 @@ module render_keycap(stuff_to_render) {
 render_keycap(RENDER);
 
 /* CHANGELOG:
+    1.9.4:
+        * Fixed a bug where you'd get warnings in the console if DISH_DEPTH was set to 0.
     1.9.3:
         * Added STEM_LOCATIONS to snap_fit.scad because it simplified testing.
         * Added a taper to the box_cherry stem type when UNIFORM_WALL_THICKNESS is enabled.

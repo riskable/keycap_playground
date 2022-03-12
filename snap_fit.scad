@@ -23,7 +23,8 @@ STEM_TOP_THICKNESS = 0.5; // This is the minimum you want for a 0.45mm nozzle
 STEM_SNAP_FIT = true; // Tells poly_keycap() to add clips to the inside of the keycap
 STEM_SIDES_WALL_THICKNESS = 0.65; // Any thinner than 0.65 is not recommended
 STEM_WALLS_INSET = 1.15; // Makes it so the stem walls don't go all the way to the bottom of the keycap; works just like STEM_INSET but for the walls
-// NOTE: The clips take up about 1mm of "inset space" so you need to set STEM_WALLS_INSET to some value greater than that.
+// NOTE: The clips take up about 1mm of "inset space" so you need to set STEM_WALLS_INSET to some value greater than that.  Consider values above 1 to be the tolerance..  So a value of 1.15 would be 0.15mm of tolerance/wiggle room (for the stem walls pressing against the clips).
+// TIP: If you give STEM_WALLS_INSET a bit more room than necessary (like say, 1.3) and use silicone caulk/sealant between the stem and keycap it have a cushioning effect whenever you press that keycap (it feels nice!).
 STEM_WALLS_TOLERANCE = 0.2; // How much wiggle room the stem sides will get inside the keycap
 STEM_LOCATIONS = [ // Where to place stems/stabilizers
     [0,0,0], // Dead center (don't comment this out when uncommenting below)
