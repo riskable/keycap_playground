@@ -559,18 +559,26 @@ module poly_keycap(height=9.0, length=18, width=18,
 //                                xy2_offset=[top_x,top_y],
 //                                h=height, r=corner_radius/2, center=false);
 //                        }
-                        clip_width = 1.25;
+                        clip_width = wall_thickness*2;
                         clip_height = 2;
+                        clip_tolerance = 0.05; // Just the tiniest smidge is all that's necessary
+                        height_factor = top_difference*(stem_walls_inset/height);
 // NOTE: The top half of the clip gets cut off so the clip_height is really 1 (when set to 2)
                         if (stem_clips) {
-                            translate([length/6,-width/2+clip_width/2+wall_thickness,0])
+                            translate([
+                              length/6,
+                              -width/2+clip_width/2+height_factor,
+                              stem_walls_inset-clip_height/2-clip_tolerance])
                                 difference() {
                                     cube([length/5,clip_width,clip_height], center=true);
                                     translate([0,0,-clip_height/1.333])
                                         rotate([45,0,0])
                                             cube([length,10,clip_height], center=true);
                                 }
-                            translate([-length/6,-width/2+clip_width/2+wall_thickness,0])
+                            translate([
+                              -length/6,
+                              -width/2+clip_width/2+height_factor,
+                              stem_walls_inset-clip_height/2-clip_tolerance])
                                 difference() {
                                     cube([length/5,clip_width,clip_height], center=true);
                                     translate([0,0,-clip_height/1.333])
@@ -579,21 +587,27 @@ module poly_keycap(height=9.0, length=18, width=18,
                                 }
                             // Mirror the clips on the other side
                             mirror([0,1,0]) {
-                                translate([length/6,-width/2+clip_width/2+wall_thickness,0])
+                                translate([
+                                  length/6,
+                                  -width/2+clip_width/2+height_factor,
+                                  stem_walls_inset-clip_height/2-clip_tolerance])
                                     difference() {
                                         cube([length/5,clip_width,clip_height], center=true);
                                         translate([0,0,-clip_height/1.333])
                                             rotate([45,0,0])
                                                 cube([length,10,clip_height], center=true);
                                     }
-                                translate([-length/6,-width/2+clip_width/2+wall_thickness,0])
+                                translate([
+                                  -length/6,
+                                  -width/2+clip_width/2+height_factor,
+                                  stem_walls_inset-clip_height/2-clip_tolerance])
                                     difference() {
                                         cube([length/5,clip_width,clip_height], center=true);
                                         translate([0,0,-clip_height/1.333])
                                             rotate([45,0,0])
                                                 cube([length,10,clip_height], center=true);
                                     }
-                            }
+                                }
                         }
                     }
                     // Cut off the top (of the interior--to make it the right height)

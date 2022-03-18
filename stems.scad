@@ -71,7 +71,7 @@ module stem_top(key_height, key_length, key_width, dish_depth, dish_thickness, t
         if (uniform_wall_thickness) {
             // Inverted dish needs to go up a bit
             inverted_dish_adjustment = dish_invert ? wall_thickness*0.85 : 0;
-            #translate([0,0,-wall_thickness]) difference() {
+            translate([0,0,-wall_thickness]) difference() {
                 translate([0,0,0]) _poly_keycap(
                 // Since this is an interior cutout sort of thing we need to cut the height down slightly so there's some overlap
                     height=key_height-wall_thickness/2+inverted_dish_adjustment,
@@ -150,7 +150,7 @@ module stem_top(key_height, key_length, key_width, dish_depth, dish_thickness, t
                         }
                 }
             }
-        } else {
+        } else { // Non-uniform wall thickness
             difference() {
                 squarish_rpoly(
                     xy1=[key_length-wall_thickness*2,key_width-wall_thickness*2],
@@ -1117,7 +1117,7 @@ module stem_support(key_height, key_length, key_width, dish_depth, dish_thicknes
                     polygon_rotation=polygon_rotation,
                     dish_invert=dish_invert);
             } else {
-                // NOTE: Using the interior stem cutout sizing with wall_extra*4 below because it works with both regular stems and snap-fit stems
+                // NOTE: Using the interior stem cutout sizing with wall_extra*2 below because it works with both regular stems and snap-fit stems
                 squarish_rpoly(
                     xy1=[
                         key_length-wall_thickness-wall_tolerance*2-wall_extra*2,
