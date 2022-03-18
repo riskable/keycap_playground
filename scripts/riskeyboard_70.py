@@ -710,6 +710,8 @@ if __name__ == "__main__":
         # Next render the legends (for multi-material, non-transparent legends)
         if args.legends:
             for legend in KEYCAPS:
+                if legend.legends == [""]:
+                    continue # No actual legends
                 legend.name = f"{legend.name}_legends"
                 legend.output_path = f"{args.out}"
                 legend.render = ["legends"]
