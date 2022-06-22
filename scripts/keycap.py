@@ -97,6 +97,11 @@ class Keycap(object):
             stem_snap_fit=False,
             stem_walls_inset=1.05,
             stem_walls_tolerance=0.2,
+            homing_dot_length=0, # 0 means no "dot"
+            homing_dot_width=1,
+            homing_dot_x=0,
+            homing_dot_y=-2,
+            homing_dot_z=-0.35, # How far it sticks out
             legends=[""],
             fonts=[], font_sizes=[],
             trans=[[0,0,0]], trans2=[[0,0,0]],
@@ -138,12 +143,21 @@ class Keycap(object):
         self.corner_radius_curve = corner_radius_curve
         self.stem_type = stem_type
         self.stem_top_thickness = stem_top_thickness
+        self.stem_inset = stem_inset
+        self.stem_inside_tolerance = stem_inside_tolerance
+        self.stem_outside_tolerance_x = stem_outside_tolerance_x
+        self.stem_outside_tolerance_y = stem_outside_tolerance_y
         self.stem_locations = stem_locations
         self.stem_side_supports = stem_side_supports
         self.stem_sides_wall_thickness = stem_sides_wall_thickness
         self.stem_snap_fit = stem_snap_fit
         self.stem_walls_inset = stem_walls_inset
         self.stem_walls_tolerance = stem_walls_tolerance
+        self.homing_dot_length = homing_dot_length
+        self.homing_dot_width = homing_dot_width
+        self.homing_dot_x = homing_dot_x
+        self.homing_dot_y = homing_dot_y
+        self.homing_dot_z = homing_dot_z
         self.legends = legends
         self.fonts = fonts
         self.font_sizes = font_sizes
@@ -201,7 +215,8 @@ class Keycap(object):
         # NOTE: Since OpenSCAD requires double quotes I'm using the json module
         #       to encode things that need it:
         return (
-            f"openscad -o '{self.output_path}'/'{self.name}.stl' -D $'"
+            f"{self.openscad_path} --enable=fast-csg -o "
+            f"'{self.output_path}'/'{self.name}.stl' -D $'"
             f"RENDER={json.dumps(self.render)}; "
             f"KEY_PROFILE={json.dumps(self.key_profile)}; "
             f"KEY_LENGTH={round(self.key_length,2)}; "
@@ -227,13 +242,21 @@ class Keycap(object):
             f"CORNER_RADIUS_CURVE={json.dumps(self.corner_radius_curve)}; "
             f"STEM_TYPE={json.dumps(self.stem_type)}; "
             f"STEM_TOP_THICKNESS={self.stem_top_thickness}; "
+            f"STEM_INSET={self.stem_inset}; "
             f"STEM_INSIDE_TOLERANCE={self.stem_inside_tolerance}; "
+            f"STEM_OUTSIDE_TOLERANCE_X={self.stem_outside_tolerance_x}; "
+            f"STEM_OUTSIDE_TOLERANCE_Y={self.stem_outside_tolerance_y}; "
             f"STEM_SIDE_SUPPORTS={self.stem_side_supports}; "
             f"STEM_SIDES_WALL_THICKNESS={self.stem_sides_wall_thickness}; "
             f"STEM_LOCATIONS={self.stem_locations}; "
             f"STEM_SNAP_FIT={json.dumps(self.stem_snap_fit)}; "
             f"STEM_WALLS_INSET={self.stem_walls_inset}; "
             f"STEM_WALLS_TOLERANCE={self.stem_walls_tolerance}; "
+            f"HOMING_DOT_LENGTH={self.homing_dot_length}; "
+            f"HOMING_DOT_WIDTH={self.homing_dot_width}; "
+            f"HOMING_DOT_X={self.homing_dot_x}; "
+            f"HOMING_DOT_Y={self.homing_dot_y}; "
+            f"HOMING_DOT_Z={self.homing_dot_z}; "
             f"LEGENDS={self.quote(self.legends)}; "
             f"LEGEND_FONTS={json.dumps(self.fonts)}; "
             f"LEGEND_FONT_SIZES={self.font_sizes}; "

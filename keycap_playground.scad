@@ -1,7 +1,7 @@
 // Riskable's Keycap Playground -- Use this tool to try out all your cool keycap ideas.
 
 // AUTHOR: Riskable <riskable@youknowwhat.com>
-// VERSION: 1.9.4 (Changelog is at the bottom)
+// VERSION: 1.10.0 (Changelog is at the bottom)
 
 /* NOTES
     * Want to understand how to use this file? See: https://youtu.be/WDlRZMvisA4
@@ -598,6 +598,28 @@ module handle_render(what, legends) {
                         homing_dot_z=HOMING_DOT_Z,
                         key_rotation=KEY_ROTATION, dish_invert=DISH_INVERT,
                         uniform_wall_thickness=UNIFORM_WALL_THICKNESS, debug=DEBUG);
+        }  else if (KEY_PROFILE == "xda") {
+            just_legends(height=KEY_HEIGHT+KEY_HEIGHT_EXTRA,
+                dish_tilt=DISH_TILT, dish_tilt_curve=false, 
+                polygon_layers=POLYGON_LAYERS, legends=legends,
+                legend_font_sizes=LEGEND_FONT_SIZES, legend_fonts=LEGEND_FONTS,
+                legend_trans=LEGEND_TRANS, legend_trans2=LEGEND_TRANS2,
+                legend_scale=LEGEND_SCALE,
+                legend_rotation=LEGEND_ROTATION, legend_rotation2=LEGEND_ROTATION2,
+                legend_underset=LEGEND_UNDERSET, key_rotation=KEY_ROTATION)
+                    XDA_keycap(row=KEY_ROW, length=KEY_LENGTH, width=KEY_WIDTH,
+                        height_extra=KEY_HEIGHT_EXTRA,
+                        wall_thickness=WALL_THICKNESS,
+                        polygon_layers=POLYGON_LAYERS,
+                        dish_fn=DISH_FN, dish_thickness=DISH_THICKNESS,
+                        dish_corner_fn=DISH_CORNER_FN,
+                        visualize_legends=VISUALIZE_LEGENDS,
+                        homing_dot_length=HOMING_DOT_LENGTH,
+                        homing_dot_width=HOMING_DOT_WIDTH,
+                        homing_dot_x=HOMING_DOT_X, homing_dot_y=HOMING_DOT_Y,
+                        homing_dot_z=HOMING_DOT_Z,
+                        key_rotation=KEY_ROTATION, dish_invert=DISH_INVERT,
+                        uniform_wall_thickness=UNIFORM_WALL_THICKNESS, debug=DEBUG);
         } else {
             just_legends(height=KEY_HEIGHT+KEY_HEIGHT_EXTRA,
                 dish_tilt=DISH_TILT, dish_tilt_curve=DISH_TILT_CURVE,
@@ -871,6 +893,43 @@ module handle_render(what, legends) {
                     legend_rotation=LEGEND_ROTATION, legend_rotation2=LEGEND_ROTATION2,
                     legend_underset=LEGEND_UNDERSET, key_rotation=KEY_ROTATION);
             }
+        } else if (KEY_PROFILE == "xda") {
+            difference() {
+                XDA_stem(
+                    stem_type="stem_top",
+                    wall_thickness=WALL_THICKNESS,
+                    wall_extra=STEM_SIDES_WALL_THICKNESS,
+                    wall_inset=STEM_WALLS_INSET,
+                    wall_tolerance=STEM_WALLS_TOLERANCE,
+                    key_length=KEY_LENGTH,
+                    key_width=KEY_WIDTH,
+                    height_extra=KEY_HEIGHT_EXTRA,
+                    dish_depth=DISH_DEPTH,
+                    inset=STEM_INSET,
+                    depth=STEM_HEIGHT,
+                    dish_thickness=DISH_THICKNESS,
+                    dish_invert=DISH_INVERT,
+                    dish_fn=DISH_FN,
+                    dish_corner_fn=DISH_CORNER_FN,
+                    flat_support=STEM_FLAT_SUPPORT,
+                    side_support_thickness=STEM_SIDE_SUPPORT_THICKNESS,
+                    side_supports=STEM_SIDE_SUPPORTS,
+                    outside_tolerance_x=STEM_OUTSIDE_TOLERANCE_X,
+                    outside_tolerance_y=STEM_OUTSIDE_TOLERANCE_Y,
+                    inside_tolerance=STEM_INSIDE_TOLERANCE,
+                    locations=STEM_LOCATIONS,
+                    key_rotation=KEY_ROTATION,
+                    hollow=STEM_HOLLOW,
+                    uniform_wall_thickness=UNIFORM_WALL_THICKNESS);
+                just_legends(height=KEY_HEIGHT+KEY_HEIGHT_EXTRA,
+                    dish_tilt=DISH_TILT, dish_tilt_curve=DISH_TILT_CURVE,
+                    polygon_layers=POLYGON_LAYERS, legends=legends,
+                    legend_font_sizes=LEGEND_FONT_SIZES, legend_fonts=LEGEND_FONTS,
+                    legend_trans=LEGEND_TRANS, legend_trans2=LEGEND_TRANS2,
+                    legend_scale=LEGEND_SCALE,
+                    legend_rotation=LEGEND_ROTATION, legend_rotation2=LEGEND_ROTATION2,
+                    legend_underset=LEGEND_UNDERSET, key_rotation=KEY_ROTATION);
+            }
         } else {
             difference() {
                 stem_top_using_globals();
@@ -1017,6 +1076,25 @@ module handle_render(what, legends) {
                 homing_dot_z=HOMING_DOT_Z,
                 key_rotation=KEY_ROTATION, dish_invert=DISH_INVERT,
                 uniform_wall_thickness=UNIFORM_WALL_THICKNESS, debug=DEBUG);
+        }  else if (KEY_PROFILE == "xda") {
+            XDA_keycap(row=KEY_ROW, length=KEY_LENGTH, width=KEY_WIDTH,
+                height_extra=KEY_HEIGHT_EXTRA, wall_thickness=WALL_THICKNESS,
+                stem_clips=STEM_SNAP_FIT, stem_walls_inset=STEM_WALLS_INSET,
+                stem_walls_tolerance=STEM_WALLS_TOLERANCE,
+                legends=legends, legend_font_sizes=LEGEND_FONT_SIZES,
+                legend_fonts=LEGEND_FONTS,
+                legend_trans=LEGEND_TRANS, legend_trans2=LEGEND_TRANS2,
+                legend_scale=LEGEND_SCALE, legend_carved=LEGEND_CARVED,
+                legend_rotation=LEGEND_ROTATION, legend_rotation2=LEGEND_ROTATION2,
+                polygon_layers=POLYGON_LAYERS,
+                dish_fn=DISH_FN, dish_corner_fn=DISH_CORNER_FN,
+                dish_thickness=DISH_THICKNESS,
+                visualize_legends=VISUALIZE_LEGENDS, legend_underset=LEGEND_UNDERSET,
+                homing_dot_length=HOMING_DOT_LENGTH, homing_dot_width=HOMING_DOT_WIDTH,
+                homing_dot_x=HOMING_DOT_X, homing_dot_y=HOMING_DOT_Y,
+                homing_dot_z=HOMING_DOT_Z,
+                key_rotation=KEY_ROTATION, dish_invert=DISH_INVERT,
+                uniform_wall_thickness=UNIFORM_WALL_THICKNESS, debug=DEBUG);
         } else {
             key_using_globals(legends=legends);
         }
@@ -1136,6 +1214,25 @@ module handle_render(what, legends) {
                 uniform_wall_thickness=UNIFORM_WALL_THICKNESS, debug=DEBUG);
         } else if (KEY_PROFILE == "gem") {
             %GEM_keycap(row=KEY_ROW, length=KEY_LENGTH, width=KEY_WIDTH,
+                height_extra=KEY_HEIGHT_EXTRA, wall_thickness=WALL_THICKNESS,
+                stem_clips=STEM_SNAP_FIT, stem_walls_inset=STEM_WALLS_INSET,
+                stem_walls_tolerance=STEM_WALLS_TOLERANCE,
+                legends=legends, legend_font_sizes=LEGEND_FONT_SIZES,
+                legend_fonts=LEGEND_FONTS,
+                legend_trans=LEGEND_TRANS, legend_trans2=LEGEND_TRANS2,
+                legend_scale=LEGEND_SCALE, legend_carved=LEGEND_CARVED,
+                legend_rotation=LEGEND_ROTATION, legend_rotation2=LEGEND_ROTATION2,
+                polygon_layers=POLYGON_LAYERS,
+                dish_fn=DISH_FN, dish_corner_fn=DISH_CORNER_FN,
+                dish_thickness=DISH_THICKNESS,
+                visualize_legends=VISUALIZE_LEGENDS, legend_underset=LEGEND_UNDERSET,
+                homing_dot_length=HOMING_DOT_LENGTH, homing_dot_width=HOMING_DOT_WIDTH,
+                homing_dot_x=HOMING_DOT_X, homing_dot_y=HOMING_DOT_Y,
+                homing_dot_z=HOMING_DOT_Z,
+                key_rotation=KEY_ROTATION, dish_invert=DISH_INVERT,
+                uniform_wall_thickness=UNIFORM_WALL_THICKNESS, debug=DEBUG);
+        } else if (KEY_PROFILE == "xda") {
+            %XDA_keycap(row=KEY_ROW, length=KEY_LENGTH, width=KEY_WIDTH,
                 height_extra=KEY_HEIGHT_EXTRA, wall_thickness=WALL_THICKNESS,
                 stem_clips=STEM_SNAP_FIT, stem_walls_inset=STEM_WALLS_INSET,
                 stem_walls_tolerance=STEM_WALLS_TOLERANCE,
@@ -1349,6 +1446,33 @@ module handle_render(what, legends) {
                 key_rotation=KEY_ROTATION,
                 hollow=STEM_HOLLOW,
                 uniform_wall_thickness=UNIFORM_WALL_THICKNESS);
+        } else if (KEY_PROFILE == "xda") {
+            XDA_stem(
+                stem_type=STEM_TYPE,
+                wall_thickness=WALL_THICKNESS,
+                wall_extra=STEM_SIDES_WALL_THICKNESS,
+                wall_inset=STEM_WALLS_INSET,
+                wall_tolerance=STEM_WALLS_TOLERANCE,
+                key_length=KEY_LENGTH,
+                key_width=KEY_WIDTH,
+                height_extra=KEY_HEIGHT_EXTRA,
+                inset=STEM_INSET,
+                depth=STEM_HEIGHT,
+                dish_thickness=DISH_THICKNESS,
+                dish_invert=DISH_INVERT,
+                dish_fn=DISH_FN,
+                dish_corner_fn=DISH_CORNER_FN, // Ignored (always 4)
+                corner_radius=STEM_CORNER_RADIUS, // Of the stem; not the keycap
+                flat_support=STEM_FLAT_SUPPORT,
+                side_support_thickness=STEM_SIDE_SUPPORT_THICKNESS,
+                side_supports=STEM_SIDE_SUPPORTS,
+                outside_tolerance_x=STEM_OUTSIDE_TOLERANCE_X,
+                outside_tolerance_y=STEM_OUTSIDE_TOLERANCE_Y,
+                inside_tolerance=STEM_INSIDE_TOLERANCE,
+                locations=STEM_LOCATIONS,
+                key_rotation=KEY_ROTATION,
+                hollow=STEM_HOLLOW,
+                uniform_wall_thickness=UNIFORM_WALL_THICKNESS);
         } else { // Use globals
             stem_using_globals();
         }
@@ -1414,6 +1538,10 @@ module render_keycap(stuff_to_render) {
 render_keycap(RENDER);
 
 /* CHANGELOG:
+    1.10.0:
+        * Added XDA profile
+        * Fixed a bug in various keycap profiles where the `polygon_curve` value was missing when generating stems which resulted in some hollow interior space when UNIFORM_WALL_THICKNESS was enabled.
+        * Added some missing arguments/parameters and support for `--enable=fast-csg` (new OpenSCAD feature that speeds up rendering like 100x) to scripts/keycap.py
     1.9.4:
         * Fixed a bug where you'd get warnings in the console if DISH_DEPTH was set to 0.
     1.9.3:
