@@ -40,6 +40,7 @@ RENDER = ["keycap", "stem"]; // Supported values: keycap, stem, legends, row, ro
 //RENDER = ["legends"];
 //RENDER = ["legends", "stem"];
 //RENDER = ["stem"];
+//RENDER = ["keycap", "stem", "legends"]; // For generating multi-material keycaps (using colorscad.sh)
 //RENDER = ["underset_mask"]; // A thin layer under the top of they keycap meant to be darkened for underset legends
 // Want to render a whole row of keycaps/stems/legends at a time?  You can do that here:
 //RENDER = ["row", "row_stems"]; // For making whole keyboards at a time (with whole-keyboard inlaid art!)
@@ -163,7 +164,7 @@ HOMING_DOT_Z = -0.35; // 0 == Right at KEY_HEIGHT (dish type makes a big differe
 
 // LEGENDARY!
 LEGENDS = [ // As many legends as you want
-//    "Q",
+    "A",
 //    "1", "!", // Just an example of multiple legends (uncomment to try it!)
 //    "☺", // Unicode characters work too!
 ];
@@ -467,6 +468,8 @@ module stem_top_using_globals() {
 module handle_render(what, legends) {
     if (what=="legends") {
     // NOTE: just_legends() uses children() which is why there's no semicolon after it
+        color("black")
+        render()
         if (KEY_PROFILE == "dsa") {
             just_legends(height=KEY_HEIGHT+KEY_HEIGHT_EXTRA,
                 legends=legends, polygon_layers=POLYGON_LAYERS,
@@ -944,6 +947,8 @@ module handle_render(what, legends) {
             }
         }
     } else if (what=="keycap") {
+        color("white")
+        render()
         if (KEY_PROFILE == "dsa") {
             DSA_keycap(row=KEY_ROW, length=KEY_LENGTH, width=KEY_WIDTH,
                 height_extra=KEY_HEIGHT_EXTRA, wall_thickness=WALL_THICKNESS,
@@ -1254,6 +1259,7 @@ module handle_render(what, legends) {
             %key_using_globals(legends=legends);
         }
     } else if (what=="stem") {
+        color("white")
         if (KEY_PROFILE == "dsa") {
             DSA_stem(
                 stem_type=STEM_TYPE,
