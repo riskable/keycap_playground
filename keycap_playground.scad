@@ -54,15 +54,15 @@ VISUALIZE_LEGENDS = false; // Set to true to have the legends appear via %
 
 // CONSTANTS
 KEY_UNIT = 19.05; // Square that makes up the entire space of a key
-BETWEENSPACE = 0.8; // The Betweenspace:  The void between realms...  And keycaps (for an 18.25mm keycap)
+BETWEENSPACE = 1; // The Betweenspace:  The void between realms...  And keycaps (for a 17.9mm XDA keycap, as this seems to overrule the profile's length/width)
 
 // BASIC KEYCAP PARAMETERS
 // If you want to make a keycap using a common profile set this to one of: dcs, dss, dsa, kat, kam, riskeycap, gem:
-KEY_PROFILE = "riskeycap"; // Any value other than a supported profile (e.g. "dsa") will use the globals specified below.  In other words, an empty KEY_PROFILE means "just use the values specified here in this file."
+KEY_PROFILE = "xda"; // Any value other than a supported profile (e.g. "dsa") will use the globals specified below.  In other words, an empty KEY_PROFILE means "just use the values specified here in this file."
 KEY_ROW = 1; // NOTE: For a spacebar make sure you also set DISH_INVERT=true
 // Some settings override profile settings but most will be ignored (if using a profile)
 KEY_HEIGHT = 9; // The Z (NOTE: Dish values may reduce this a bit as they carve themselves out)
-KEY_HEIGHT_EXTRA = 0.0; // If you're planning on sanding the keycap you can use this to make up for lost material (normally this is only useful when using a profile e.g. DSA)
+KEY_HEIGHT_EXTRA = 0.08; // If you're planning on sanding the keycap you can use this to make up for lost material (normally this is only useful when using a profile e.g. DSA)
 // NOTE: You *can* just set KEY_LENGTH/KEY_WIDTH to something simple e.g. 18
 KEY_LENGTH = (KEY_UNIT*1-BETWEENSPACE); // The X (NOTE: Increase DISH_FN if you make this >1U!)
 // NOTE: If using a profile make sure KEY_LENGTH matches the profile's KEY_WIDTH for 1U keycaps!
@@ -70,14 +70,14 @@ KEY_WIDTH = (KEY_UNIT*1-BETWEENSPACE); // The Y (NOTE: If using POLYGON_EGDES>4 
 // NOTE: Spacebars don't seem to use BETWEENSPACE (for whatever reason).  So to make a spacebar just use "KEY_UNIT*<spacebar unit length>" and omit the "-BETWEENSPACE" part.  Or just be precise and give it a value like 119.0625 (19.05*6.25)
 // NOTE: When making longer keycaps you may need to increase KEY_HEIGHT slightly in order for the height to be accurate.  I recommend giving it an extra 0.3mm per extra unit of length so 2U would be +0.3, 3U would be +0.6, etc BUT DOUBLE CHECK IT.  Do a side profile view and look at the ruler or render it and double-check the height in your slicer.
 //KEY_ROTATION = [0,0,0]; // I *highly* recommend 3D printing keycaps on their front/back/sides! Try this:
-KEY_ROTATION = [0,110.1,90]; // An example of how you'd rotate a keycap on its side.  Make sure to zoom in on the bottom to make sure it's *actually* going to print flat! This should be the correct rotation for riskeycap profile.  For GEM use:
+KEY_ROTATION = [0,0,0]; // An example of how you'd rotate a keycap on its side.  Make sure to zoom in on the bottom to make sure it's *actually* going to print flat! This should be the correct rotation for riskeycap profile.  For GEM use:
 //KEY_ROTATION = [0,108.6,90];
 // NOTE: If you rotate a keycap to print on its side don't forget to add a built-in support via STEM_SIDE_SUPPORTS! [0,1,0,0] is what you want if you rotated to print on the right side.
 KEY_TOP_DIFFERENCE = 5; // How much skinnier the key is at the top VS the bottom [x,y]
 KEY_TOP_X = 0; // Move the keycap's top on the X axis (controls skew left/right)
 KEY_TOP_Y = 0; // Move the keycap's top on the Y axis (controls skew forward/backward)
 WALL_THICKNESS = 0.45*2.25; // Default: 0.45 extrusion width * 2.25 (nice and thick; feels/sounds good). NOTE: STEM_SIDES_WALL_THICKNESS gets added to this.
-UNIFORM_WALL_THICKNESS = true; // Much more expensive rendering but the material under the dish will match the sides (even the shape of the dish will be matched)
+UNIFORM_WALL_THICKNESS = false; // Much more expensive rendering but the material under the dish will match the sides (even the shape of the dish will be matched)
 // NOTE: UNIFORM_WALL_THICKNESS uses WALL_THICKNESS instead of DISH_THICKNESS. So DISH_THICKNESS will be ignored if you enable this option.
 
 // DO THE DISHES!
@@ -121,10 +121,10 @@ STEM_HEIGHT = 4; // How far into the keycap's stem the switch's stem can go (4 i
 // NOTE: For Alps you typically want STEM_HEIGHT=3.5 (slightly shorter)
 STEM_TOP_THICKNESS = 0.5; // The part that resides under the keycap, connecting stems and keycap together (Note: Only used if UNIFORM_WALL_THICKNESS is false)
 // TIP: Increase STEM_TOP_THICKNESS when generating underset masks; makes them easier to use as a modifier in your slicer.
-STEM_INSIDE_TOLERANCE = 0.2; // Increases the size of the empty space(s) in the stem
+STEM_INSIDE_TOLERANCE = 0.0; // Increases the size of the empty space(s) in the stem
 // NOTE: For Alps stems I recommend reducing these two values to something like 0.1 or 0.05:
 STEM_OUTSIDE_TOLERANCE_X = 0.05; // Shrinks the stem a bit on the X axis (both axis for round_cherry)
-STEM_OUTSIDE_TOLERANCE_Y = 0.05; // Shrinks the stem a bit on th Y axix (unused with round_cherry)
+STEM_OUTSIDE_TOLERANCE_Y = 0.05; // Shrinks the stem a bit on the Y axis (unused with round_cherry)
 // For box stems (e.g. Kailh box) you want outside tolerances to be equal.  For Cherry stems you (usually) want the Y tolerance to be greater (since there's plenty of room on the sides).  In fact, you can go *negative* with STEM_OUTSIDE_TOLERANCE_X (e.g. -0.5) for extra strength!
 // Probably leave these two alone but they're here if you really love to mess with things:
 ALPS_STEM_CORNER_RADIUS = 0.25;
@@ -132,11 +132,11 @@ BOX_CHERRY_STEM_CORNER_RADIUS = 0.5;
 // Convert to one variable to rule them all (down below):
 STEM_CORNER_RADIUS = STEM_TYPE=="alps" ? ALPS_STEM_CORNER_RADIUS : BOX_CHERRY_STEM_CORNER_RADIUS;
 // NOTE ABOUT STEM STRENGTH AND ACCURACY: Printing stems upright/flat with a 0.4mm nozzle is troublesome.  They work OK but they're usually quite tight.  It's better to print keys on their side (front or left/right) so that the layer lines run at an angle to the switch stem; they end up more accurate *and* much, much stronger.
-STEM_INSET = 1; // How far to inset the stem (set to 0 to have the stem rest on the build plate which means you won't need supports when printing flat)
+STEM_INSET = 1.3; // How far to inset the stem (set to 0 to have the stem rest on the build plate which means you won't need supports when printing flat)
 STEM_FLAT_SUPPORT = false; // Add built-in support for the stem when printing flat (if inset)
 STEM_SIDE_SUPPORT_THICKNESS = 1; // 1 works well for most things
 // This controls which sides get (internal, under-the-top) stem supports (for printing on the side):
-STEM_SIDE_SUPPORTS = [0,1,0,0]; // Left, right, front, back
+STEM_SIDE_SUPPORTS = [0,0,0,0]; // Left, right, front, back
 // NOTE: You can only enable left/right supports *or* front/back supports.  Not both at the same time. (TODO: Fix that...  Maybe?  Why would you ever need *both* say, a left support *and* a top support at the same time?)
 STEM_SUPPORT_DISTANCE = 0.2; // Controls the air gap between the stem and its support
 // NOTE: If printing with a small nozzle like 0.25mm you might want to set the support distance to 0 to prevent "misses".
@@ -147,6 +147,10 @@ STEM_LOCATIONS = [ // Where to place stems/stabilizers
 //    [0,12,0], [0,-12,0], // Standard 2U Numpad + or Enter
 //    [50,0,0], [-50,0,0], // Cherry style 6.25U spacebar (most common)
 //    [57,0,0], [-57,0,0], // Cherry style 7U spacebar
+//    [12,0,0], [-12,0,0] // ISO enter
+//    [-KEY_UNIT / 2, 0, 0], [KEY_UNIT / 2, 0, 0] // 2u across 2 switches
+//    [0, -KEY_UNIT / 2, 0], [0, KEY_UNIT / 2, 0] // 2u across 2 switches, vertical
+//    [((1.75 - 1.25)/2)*KEY_UNIT, 0, 0] // stepped caps on a non-stepped caps layout
 ];
 // SNAP-FIT STEM STUFF (see snap_fit.scad for more details)
 STEM_SNAP_FIT = false; // If you want to print the stem as a separate part
@@ -159,7 +163,7 @@ HOMING_DOT_LENGTH = 0; // Set to something like "3" for a good, easy-to-feel "do
 HOMING_DOT_WIDTH = 1; // Default: 1
 HOMING_DOT_X = 0; // 0 == Center
 HOMING_DOT_Y = -KEY_WIDTH/4; // Default: Move it down towards the front a bit
-HOMING_DOT_Z = -0.35; // 0 == Right at KEY_HEIGHT (dish type makes a big difference here)
+HOMING_DOT_Z = 0.2; // 0 == Right at KEY_HEIGHT (dish type makes a big difference here)
 // NOTE: ADA specifies 0.5mm as the ideal braille dot height so that's what I recommend for homing dots too!  Though, 0.3mm seems to be reasonably "feelable" in my testing.  Experiment!
 
 // LEGENDARY!

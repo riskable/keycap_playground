@@ -1410,9 +1410,18 @@ module GEM_stem(stem_type="box_cherry", key_height=8.2, key_length=18.25, key_wi
     }
 }
 
-module XDA_keycap(row=1, length=18.41, width=18.41, height_extra=0, wall_thickness=1.5, dish_thickness=1.5, dish_fn=$preview ? 28 : 256, dish_corner_fn=$preview ? 16 : 64, dish_depth=1, dish_invert=false, stem_clips=false, stem_walls_inset=0, stem_walls_tolerance=0.25, top_difference=19.05/5, key_rotation=[0,0,0], corner_radius=0.3, corner_radius_curve=8, legends=[""], legend_font_sizes=[6], legend_fonts=["Roboto"], legend_trans=[[0,0,0]], legend_trans2=[[0,0,0]], legend_rotation=[[0,0,0]], legend_rotation2=[[0,0,0]], legend_scale=[[0,0,0]], legend_underset=[[0,0,0]], legend_carved=false, homing_dot_length=0, homing_dot_width=0, homing_dot_x=0, homing_dot_y=0, homing_dot_z=0, polygon_layers=10, visualize_legends=false, uniform_wall_thickness=true, debug=false) {
+module XDA_keycap(
+	row=1, length=17.9, width=17.9, height_extra=0, top_difference=4.15, wall_thickness=1.5, uniform_wall_thickness=true, key_rotation=[0,0,0],
+	dish_thickness=1.5, dish_fn=$preview ? 28 : 256, dish_corner_fn=$preview ? 16 : 64, dish_depth=1.1, dish_invert=false,
+	stem_clips=false, stem_walls_inset=0, stem_walls_tolerance=0.25,
+	corner_radius=0.2, corner_radius_curve=17.9,
+	visualize_legends=false, legend_carved=false, legends=[""], legend_font_sizes=[6], legend_fonts=["Roboto"], legend_trans=[[0,0,0]], legend_trans2=[[0,0,0]], legend_rotation=[[0,0,0]], legend_rotation2=[[0,0,0]], legend_scale=[[0,0,0]], legend_underset=[[0,0,0]],
+	homing_dot_length=0, homing_dot_width=0, homing_dot_x=0, homing_dot_y=0, homing_dot_z=0, polygon_layers=10,
+	debug=false
+    ) {
+
     // NOTE: The 0-index values are ignored (there's no row 0 in XDA)
-    row_height = dish_invert ? 8.1+height_extra : 9.1+height_extra; // One less if we're generating a spacebar
+    row_height = dish_invert ? 8.95+height_extra : 9.95+height_extra; // One less if we're generating a spacebar
     if (row < 1) {
         warning("We only support rows 1 for XDA profile caps!");
     }
@@ -1435,7 +1444,7 @@ module XDA_keycap(row=1, length=18.41, width=18.41, height_extra=0, wall_thickne
         legend_rotation=legend_rotation, legend_rotation2=legend_rotation2,
         legend_underset=legend_underset, legend_carved=legend_carved,
         polygon_layers=polygon_layers, polygon_layer_rotation=0,
-        polygon_edges=4, polygon_curve=5,
+        polygon_edges=4, polygon_curve=3.5,
         key_rotation=key_rotation,
         homing_dot_length=homing_dot_length, homing_dot_width=homing_dot_width,
         homing_dot_x=homing_dot_x, homing_dot_y=homing_dot_y, homing_dot_z=homing_dot_z,
@@ -1444,8 +1453,8 @@ module XDA_keycap(row=1, length=18.41, width=18.41, height_extra=0, wall_thickne
         debug=debug);
 }
 
-module XDA_stem(stem_type="box_cherry", key_height=7.3914, key_length=18.41, key_width=18.41, height_extra=0, dish_depth=1, dish_fn=128, dish_corner_fn=64, dish_thickness=1.5, dish_invert=false, depth=4, top_difference=19.05/5, wall_thickness=1.5, wall_extra=0.65, wall_inset=0, wall_tolerance=0.25, corner_radius=0.3, key_corner_radius=0.3, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=0, top_thickness=1, side_support_thickness=0, side_supports=[0,0,0,0], flat_support=false, locations=[[0,0,0]], key_rotation=[0,0,0], polygon_layers=10, polygon_layer_rotation=0, hollow=false, uniform_wall_thickness=true) {
-    row_height = dish_invert ? 8.1+height_extra : 9.1+height_extra; // One less if we're generating a spacebar
+module XDA_stem(stem_type="box_cherry", key_height=9.95, key_length=17.9, key_width=17.9, height_extra=0, dish_depth=1, dish_fn=128, dish_corner_fn=64, dish_thickness=1.5, dish_invert=false, depth=4, top_difference=3.6, wall_thickness=1.5, wall_extra=0.65, wall_inset=0, wall_tolerance=0.25, corner_radius=0.3, key_corner_radius=0.3, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=0, top_thickness=1, side_support_thickness=0, side_supports=[0,0,0,0], flat_support=false, locations=[[0,0,0]], key_rotation=[0,0,0], polygon_layers=10, polygon_layer_rotation=0, hollow=false, uniform_wall_thickness=true) {
+    row_height = dish_invert ? 8.95+height_extra : 9.95+height_extra; // One less if we're generating a spacebar
     dish_type = "sphere";
     dish_z = 0.111; // NOTE: Width of the top dish (at widest) should be ~12.7mm
     corner_radius_curve = 8;

@@ -1,0 +1,5 @@
+*.swp
+/*.stl
+/*.3mf
+/*.gcode
+/*.diff
