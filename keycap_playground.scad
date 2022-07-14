@@ -164,7 +164,7 @@ HOMING_DOT_Z = -0.35; // 0 == Right at KEY_HEIGHT (dish type makes a big differe
 
 // LEGENDARY!
 LEGENDS = [ // As many legends as you want
-    "A",
+//    "A",
 //    "1", "!", // Just an example of multiple legends (uncomment to try it!)
 //    "☺", // Unicode characters work too!
 ];
