@@ -1411,7 +1411,7 @@ module GEM_stem(stem_type="box_cherry", key_height=8.2, key_length=18.25, key_wi
 }
 
 module XDA_keycap(
-	row=1, length=17.9, width=17.9, height_extra=0, top_difference=4.15, wall_thickness=1.5, uniform_wall_thickness=true, key_rotation=[0,0,0],
+	row=1, length=18.2, width=18.2, height_extra=0, top_difference=4.15, wall_thickness=1.5, uniform_wall_thickness=true, key_rotation=[0,0,0],
 	dish_thickness=1.5, dish_fn=$preview ? 28 : 256, dish_corner_fn=$preview ? 16 : 64, dish_depth=1.1, dish_invert=false,
 	stem_clips=false, stem_walls_inset=0, stem_walls_tolerance=0.25,
 	corner_radius=0.2, corner_radius_curve=17.9,

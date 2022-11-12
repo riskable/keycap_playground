@@ -76,8 +76,8 @@ KEY_ROTATION = [0,0,0]; // An example of how you'd rotate a keycap on its side. 
 KEY_TOP_DIFFERENCE = 5; // How much skinnier the key is at the top VS the bottom [x,y]
 KEY_TOP_X = 0; // Move the keycap's top on the X axis (controls skew left/right)
 KEY_TOP_Y = 0; // Move the keycap's top on the Y axis (controls skew forward/backward)
-WALL_THICKNESS = 0.45*2.25; // Default: 0.45 extrusion width * 2.25 (nice and thick; feels/sounds good). NOTE: STEM_SIDES_WALL_THICKNESS gets added to this.
-UNIFORM_WALL_THICKNESS = false; // Much more expensive rendering but the material under the dish will match the sides (even the shape of the dish will be matched)
+WALL_THICKNESS = 0.4*3; // Default: 0.45 extrusion width * 2.25 (nice and thick; feels/sounds good). NOTE: STEM_SIDES_WALL_THICKNESS gets added to this.
+UNIFORM_WALL_THICKNESS = true; // Much more expensive rendering but the material under the dish will match the sides (even the shape of the dish will be matched)
 // NOTE: UNIFORM_WALL_THICKNESS uses WALL_THICKNESS instead of DISH_THICKNESS. So DISH_THICKNESS will be ignored if you enable this option.
 
 // DO THE DISHES!
@@ -88,7 +88,7 @@ DISH_TYPE = "sphere"; // "inv_pyramid", "cylinder", "sphere" (aka "domed"), anyt
 // NOTE: inv_pyramid doesn't work for making spacbars (kinda, "duh")
 DISH_DEPTH = 1; // Distance between the top sides and the bottommost point in the dish (set to 0 for flat top)
 // NOTE: When DISH_INVERT is true DISH_DEPTH becomes more like, "how far dish protrudes upwards"
-DISH_THICKNESS = 0.6; // Amount of material that will be placed under the bottommost part of the dish (Note: only used if UNIFORM_WALL_THICKNESS is false)
+DISH_THICKNESS = 1; // Amount of material that will be placed under the bottommost part of the dish (Note: only used if UNIFORM_WALL_THICKNESS is false)
 // NOTE: If you make DISH_THICKNESS too small legends might not print properly--even with a tiny nozzle.  In other words, a thick keycap top makes for nice clean (3D printed) legends.
 // NOTE: Also, if you're printing white keycaps with transparent legends you want a thick dish (1.2+) to darken the non-transparent parts of the keycap
 DISH_TILT = 0; // How to rotate() the dish of the key (on the Y axis)
@@ -99,13 +99,13 @@ DISH_INVERT_DIVISION_X = 4;
 DISH_INVERT_DIVISION_Y = 1;
 // TIP: If you're making a 1U keycap and want a truly rounded (spherical) top set DISH_INVERT_DIVISION_X to 1 
 // NOTE: Don't forget to increase DISH_FN if you make a longer/wider keycap!
-DISH_FN = $preview ? 28 : 256; // If you want to increase or decrease the resolution of the shapes used to make the dish (Tip: Don't go <64 for "cylinder" dish types and don't go <128 for "sphere")
+DISH_FN = $preview ? 28 : 512; // If you want to increase or decrease the resolution of the shapes used to make the dish (Tip: Don't go <64 for "cylinder" dish types and don't go <128 for "sphere")
 // NOTE: DISH_FN does not apply if DISH_INVERT==true (because it would be too much; inverted dish doesn't need as much resolution)
-DISH_CORNER_FN = $preview ? 16 : 64;
+DISH_CORNER_FN = $preview ? 16 : 128;
 // COOL TRICK: Set DISH_CORNER_FN to 4 to get flattened/chamfered corners (low-poly look!)
 
 // POLYGON/SHAPE MANIPULATION
-POLYGON_LAYERS = 10; // Number of layers we're going to extrude (set to 1 to get a boring keycap)
+POLYGON_LAYERS = 32; // Number of layers we're going to extrude (set to 1 to get a boring keycap)
 POLYGON_LAYER_ROTATION = 0; // How much to rotate per layer (set to 0 for boring keycap). Try messing with this!  It's fun!
 POLYGON_EDGES = 4; // How many sides the keycap will have (normal keycap is 4). Try messing with this too!
 POLYGON_ROTATION = true; // If false, each layer will ALTERNATE it's rotation CW/CCW (for a low-poly effect).  If true the keycap will gently rotate the given rotation amount until it reaches the final rotated destination (as it were).
@@ -121,7 +121,7 @@ STEM_HEIGHT = 4; // How far into the keycap's stem the switch's stem can go (4 i
 // NOTE: For Alps you typically want STEM_HEIGHT=3.5 (slightly shorter)
 STEM_TOP_THICKNESS = 0.5; // The part that resides under the keycap, connecting stems and keycap together (Note: Only used if UNIFORM_WALL_THICKNESS is false)
 // TIP: Increase STEM_TOP_THICKNESS when generating underset masks; makes them easier to use as a modifier in your slicer.
-STEM_INSIDE_TOLERANCE = 0.0; // Increases the size of the empty space(s) in the stem
+STEM_INSIDE_TOLERANCE = 0.1; // Increases the size of the empty space(s) in the stem
 // NOTE: For Alps stems I recommend reducing these two values to something like 0.1 or 0.05:
 STEM_OUTSIDE_TOLERANCE_X = 0.05; // Shrinks the stem a bit on the X axis (both axis for round_cherry)
 STEM_OUTSIDE_TOLERANCE_Y = 0.05; // Shrinks the stem a bit on the Y axis (unused with round_cherry)
@@ -132,7 +132,7 @@ BOX_CHERRY_STEM_CORNER_RADIUS = 0.5;
 // Convert to one variable to rule them all (down below):
 STEM_CORNER_RADIUS = STEM_TYPE=="alps" ? ALPS_STEM_CORNER_RADIUS : BOX_CHERRY_STEM_CORNER_RADIUS;
 // NOTE ABOUT STEM STRENGTH AND ACCURACY: Printing stems upright/flat with a 0.4mm nozzle is troublesome.  They work OK but they're usually quite tight.  It's better to print keys on their side (front or left/right) so that the layer lines run at an angle to the switch stem; they end up more accurate *and* much, much stronger.
-STEM_INSET = 1.3; // How far to inset the stem (set to 0 to have the stem rest on the build plate which means you won't need supports when printing flat)
+STEM_INSET = 2.4; // How far to inset the stem (set to 0 to have the stem rest on the build plate which means you won't need supports when printing flat)
 STEM_FLAT_SUPPORT = false; // Add built-in support for the stem when printing flat (if inset)
 STEM_SIDE_SUPPORT_THICKNESS = 1; // 1 works well for most things
 // This controls which sides get (internal, under-the-top) stem supports (for printing on the side):
@@ -154,16 +154,16 @@ STEM_LOCATIONS = [ // Where to place stems/stabilizers
 ];
 // SNAP-FIT STEM STUFF (see snap_fit.scad for more details)
 STEM_SNAP_FIT = false; // If you want to print the stem as a separate part
-STEM_SIDES_WALL_THICKNESS = 0.5; // This will add additional thickness to the interior walls of the keycap that's rendered/exported with the "stem".  If you have legends on the front/back/sides of your keycap setting this to something like 0.65 will give those legends something to "sit" on when printing (so there's no mid-air printing or drooping).
+STEM_SIDES_WALL_THICKNESS = 0; // This will add additional thickness to the interior walls of the keycap that's rendered/exported with the "stem".  If you have legends on the front/back/sides of your keycap setting this to something like 0.65 will give those legends something to "sit" on when printing (so there's no mid-air printing or drooping).
 STEM_WALLS_INSET = 0; // Makes it so the stem walls don't go all the way to the bottom of the keycap; works just like STEM_INSET but for the walls (1.05 is good for snap-fit stems)
-STEM_WALLS_TOLERANCE = 0.0; // How much wiggle room the stem sides will get inside the keycap (0.2 is good for snap-fit stems)
+STEM_WALLS_TOLERANCE = 0.1; // How much wiggle room the stem sides will get inside the keycap (0.2 is good for snap-fit stems)
 
 // If you want "homing dots" for home row keys:
 HOMING_DOT_LENGTH = 0; // Set to something like "3" for a good, easy-to-feel "dot"
 HOMING_DOT_WIDTH = 1; // Default: 1
 HOMING_DOT_X = 0; // 0 == Center
 HOMING_DOT_Y = -KEY_WIDTH/4; // Default: Move it down towards the front a bit
-HOMING_DOT_Z = 0.2; // 0 == Right at KEY_HEIGHT (dish type makes a big difference here)
+HOMING_DOT_Z = 0.05; // 0 == Right at KEY_HEIGHT (dish type makes a big difference here)
 // NOTE: ADA specifies 0.5mm as the ideal braille dot height so that's what I recommend for homing dots too!  Though, 0.3mm seems to be reasonably "feelable" in my testing.  Experiment!
 
 // LEGENDARY!
