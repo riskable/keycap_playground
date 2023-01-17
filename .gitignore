@@ -1,0 +1,7 @@
+*.swp
+/*.stl
+/*.3mf
+/*.gcode
+/*.diff
+*.png
+*.blend
