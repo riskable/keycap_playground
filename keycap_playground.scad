@@ -1,7 +1,7 @@
 // Riskable's Keycap Playground -- Use this tool to try out all your cool keycap ideas.
 
 // AUTHOR: Riskable <riskable@youknowwhat.com>
-// VERSION: 1.10.0 (Changelog is at the bottom)
+// VERSION: 1.10.1 (Changelog is at the bottom)
 
 /* NOTES
     * Want to understand how to use this file? See: https://youtu.be/WDlRZMvisA4
@@ -31,10 +31,20 @@ use <legends.scad>
 use <utils.scad>
 use <profiles.scad>
 
+// Rendering resolution (32 is usually good enough)
 $fn = 32; // Mostly only applies to legends/fonts but increase as needed for greater resolution
 
-// Pick what you want to render (you can put a '%' in front of the name to make it transparent)
-RENDER = ["keycap", "stem"]; // Supported values: keycap, stem, legends, row, row_stems, row_legends, custom
+// Pick what you want to render. For more advanced options edit the RENDER variable directly (don't use the customizer).
+WHAT_TO_RENDER = "keycap+stem"; // [keycap, keycap+stem, legends]
+
+RENDER = WHAT_TO_RENDER == "keycap" ? ["keycap"] : (
+         WHAT_TO_RENDER == "keycap+stem" ? ["keycap", "stem"] : (
+         WHAT_TO_RENDER == "legends" ? ["legends"] : []
+));
+// NOTE: I *hate* that OpenSCAD forces conditional assignment like that.  I can't stand the ternary operator!
+
+//RENDER = ["keycap", "stem"];
+// Supported values: keycap, stem, legends, row, row_stems, row_legends, custom
 //RENDER = ["%keycap", "stem"]; // Can be useful for visualizing the stem inside the keycap
 //RENDER = ["keycap"];
 //RENDER = ["legends"];
@@ -49,16 +59,18 @@ RENDER = ["keycap", "stem"]; // Supported values: keycap, stem, legends, row, ro
 //RENDER = ["row_stems"];
 //RENDER = ["row_underset_masks"];
 
-// HUGE PERFORMANCE BOOST WHILE EXPERIMENTING:
+// Lets you see the legends as a transparent object but also GREATLY improves preview rendering speed.
 VISUALIZE_LEGENDS = false; // Set to true to have the legends appear via %
 
-// CONSTANTS
+// Width of a standard "key unit" (how much space a "key" takes up in total). Probably don't want to change this.
 KEY_UNIT = 19.05; // Square that makes up the entire space of a key
+// How much space (air) between keycaps
 BETWEENSPACE = 0.8; // The Betweenspace:  The void between realms...  And keycaps (for an 18.25mm keycap)
 
 // BASIC KEYCAP PARAMETERS
 // If you want to make a keycap using a common profile set this to one of: dcs, dss, dsa, kat, kam, riskeycap, gem:
-KEY_PROFILE = "riskeycap"; // Any value other than a supported profile (e.g. "dsa") will use the globals specified below.  In other words, an empty KEY_PROFILE means "just use the values specified here in this file."
+KEY_PROFILE = "riskeycap"; // [riskeycap, gem, dsa, dcs, dss, kat, kam]
+// Any value other than a supported profile (e.g. "dsa") will use the globals specified below.  In other words, an empty KEY_PROFILE means "just use the values specified here in this file."
 KEY_ROW = 1; // NOTE: For a spacebar make sure you also set DISH_INVERT=true
 // Some settings override profile settings but most will be ignored (if using a profile)
 KEY_HEIGHT = 9; // The Z (NOTE: Dish values may reduce this a bit as they carve themselves out)
@@ -88,7 +100,7 @@ DISH_TYPE = "sphere"; // "inv_pyramid", "cylinder", "sphere" (aka "domed"), anyt
 // NOTE: inv_pyramid doesn't work for making spacbars (kinda, "duh")
 DISH_DEPTH = 1; // Distance between the top sides and the bottommost point in the dish (set to 0 for flat top)
 // NOTE: When DISH_INVERT is true DISH_DEPTH becomes more like, "how far dish protrudes upwards"
-DISH_THICKNESS = 0.6; // Amount of material that will be placed under the bottommost part of the dish (Note: only used if UNIFORM_WALL_THICKNESS is false)
+DISH_THICKNESS = 1; // Amount of material that will be placed under the bottommost part of the dish (Note: only used if UNIFORM_WALL_THICKNESS is false)
 // NOTE: If you make DISH_THICKNESS too small legends might not print properly--even with a tiny nozzle.  In other words, a thick keycap top makes for nice clean (3D printed) legends.
 // NOTE: Also, if you're printing white keycaps with transparent legends you want a thick dish (1.2+) to darken the non-transparent parts of the keycap
 DISH_TILT = 0; // How to rotate() the dish of the key (on the Y axis)
@@ -119,7 +131,7 @@ STEM_TYPE = "box_cherry"; // "box_cherry" (default), "round_cherry" (harder to p
 STEM_HOLLOW = false; // Only applies to Alps: Whether or not the inside is hollow
 STEM_HEIGHT = 4; // How far into the keycap's stem the switch's stem can go (4 is "normal keycap")
 // NOTE: For Alps you typically want STEM_HEIGHT=3.5 (slightly shorter)
-STEM_TOP_THICKNESS = 0.5; // The part that resides under the keycap, connecting stems and keycap together (Note: Only used if UNIFORM_WALL_THICKNESS is false)
+STEM_TOP_THICKNESS = 0.65; // The part that resides under the keycap, connecting stems and keycap together (Note: Only used if UNIFORM_WALL_THICKNESS is false)
 // TIP: Increase STEM_TOP_THICKNESS when generating underset masks; makes them easier to use as a modifier in your slicer.
 STEM_INSIDE_TOLERANCE = 0.2; // Increases the size of the empty space(s) in the stem
 // NOTE: For Alps stems I recommend reducing these two values to something like 0.1 or 0.05:
@@ -150,7 +162,7 @@ STEM_LOCATIONS = [ // Where to place stems/stabilizers
 ];
 // SNAP-FIT STEM STUFF (see snap_fit.scad for more details)
 STEM_SNAP_FIT = false; // If you want to print the stem as a separate part
-STEM_SIDES_WALL_THICKNESS = 0.5; // This will add additional thickness to the interior walls of the keycap that's rendered/exported with the "stem".  If you have legends on the front/back/sides of your keycap setting this to something like 0.65 will give those legends something to "sit" on when printing (so there's no mid-air printing or drooping).
+STEM_SIDES_WALL_THICKNESS = 0.8; // This will add additional thickness to the interior walls of the keycap that's rendered/exported with the "stem".  If you have legends on the front/back/sides of your keycap setting this to something like 0.65 will give those legends something to "sit" on when printing (so there's no mid-air printing or drooping).
 STEM_WALLS_INSET = 0; // Makes it so the stem walls don't go all the way to the bottom of the keycap; works just like STEM_INSET but for the walls (1.05 is good for snap-fit stems)
 STEM_WALLS_TOLERANCE = 0.0; // How much wiggle room the stem sides will get inside the keycap (0.2 is good for snap-fit stems)
 
@@ -164,13 +176,14 @@ HOMING_DOT_Z = -0.35; // 0 == Right at KEY_HEIGHT (dish type makes a big differe
 
 // LEGENDARY!
 LEGENDS = [ // As many legends as you want
-    "A",
+//    "A",
 //    "1", "!", // Just an example of multiple legends (uncomment to try it!)
 //    "☺", // Unicode characters work too!
 ];
 // NOTE: Legends might not look quite right until final render (F6)
 LEGEND_FONTS = [ // Each legend can use its own font. If not specified the first font definition will be used
-    "Arial Black:style=Regular", // Position/index must match the index in LEGENDS
+    "Overpass Nerd Font",
+//    "Arial Black:style=Regular", // Position/index must match the index in LEGENDS
 //    "Franklin Gothic Medium:style=Regular" // Normal-ish keycap legend font
 //    "Gotham Rounded:style=Bold", // Looks similar to the SA Dasher font
     // Favorite fonts for legends: Roboto, Aharoni, Ubuntu, Cabin, Noto, Code2000, Franklin Gothic Medium
@@ -332,6 +345,7 @@ module stem_using_globals() {
             dish_y=DISH_Y,
             dish_z=DISH_Z,
             dish_fn=DISH_FN,
+            dish_type=DISH_TYPE,
             dish_corner_fn=DISH_CORNER_FN,
             dish_tilt_curve=DISH_TILT_CURVE,
             dish_division_x=DISH_INVERT_DIVISION_X,
@@ -375,6 +389,7 @@ module stem_using_globals() {
             dish_y=DISH_Y,
             dish_z=DISH_Z,
             dish_fn=DISH_FN,
+            dish_type=DISH_TYPE,
             dish_corner_fn=DISH_CORNER_FN,
             dish_tilt_curve=DISH_TILT_CURVE,
             corner_radius=CORNER_RADIUS,
@@ -415,6 +430,7 @@ module stem_using_globals() {
             dish_y=DISH_Y,
             dish_z=DISH_Z,
             dish_fn=DISH_FN,
+            dish_type=DISH_TYPE,
             dish_corner_fn=DISH_CORNER_FN,
             dish_tilt_curve=DISH_TILT_CURVE,
             corner_radius=ALPS_STEM_CORNER_RADIUS,
@@ -453,6 +469,7 @@ module stem_top_using_globals() {
         dish_y=DISH_Y,
         dish_z=DISH_Z,
         dish_fn=DISH_FN,
+        dish_type=DISH_TYPE,
         dish_corner_fn=DISH_CORNER_FN,
         dish_tilt_curve=DISH_TILT_CURVE,
         corner_radius_curve=CORNER_RADIUS_CURVE,
@@ -468,7 +485,7 @@ module stem_top_using_globals() {
 module handle_render(what, legends) {
     if (what=="legends") {
     // NOTE: just_legends() uses children() which is why there's no semicolon after it
-        color("black")
+        color("#505050")
         render()
         if (KEY_PROFILE == "dsa") {
             just_legends(height=KEY_HEIGHT+KEY_HEIGHT_EXTRA,
@@ -654,6 +671,7 @@ module handle_render(what, legends) {
                     dish_thickness=DISH_THICKNESS,
                     dish_invert=DISH_INVERT,
                     flat_support=STEM_FLAT_SUPPORT,
+                    support_distance=STEM_SUPPORT_DISTANCE,
                     side_support_thickness=STEM_SIDE_SUPPORT_THICKNESS,
                     side_supports=STEM_SIDE_SUPPORTS,
                     outside_tolerance_x=STEM_OUTSIDE_TOLERANCE_X,
@@ -692,6 +710,7 @@ module handle_render(what, legends) {
                     dish_fn=DISH_FN,
                     dish_corner_fn=DISH_CORNER_FN,
                     flat_support=STEM_FLAT_SUPPORT,
+                    support_distance=STEM_SUPPORT_DISTANCE,
                     side_support_thickness=STEM_SIDE_SUPPORT_THICKNESS,
                     side_supports=STEM_SIDE_SUPPORTS,
                     outside_tolerance_x=STEM_OUTSIDE_TOLERANCE_X,
@@ -730,6 +749,7 @@ module handle_render(what, legends) {
                     dish_fn=DISH_FN,
                     dish_corner_fn=DISH_CORNER_FN,
                     flat_support=STEM_FLAT_SUPPORT,
+                    support_distance=STEM_SUPPORT_DISTANCE,
                     side_support_thickness=STEM_SIDE_SUPPORT_THICKNESS,
                     side_supports=STEM_SIDE_SUPPORTS,
                     outside_tolerance_x=STEM_OUTSIDE_TOLERANCE_X,
@@ -768,6 +788,7 @@ module handle_render(what, legends) {
                     dish_fn=DISH_FN,
                     dish_corner_fn=DISH_CORNER_FN,
                     flat_support=STEM_FLAT_SUPPORT,
+                    support_distance=STEM_SUPPORT_DISTANCE,
                     side_support_thickness=STEM_SIDE_SUPPORT_THICKNESS,
                     side_supports=STEM_SIDE_SUPPORTS,
                     outside_tolerance_x=STEM_OUTSIDE_TOLERANCE_X,
@@ -804,6 +825,7 @@ module handle_render(what, legends) {
                     dish_fn=DISH_FN,
                     dish_corner_fn=DISH_CORNER_FN,
                     flat_support=STEM_FLAT_SUPPORT,
+                    support_distance=STEM_SUPPORT_DISTANCE,
                     side_support_thickness=STEM_SIDE_SUPPORT_THICKNESS,
                     side_supports=STEM_SIDE_SUPPORTS,
                     outside_tolerance_x=STEM_OUTSIDE_TOLERANCE_X,
@@ -841,6 +863,7 @@ module handle_render(what, legends) {
                     dish_fn=DISH_FN,
                     dish_corner_fn=DISH_CORNER_FN,
                     flat_support=STEM_FLAT_SUPPORT,
+                    support_distance=STEM_SUPPORT_DISTANCE,
                     side_support_thickness=STEM_SIDE_SUPPORT_THICKNESS,
                     side_supports=STEM_SIDE_SUPPORTS,
                     outside_tolerance_x=STEM_OUTSIDE_TOLERANCE_X,
@@ -878,6 +901,7 @@ module handle_render(what, legends) {
                     dish_fn=DISH_FN,
                     dish_corner_fn=DISH_CORNER_FN,
                     flat_support=STEM_FLAT_SUPPORT,
+                    support_distance=STEM_SUPPORT_DISTANCE,
                     side_support_thickness=STEM_SIDE_SUPPORT_THICKNESS,
                     side_supports=STEM_SIDE_SUPPORTS,
                     outside_tolerance_x=STEM_OUTSIDE_TOLERANCE_X,
@@ -915,6 +939,7 @@ module handle_render(what, legends) {
                     dish_fn=DISH_FN,
                     dish_corner_fn=DISH_CORNER_FN,
                     flat_support=STEM_FLAT_SUPPORT,
+                    support_distance=STEM_SUPPORT_DISTANCE,
                     side_support_thickness=STEM_SIDE_SUPPORT_THICKNESS,
                     side_supports=STEM_SIDE_SUPPORTS,
                     outside_tolerance_x=STEM_OUTSIDE_TOLERANCE_X,
@@ -1278,6 +1303,7 @@ module handle_render(what, legends) {
                 dish_corner_fn=DISH_CORNER_FN,
                 corner_radius=STEM_CORNER_RADIUS, // Of the stem; not the keycap
                 flat_support=STEM_FLAT_SUPPORT,
+                support_distance=STEM_SUPPORT_DISTANCE,
                 side_support_thickness=STEM_SIDE_SUPPORT_THICKNESS,
                 side_supports=STEM_SIDE_SUPPORTS,
                 outside_tolerance_x=STEM_OUTSIDE_TOLERANCE_X,
@@ -1306,6 +1332,7 @@ module handle_render(what, legends) {
                 dish_corner_fn=DISH_CORNER_FN,
                 corner_radius=STEM_CORNER_RADIUS, // Of the stem; not the keycap
                 flat_support=STEM_FLAT_SUPPORT,
+                support_distance=STEM_SUPPORT_DISTANCE,
                 side_support_thickness=STEM_SIDE_SUPPORT_THICKNESS,
                 side_supports=STEM_SIDE_SUPPORTS,
                 outside_tolerance_x=STEM_OUTSIDE_TOLERANCE_X,
@@ -1334,6 +1361,7 @@ module handle_render(what, legends) {
                 dish_corner_fn=DISH_CORNER_FN,
                 corner_radius=STEM_CORNER_RADIUS, // Of the stem; not the keycap
                 flat_support=STEM_FLAT_SUPPORT,
+                support_distance=STEM_SUPPORT_DISTANCE,
                 side_support_thickness=STEM_SIDE_SUPPORT_THICKNESS,
                 side_supports=STEM_SIDE_SUPPORTS,
                 outside_tolerance_x=STEM_OUTSIDE_TOLERANCE_X,
@@ -1362,6 +1390,7 @@ module handle_render(what, legends) {
                 dish_corner_fn=DISH_CORNER_FN,
                 corner_radius=STEM_CORNER_RADIUS, // Of the stem; not the keycap
                 flat_support=STEM_FLAT_SUPPORT,
+                support_distance=STEM_SUPPORT_DISTANCE,
                 side_support_thickness=STEM_SIDE_SUPPORT_THICKNESS,
                 side_supports=STEM_SIDE_SUPPORTS,
                 outside_tolerance_x=STEM_OUTSIDE_TOLERANCE_X,
@@ -1389,6 +1418,7 @@ module handle_render(what, legends) {
                 dish_corner_fn=DISH_CORNER_FN,
                 corner_radius=STEM_CORNER_RADIUS, // Of the stem; not the keycap
                 flat_support=STEM_FLAT_SUPPORT,
+                support_distance=STEM_SUPPORT_DISTANCE,
                 side_support_thickness=STEM_SIDE_SUPPORT_THICKNESS,
                 side_supports=STEM_SIDE_SUPPORTS,
                 outside_tolerance_x=STEM_OUTSIDE_TOLERANCE_X,
@@ -1416,6 +1446,7 @@ module handle_render(what, legends) {
                 dish_corner_fn=DISH_CORNER_FN,
                 corner_radius=STEM_CORNER_RADIUS, // Of the stem; not the keycap
                 flat_support=STEM_FLAT_SUPPORT,
+                support_distance=STEM_SUPPORT_DISTANCE,
                 side_support_thickness=STEM_SIDE_SUPPORT_THICKNESS,
                 side_supports=STEM_SIDE_SUPPORTS,
                 outside_tolerance_x=STEM_OUTSIDE_TOLERANCE_X,
@@ -1443,6 +1474,7 @@ module handle_render(what, legends) {
                 dish_corner_fn=DISH_CORNER_FN, // Ignored (always 4)
                 corner_radius=STEM_CORNER_RADIUS, // Of the stem; not the keycap
                 flat_support=STEM_FLAT_SUPPORT,
+                support_distance=STEM_SUPPORT_DISTANCE,
                 side_support_thickness=STEM_SIDE_SUPPORT_THICKNESS,
                 side_supports=STEM_SIDE_SUPPORTS,
                 outside_tolerance_x=STEM_OUTSIDE_TOLERANCE_X,
@@ -1470,6 +1502,7 @@ module handle_render(what, legends) {
                 dish_corner_fn=DISH_CORNER_FN, // Ignored (always 4)
                 corner_radius=STEM_CORNER_RADIUS, // Of the stem; not the keycap
                 flat_support=STEM_FLAT_SUPPORT,
+                support_distance=STEM_SUPPORT_DISTANCE,
                 side_support_thickness=STEM_SIDE_SUPPORT_THICKNESS,
                 side_supports=STEM_SIDE_SUPPORTS,
                 outside_tolerance_x=STEM_OUTSIDE_TOLERANCE_X,
@@ -1544,10 +1577,21 @@ module render_keycap(stuff_to_render) {
 render_keycap(RENDER);
 
 /* CHANGELOG:
+    1.10.1:
+        * Improved corner wall thickness accuracy when UNIFORM_WALL_THICKNESS=true.
+        * Fixed a bug where STEM_SUPPORT_DISTANCE wasn't being passed through when specifying a keycap profile (e.g. "riskeycap").
+        * Fixed a bug where stem supports weren't always attaching to the full length of the wall when UNIFORM_WALL_THICKNESS=false.
+        * Snap-fit clips on the interior walls of the keycaps now take KEYCAP_ROTATION into account so that you don't end up printing bits of them in mid-air when printing keycaps on their sides.
+        * Added a preliminary `legend_backing` feature to the box cherry stem type.  It will make sure that if your legends cut all the way through the top of the keycap there will still be at least a little bit of material there so the legends don't end up making holes with characters like 8 or A.  Still needs a way to configure it though (next release maybe; the behind-the-scenes code is there if needed).
+        * Disabled various preview colors since they were messing with the ability to visualize certain things.  I just commented them out because I may re-visit that capability in the future.
+        * Adjusted the default KEYCAP_ROTATION to more accurately keep the riskeycap profile flat (on its side).
+        * A few minor formatting changes (mostly just changed arguments to be one per line).
+        * Lots of improvements to scripts/keycap.py (supports passing through more features and does more sanity checks) and also added scripts/riskeycap.py
+        * STARTED modifying all the variables/comments to enable customizer support.
     1.10.0:
-        * Added XDA profile
+        * Added XDA profile.
         * Fixed a bug in various keycap profiles where the `polygon_curve` value was missing when generating stems which resulted in some hollow interior space when UNIFORM_WALL_THICKNESS was enabled.
-        * Added some missing arguments/parameters and support for `--enable=fast-csg` (new OpenSCAD feature that speeds up rendering like 100x) to scripts/keycap.py
+        * Added some missing arguments/parameters and support for `--enable=fast-csg` (new OpenSCAD feature that speeds up rendering like 100x) to scripts/keycap.py.
     1.9.4:
         * Fixed a bug where you'd get warnings in the console if DISH_DEPTH was set to 0.
     1.9.3:

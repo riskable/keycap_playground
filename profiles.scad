@@ -58,7 +58,7 @@ module DSA_keycap(row=1, length=18.41, width=18.41, height_extra=0, wall_thickne
 }
 
 // DSA Stems are pretty simple (don't need anything special)
-module DSA_stem(stem_type="box_cherry", key_height=7.3914, key_length=18.41, key_width=18.41, height_extra=0, dish_depth=1, dish_fn=128, dish_corner_fn=64, dish_thickness=1, dish_invert=false, depth=4, top_difference=6, wall_thickness=1.35, wall_extra=0.65, wall_inset=0, wall_tolerance=0.25, corner_radius=0.5, key_corner_radius=0.5, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=0, top_thickness=0.6, side_support_thickness=0.8, side_supports=[0,0,0,0], flat_support=true, locations=[[0,0,0]], key_rotation=[0,0,0], polygon_layers=10, polygon_layer_rotation=0, hollow=false, uniform_wall_thickness=false) {
+module DSA_stem(stem_type="box_cherry", key_height=7.3914, key_length=18.41, key_width=18.41, height_extra=0, dish_depth=1, dish_fn=128, dish_corner_fn=64, dish_thickness=1, dish_invert=false, depth=4, top_difference=6, wall_thickness=1.35, wall_extra=0.65, wall_inset=0, wall_tolerance=0.25, corner_radius=0.5, key_corner_radius=0.5, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=0, top_thickness=0.6, side_support_thickness=0.8, side_supports=[0,0,0,0], flat_support=true, support_distance=0.2, locations=[[0,0,0]], key_rotation=[0,0,0], polygon_layers=10, polygon_layer_rotation=0, hollow=false, uniform_wall_thickness=false) {
     dish_type = "sphere";
     dish_z = 0.111; // NOTE: Width of the top dish (at widest) should be ~12.7mm
 //    adjusted_dish_depth = dish_invert ? 0.5 : dish_depth; // Make it a smaller for inverted dishes
@@ -95,6 +95,7 @@ module DSA_stem(stem_type="box_cherry", key_height=7.3914, key_length=18.41, key
             inside_tolerance=inside_tolerance,
             inset=inset,
             flat_support=flat_support,
+            support_distance=support_distance,
             locations=locations,
             key_rotation=key_rotation,
             side_support_thickness=side_support_thickness,
@@ -129,6 +130,7 @@ module DSA_stem(stem_type="box_cherry", key_height=7.3914, key_length=18.41, key
             inside_tolerance=inside_tolerance,
             inset=inset,
             flat_support=flat_support,
+            support_distance=support_distance,
             locations=locations,
             key_rotation=key_rotation,
             side_support_thickness=side_support_thickness,
@@ -165,6 +167,7 @@ module DSA_stem(stem_type="box_cherry", key_height=7.3914, key_length=18.41, key
             inside_tolerance=inside_tolerance,
             inset=inset,
             flat_support=flat_support,
+            support_distance=support_distance,
             locations=locations,
             key_rotation=key_rotation,
             side_support_thickness=side_support_thickness,
@@ -246,7 +249,7 @@ module DCS_keycap(row=2, length=18.15, width=18.15, height_extra=0, wall_thickne
 
 // DCS stems are a pain in the ass so they need their own special fidding...
 // TODO: Fix DCS it's all screwed up
-module DCS_stem(row=2, stem_type="box_cherry", key_length=18.15, key_width=18.15, height_extra=0, depth=4, top_difference=6, wall_thickness=1.35, wall_extra=0.65, wall_inset=0, wall_tolerance=0.25, corner_radius=0.5, key_corner_radius=0.5, top_x=0, top_y=-1.75, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=0, dish_thickness=0.6, dish_invert=false, dish_fn=32, dish_corner_fn=64, top_thickness=0.6, polygon_layers=10, side_support_thickness=0.8, side_supports=[0,0,0,0], flat_support=true, locations=[[0,0,0]], key_rotation=[0,0,0], hollow=false, uniform_wall_thickness=false) {
+module DCS_stem(row=2, stem_type="box_cherry", key_length=18.15, key_width=18.15, height_extra=0, depth=4, top_difference=6, wall_thickness=1.35, wall_extra=0.65, wall_inset=0, wall_tolerance=0.25, corner_radius=0.5, key_corner_radius=0.5, top_x=0, top_y=-1.75, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=0, dish_thickness=0.6, dish_invert=false, dish_fn=32, dish_corner_fn=64, top_thickness=0.6, polygon_layers=10, side_support_thickness=0.8, side_supports=[0,0,0,0], flat_support=true, support_distance=0.2, locations=[[0,0,0]], key_rotation=[0,0,0], hollow=false, uniform_wall_thickness=false) {
     row_height = [
         0, 9.5, 7.39, 7.39, 9, 12.5
     ];
@@ -296,6 +299,7 @@ module DCS_stem(row=2, stem_type="box_cherry", key_length=18.15, key_width=18.15
             inside_tolerance=inside_tolerance,
             inset=inset,
             flat_support=flat_support,
+            support_distance=support_distance,
             locations=locations,
             key_rotation=key_rotation,
             side_support_thickness=side_support_thickness,
@@ -329,6 +333,7 @@ module DCS_stem(row=2, stem_type="box_cherry", key_length=18.15, key_width=18.15
             inside_tolerance=inside_tolerance,
             inset=inset,
             flat_support=flat_support,
+            support_distance=support_distance,
             locations=locations,
             key_rotation=key_rotation,
             side_support_thickness=side_support_thickness,
@@ -364,6 +369,7 @@ module DCS_stem(row=2, stem_type="box_cherry", key_length=18.15, key_width=18.15
             inside_tolerance=inside_tolerance,
             inset=inset,
             flat_support=flat_support,
+            support_distance=support_distance,
             locations=locations,
             key_rotation=key_rotation,
             side_support_thickness=side_support_thickness,
@@ -445,7 +451,7 @@ module DSS_keycap(row=1, length=18.24, width=18.24, height_extra=0, wall_thickne
         key_rotation=key_rotation, debug=debug);
 }
 
-module DSS_stem(row=2, stem_type="box_cherry", key_length=18.24, key_width=18.24, height_extra=0, depth=4, top_difference=5.54, wall_thickness=1.35, wall_extra=0.65, wall_inset=0, wall_tolerance=0.25, dish_fn=128, dish_corner_fn=64, corner_radius=0.5, key_corner_radius=0.5, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=0, dish_thickness=0.6, dish_invert=false, dish_fn=128, top_thickness=0.6, side_support_thickness=0.8, side_supports=[0,0,0,0], flat_support=true, locations=[[0,0,0]], key_rotation=[0,0,0], polygon_layers=10, hollow=false, uniform_wall_thickness=false) {
+module DSS_stem(row=2, stem_type="box_cherry", key_length=18.24, key_width=18.24, height_extra=0, depth=4, top_difference=5.54, wall_thickness=1.35, wall_extra=0.65, wall_inset=0, wall_tolerance=0.25, dish_fn=128, dish_corner_fn=64, corner_radius=0.5, key_corner_radius=0.5, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=0, dish_thickness=0.6, dish_invert=false, dish_fn=128, top_thickness=0.6, side_support_thickness=0.8, side_supports=[0,0,0,0], flat_support=true, support_distance=0.2, locations=[[0,0,0]], key_rotation=[0,0,0], polygon_layers=10, hollow=false, uniform_wall_thickness=false) {
     row_height = [
         0, 10.4, 8.7, 8.5, 10.6
     ];
@@ -500,6 +506,7 @@ module DSS_stem(row=2, stem_type="box_cherry", key_length=18.24, key_width=18.24
             inside_tolerance=inside_tolerance,
             inset=inset,
             flat_support=flat_support,
+            support_distance=support_distance,
             locations=locations,
             key_rotation=key_rotation,
             side_support_thickness=side_support_thickness,
@@ -535,6 +542,7 @@ module DSS_stem(row=2, stem_type="box_cherry", key_length=18.24, key_width=18.24
             inside_tolerance=inside_tolerance,
             inset=inset,
             flat_support=flat_support,
+            support_distance=support_distance,
             locations=locations,
             key_rotation=key_rotation,
             side_support_thickness=side_support_thickness,
@@ -572,6 +580,7 @@ module DSS_stem(row=2, stem_type="box_cherry", key_length=18.24, key_width=18.24
             inside_tolerance=inside_tolerance,
             inset=inset,
             flat_support=flat_support,
+            support_distance=support_distance,
             locations=locations,
             key_rotation=key_rotation,
             side_support_thickness=side_support_thickness,
@@ -662,7 +671,7 @@ module KAT_keycap(row=1, length=18.2, width=18.2, height_extra=0, wall_thickness
 }
 
 // NOTE: I double-checked and KAT profile stems really *do* go all the way to the floor!  They're not inset at all (which is different)!
-module KAT_stem(row=1, stem_type="box_cherry", key_height=9.15, key_length=18.2, key_width=18.2, height_extra=0, dish_depth=0.75, dish_fn=128, dish_corner_fn=64, dish_thickness=1.658, dish_invert=false, depth=4, top_difference=6, wall_thickness=1.658, wall_extra=0.65, wall_inset=0, wall_tolerance=0.25, corner_radius=0.5, key_corner_radius=0.35, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=0, top_thickness=0.6, side_support_thickness=0.8, side_supports=[0,0,0,0], polygon_layers=10, flat_support=true, locations=[[0,0,0]], hollow=false, key_rotation=[0,0,0], uniform_wall_thickness=false) {
+module KAT_stem(row=1, stem_type="box_cherry", key_height=9.15, key_length=18.2, key_width=18.2, height_extra=0, dish_depth=0.75, dish_fn=128, dish_corner_fn=64, dish_thickness=1.658, dish_invert=false, depth=4, top_difference=6, wall_thickness=1.658, wall_extra=0.65, wall_inset=0, wall_tolerance=0.25, corner_radius=0.5, key_corner_radius=0.35, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=0, top_thickness=0.6, side_support_thickness=0.8, side_supports=[0,0,0,0], polygon_layers=10, flat_support=true, support_distance=0.2, locations=[[0,0,0]], hollow=false, key_rotation=[0,0,0], uniform_wall_thickness=false) {
     if (inset > 0) {
         warning("FYI: Official KAT profile keycaps don't have an inset stem.  The stems go all the way to the floor (but you don't have to do that if you don't want).");
     }
@@ -716,6 +725,7 @@ module KAT_stem(row=1, stem_type="box_cherry", key_height=9.15, key_length=18.2,
             inside_tolerance=inside_tolerance,
             inset=inset,
             flat_support=flat_support,
+            support_distance=support_distance,
             locations=locations,
             key_rotation=key_rotation,
             side_support_thickness=side_support_thickness,
@@ -751,6 +761,7 @@ module KAT_stem(row=1, stem_type="box_cherry", key_height=9.15, key_length=18.2,
             inside_tolerance=inside_tolerance,
             inset=inset,
             flat_support=flat_support,
+            support_distance=support_distance,
             locations=locations,
             key_rotation=key_rotation,
             side_support_thickness=side_support_thickness,
@@ -788,6 +799,7 @@ module KAT_stem(row=1, stem_type="box_cherry", key_height=9.15, key_length=18.2,
             inside_tolerance=inside_tolerance,
             inset=inset,
             flat_support=flat_support,
+            support_distance=support_distance,
             locations=locations,
             key_rotation=key_rotation,
             side_support_thickness=side_support_thickness,
@@ -859,7 +871,7 @@ module KAM_keycap(row=1, length=18.3, width=18.3, height_extra=0, wall_thickness
 
 // TODO: Figure out why underset mask (stem_top()) isn't at the correct height with KAM stems
 // KAM stems are pretty simple (don't need anything special)
-module KAM_stem(stem_type="box_cherry", key_height=9.05, key_length=18.3, key_width=18.3, height_extra=0, dish_depth=1, dish_thickness=1, dish_invert=false, dish_fn=128, dish_corner_fn=64, depth=4, top_difference=6.35, wall_thickness=1.65, wall_extra=0.65, wall_inset=0, wall_tolerance=0.25, corner_radius=0.5, key_corner_radius=0.5, corner_radius_curve=1.5, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=0, top_thickness=0.6, side_support_thickness=0.8, side_supports=[0,0,0,0], polygon_layers=10, flat_support=true, locations=[[0,0,0]], key_rotation=[0,0,0], hollow=false, uniform_wall_thickness=false) {
+module KAM_stem(stem_type="box_cherry", key_height=9.05, key_length=18.3, key_width=18.3, height_extra=0, dish_depth=1, dish_thickness=1, dish_invert=false, dish_fn=128, dish_corner_fn=64, depth=4, top_difference=6.35, wall_thickness=1.65, wall_extra=0.65, wall_inset=0, wall_tolerance=0.25, corner_radius=0.5, key_corner_radius=0.5, corner_radius_curve=1.5, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=0, top_thickness=0.6, side_support_thickness=0.8, side_supports=[0,0,0,0], polygon_layers=10, flat_support=true, support_distance=0.2, locations=[[0,0,0]], key_rotation=[0,0,0], hollow=false, uniform_wall_thickness=false) {
     row_height = dish_invert ? 8.05 : 9.05; // One less if we're generating a spacebar
     dish_type = dish_invert ? "cylinder" : "sphere"; // KAM spacebars actually use cylindrical tops
     dish_z = 0;
@@ -894,6 +906,7 @@ module KAM_stem(stem_type="box_cherry", key_height=9.05, key_length=18.3, key_wi
             inside_tolerance=inside_tolerance,
             inset=inset,
             flat_support=flat_support,
+            support_distance=support_distance,
             locations=locations,
             key_rotation=key_rotation,
             side_support_thickness=side_support_thickness,
@@ -928,6 +941,7 @@ module KAM_stem(stem_type="box_cherry", key_height=9.05, key_length=18.3, key_wi
             inside_tolerance=inside_tolerance,
             inset=inset,
             flat_support=flat_support,
+            support_distance=support_distance,
             locations=locations,
             key_rotation=key_rotation,
             side_support_thickness=side_support_thickness,
@@ -964,6 +978,7 @@ module KAM_stem(stem_type="box_cherry", key_height=9.05, key_length=18.3, key_wi
             inside_tolerance=inside_tolerance,
             inset=inset,
             flat_support=flat_support,
+            support_distance=support_distance,
             locations=locations,
             key_rotation=key_rotation,
             side_support_thickness=side_support_thickness,
@@ -1022,6 +1037,8 @@ module riskeycap(row=1, length=18.25, width=18.25, height_extra=0, wall_thicknes
     dish_type = "sphere";
     dish_z = 0;
     top_y = 0;
+//    echo(riskeycap_dish_depth=adjusted_dish_depth);
+//    echo(riskeycap_height=adjusted_height);
     poly_keycap(
         height=adjusted_height, length=length, width=width, wall_thickness=wall_thickness,
         top_difference=top_difference, dish_tilt=0, dish_x=0, dish_z=dish_z,
@@ -1045,7 +1062,7 @@ module riskeycap(row=1, length=18.25, width=18.25, height_extra=0, wall_thicknes
 }
 
 // Riskeycap stems are very straightforward (nothing special required; mostly defaults)
-module riskeystem(stem_type="box_cherry", key_height=8.2, key_length=18.25, key_width=18.25, height_extra=0, dish_type="sphere", dish_depth=1.5, dish_thickness=0.9, dish_fn=128, dish_corner_fn=64, dish_x=0, dish_y=0, dish_z=0, dish_invert=false, depth=4, top_difference=6, wall_thickness=1.8, wall_extra=0.65, wall_inset=0, wall_tolerance=0.25, corner_radius=0.5, key_corner_radius=0.5, corner_radius_curve=0.75, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=1, top_thickness=0.6, side_support_thickness=0.8, side_supports=[0,0,0,0], flat_support=true, locations=[[0,0,0]], polygon_layers=10, polygon_layer_rotation=0, polygon_edges=4, polygon_curve=0, key_rotation=[0,0,0], hollow=false, uniform_wall_thickness=false) {
+module riskeystem(stem_type="box_cherry", key_height=8.2, key_length=18.25, key_width=18.25, height_extra=0, dish_type="sphere", dish_depth=1.5, dish_thickness=0.9, dish_fn=128, dish_corner_fn=64, dish_x=0, dish_y=0, dish_z=0, dish_invert=false, depth=4, top_difference=6, wall_thickness=1.8, wall_extra=0.65, wall_inset=0, wall_tolerance=0.25, corner_radius=0.5, key_corner_radius=0.5, corner_radius_curve=0.75, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=1, top_thickness=0.6, side_support_thickness=0.8, side_supports=[0,0,0,0], flat_support=true, support_distance=0.2, locations=[[0,0,0]], polygon_layers=10, polygon_layer_rotation=0, polygon_edges=4, polygon_curve=0, key_rotation=[0,0,0], hollow=false, uniform_wall_thickness=false) {
     // The height needs a smidge of adjustment based on the length of the keycap
     adjusted_height_extra = key_length < KEY_UNIT*1.25 ? height_extra : height_extra+0.35;
     adjusted_height = dish_invert ? 6.5+adjusted_height_extra : 8.2+adjusted_height_extra; // A bit less if we're generating a spacebar because the dish_depth is bigger than is typical
@@ -1086,6 +1103,7 @@ module riskeystem(stem_type="box_cherry", key_height=8.2, key_length=18.25, key_
             inside_tolerance=inside_tolerance,
             inset=inset,
             flat_support=flat_support,
+            support_distance=support_distance,
             locations=locations,
             key_rotation=key_rotation,
             side_support_thickness=side_support_thickness,
@@ -1125,6 +1143,7 @@ module riskeystem(stem_type="box_cherry", key_height=8.2, key_length=18.25, key_
             inside_tolerance=inside_tolerance,
             inset=inset,
             flat_support=flat_support,
+            support_distance=support_distance,
             locations=locations,
             key_rotation=key_rotation,
             side_support_thickness=side_support_thickness,
@@ -1166,6 +1185,7 @@ module riskeystem(stem_type="box_cherry", key_height=8.2, key_length=18.25, key_
             inside_tolerance=inside_tolerance,
             inset=inset,
             flat_support=flat_support,
+            support_distance=support_distance,
             locations=locations,
             key_rotation=key_rotation,
             side_support_thickness=side_support_thickness,
@@ -1223,6 +1243,8 @@ module GEM_keycap(row=1, length=18.25, width=18.25, height_extra=0, wall_thickne
     dish_z = 0;
     top_y = 0;
     adjusted_dish_corner_fn = 4; // We ignore the parameter
+//    echo(gem_dish_depth=adjusted_dish_depth);
+//    echo(gem_height=adjusted_height);
     poly_keycap(
         height=adjusted_height, length=length, width=width, wall_thickness=wall_thickness,
         top_difference=top_difference, dish_tilt=0, dish_x=0, dish_z=dish_z,
@@ -1246,7 +1268,7 @@ module GEM_keycap(row=1, length=18.25, width=18.25, height_extra=0, wall_thickne
 }
 
 // GEM stems are very straightforward (pretty much the same as riskeystem)
-module GEM_stem(stem_type="box_cherry", key_height=8.2, key_length=18.25, key_width=18.25, height_extra=0, dish_type="sphere", dish_depth=1.5, dish_thickness=0.9, dish_fn=128, dish_corner_fn=4, dish_x=0, dish_y=0, dish_z=0, dish_invert=false, depth=4, top_difference=5.5, wall_thickness=1.8, wall_extra=0.65, wall_inset=0, wall_tolerance=0.25, corner_radius=0.5, key_corner_radius=0.5, corner_radius_curve=6, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=1, top_thickness=0.6, side_support_thickness=0.8, side_supports=[0,0,0,0], flat_support=true, locations=[[0,0,0]], polygon_layers=10, polygon_layer_rotation=0, polygon_edges=4, polygon_curve=0, key_rotation=[0,0,0], hollow=false, uniform_wall_thickness=false) {
+module GEM_stem(stem_type="box_cherry", key_height=8.2, key_length=18.25, key_width=18.25, height_extra=0, dish_type="sphere", dish_depth=1.5, dish_thickness=0.9, dish_fn=128, dish_corner_fn=4, dish_x=0, dish_y=0, dish_z=0, dish_invert=false, depth=4, top_difference=5.5, wall_thickness=1.8, wall_extra=0.65, wall_inset=0, wall_tolerance=0.25, corner_radius=0.5, key_corner_radius=0.5, corner_radius_curve=6, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=1, top_thickness=0.6, side_support_thickness=0.8, side_supports=[0,0,0,0], flat_support=true, support_distance=0.2, locations=[[0,0,0]], polygon_layers=10, polygon_layer_rotation=0, polygon_edges=4, polygon_curve=0, key_rotation=[0,0,0], hollow=false, uniform_wall_thickness=false) {
     // The height needs a smidge of adjustment based on the length of the keycap
     adjusted_height_extra = key_length < KEY_UNIT*1.25 ? height_extra : height_extra+0.35;
     adjusted_height = dish_invert ? 6.5+adjusted_height_extra : 8.2+adjusted_height_extra; // A bit less if we're generating a spacebar because the dish_depth is bigger than is typical
@@ -1289,6 +1311,7 @@ module GEM_stem(stem_type="box_cherry", key_height=8.2, key_length=18.25, key_wi
             inside_tolerance=inside_tolerance,
             inset=inset,
             flat_support=flat_support,
+            support_distance=support_distance,
             locations=locations,
             key_rotation=key_rotation,
             side_support_thickness=side_support_thickness,
@@ -1328,6 +1351,7 @@ module GEM_stem(stem_type="box_cherry", key_height=8.2, key_length=18.25, key_wi
             inside_tolerance=inside_tolerance,
             inset=inset,
             flat_support=flat_support,
+            support_distance=support_distance,
             locations=locations,
             key_rotation=key_rotation,
             side_support_thickness=side_support_thickness,
@@ -1369,6 +1393,7 @@ module GEM_stem(stem_type="box_cherry", key_height=8.2, key_length=18.25, key_wi
             inside_tolerance=inside_tolerance,
             inset=inset,
             flat_support=flat_support,
+            support_distance=support_distance,
             locations=locations,
             key_rotation=key_rotation,
             side_support_thickness=side_support_thickness,
@@ -1444,7 +1469,7 @@ module XDA_keycap(row=1, length=18.41, width=18.41, height_extra=0, wall_thickne
         debug=debug);
 }
 
-module XDA_stem(stem_type="box_cherry", key_height=7.3914, key_length=18.41, key_width=18.41, height_extra=0, dish_depth=1, dish_fn=128, dish_corner_fn=64, dish_thickness=1.5, dish_invert=false, depth=4, top_difference=19.05/5, wall_thickness=1.5, wall_extra=0.65, wall_inset=0, wall_tolerance=0.25, corner_radius=0.3, key_corner_radius=0.3, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=0, top_thickness=1, side_support_thickness=0, side_supports=[0,0,0,0], flat_support=false, locations=[[0,0,0]], key_rotation=[0,0,0], polygon_layers=10, polygon_layer_rotation=0, hollow=false, uniform_wall_thickness=true) {
+module XDA_stem(stem_type="box_cherry", key_height=7.3914, key_length=18.41, key_width=18.41, height_extra=0, dish_depth=1, dish_fn=128, dish_corner_fn=64, dish_thickness=1.5, dish_invert=false, depth=4, top_difference=19.05/5, wall_thickness=1.5, wall_extra=0.65, wall_inset=0, wall_tolerance=0.25, corner_radius=0.3, key_corner_radius=0.3, top_x=0, top_y=0, outside_tolerance_x=0.2, outside_tolerance_y=0.2, inside_tolerance=0.25, inset=0, top_thickness=1, side_support_thickness=0, side_supports=[0,0,0,0], flat_support=false, support_distance=0.2, locations=[[0,0,0]], key_rotation=[0,0,0], polygon_layers=10, polygon_layer_rotation=0, hollow=false, uniform_wall_thickness=true) {
     row_height = dish_invert ? 8.1+height_extra : 9.1+height_extra; // One less if we're generating a spacebar
     dish_type = "sphere";
     dish_z = 0.111; // NOTE: Width of the top dish (at widest) should be ~12.7mm
@@ -1481,6 +1506,7 @@ module XDA_stem(stem_type="box_cherry", key_height=7.3914, key_length=18.41, key
             inside_tolerance=inside_tolerance,
             inset=inset,
             flat_support=flat_support,
+            support_distance=support_distance,
             locations=locations,
             key_rotation=key_rotation,
             side_support_thickness=side_support_thickness,
@@ -1516,6 +1542,7 @@ module XDA_stem(stem_type="box_cherry", key_height=7.3914, key_length=18.41, key
             inside_tolerance=inside_tolerance,
             inset=inset,
             flat_support=flat_support,
+            support_distance=support_distance,
             locations=locations,
             key_rotation=key_rotation,
             side_support_thickness=side_support_thickness,
@@ -1553,6 +1580,7 @@ module XDA_stem(stem_type="box_cherry", key_height=7.3914, key_length=18.41, key
             inside_tolerance=inside_tolerance,
             inset=inset,
             flat_support=flat_support,
+            support_distance=support_distance,
             locations=locations,
             key_rotation=key_rotation,
             side_support_thickness=side_support_thickness,

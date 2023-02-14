@@ -5,17 +5,16 @@
 include <keycap_playground.scad>
 
 // Pick what you want to render (you can put a '%' in front of the name to make it transparent)
-RENDER = ["keycap", "stem"]; // Supported values: keycap, stem, legends, row, row_stems, row_legends, custom
+//RENDER = ["keycap", "stem"]; // Supported values: keycap, stem, legends, row, row_stems, row_legends, custom
 // NOTE: You'll want to render the keycap and stem separately in reality like so:
 //RENDER = ["stem"]; // Render the stem and print it upside down
-//RENDER = ["keycap"]; // Render the stem and print it on its side (90% of the time)
+RENDER = ["keycap"]; // Render the stem and print it on its side (90% of the time)
 
 KEY_PROFILE = "riskeycap";
-//KEY_ROTATION = [0,109.2,90]; // Use this amount of rotation for the stem (a little different than stock riskeycap rotation)
 KEY_LENGTH = (KEY_UNIT*1-BETWEENSPACE);
 KEY_WIDTH = (KEY_UNIT*1-BETWEENSPACE);
 // Neat little trick to print the stem upside down and the keycap on its side:
-KEY_ROTATION = (RENDER==["stem"]) ? [180,0,0] : [0,109.2,90];
+KEY_ROTATION = (RENDER==["stem"]) ? [180,0,0] : [0,110.1,90];
 UNIFORM_WALL_THICKNESS = false;
 // Clip-in stems take up some space so we need slightly thinner outside walls in most cases:
 WALL_THICKNESS = 0.45*1.85;

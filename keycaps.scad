@@ -364,7 +364,7 @@ module poly_keycap(height=9.0, length=18, width=18,
   stem_walls_inset=0, stem_walls_tolerance=0.25,
   dish_depth=1, dish_x=0, dish_y=0,
   dish_z=-0.75, dish_thickness=2,
-  dish_fn=32, dish_corner_fn=64, dish_tilt_curve=false,
+  dish_fn=32, dish_corner_fn=64,
   dish_division_x=4, dish_division_y=1, // Fancy schmancy control over spherical inverted dishes
   legends=[""], legend_font_sizes=[6], legend_fonts=["Roboto"], legend_carved=false,
   legend_trans=[[0,0,0]], legend_trans2=[[0,0,0]], legend_scale=[[1,1,1]],
@@ -429,7 +429,7 @@ module poly_keycap(height=9.0, length=18, width=18,
                         translate(trans) rotate(rotation)
                           scale(l_scale)
                             rotate([tilt_above_curved,0,0])
-                                difference() {
+                                color([0.5,0.5,0.5,0.75]) difference() {
                                     draw_legend(legend, font_size, font, height+legend_inverted_dish_adjustment);
                                     // Make sure the preview matches the curve of the dish on the bottom
                                     if (legend_carved) {
@@ -491,7 +491,8 @@ module poly_keycap(height=9.0, length=18, width=18,
                                 _poly_keycap(
                                     height=height, length=length, width=width,
                                     wall_thickness=wall_thickness,
-                                    top_difference=top_difference, dish_tilt=dish_tilt,
+                                    top_difference=top_difference,
+                                    dish_tilt=dish_tilt,
                                     dish_tilt_curve=dish_tilt_curve, stem_clips=stem_clips,
                                     stem_walls_inset=stem_walls_inset,
                                     top_x=top_x, top_y=top_y, dish_depth=dish_depth,
@@ -517,7 +518,8 @@ module poly_keycap(height=9.0, length=18, width=18,
                     _poly_keycap(
                         height=height-wall_thickness, length=length-wall_thickness*2,
                         width=width-wall_thickness*2, wall_thickness=wall_thickness,
-                        top_difference=top_difference, dish_tilt=dish_tilt,
+                        top_difference=top_difference,
+                        dish_tilt=dish_tilt,
                         dish_tilt_curve=dish_tilt_curve, stem_clips=stem_clips,
                         stem_walls_inset=stem_walls_inset,
                         top_x=top_x, top_y=top_y, dish_depth=dish_depth,
@@ -527,7 +529,7 @@ module poly_keycap(height=9.0, length=18, width=18,
                         polygon_layers=polygon_layers,
                         polygon_layer_rotation=polygon_layer_rotation,
                         polygon_edges=polygon_edges, polygon_curve=polygon_curve,
-                        dish_type=dish_type, corner_radius=corner_radius/2,
+                        dish_type=dish_type, corner_radius=corner_radius/1.25,
                         dish_division_x=dish_division_x, dish_division_y=dish_division_y,
                         corner_radius_curve=corner_radius_curve,
                         polygon_rotation=polygon_rotation,
@@ -545,7 +547,7 @@ module poly_keycap(height=9.0, length=18, width=18,
                             xy2=[length-wall_thickness*2-top_difference-corner_radius_factor,
                                  width-wall_thickness*2-top_difference-corner_radius_factor],
                             xy2_offset=[top_x,top_y],
-                            h=height, r=corner_radius/2, center=false,
+                            h=height, r=corner_radius, center=false,
                             $fn=dish_corner_fn);
                 // TEMPORARILY DISABLED NORTHEAST INDICATOR SINCE IT WAS CAUSING PROBLEMS:
                 // This adds a northeast (back right) indicator so you can tell which side is which with symmetrical keycaps
@@ -574,6 +576,10 @@ module poly_keycap(height=9.0, length=18, width=18,
                                     translate([0,0,-clip_height/1.333])
                                         rotate([45,0,0])
                                             cube([length,10,clip_height], center=true);
+            // Cut off a bit of an angle at the side so there's no printing in mid-air when printing a keycap on its side:
+                                    translate([clip_width,0,clip_width/2])
+                                        rotate([0,-key_rotation[1],0])
+                                            cube([clip_height,clip_height*2,clip_width], center=true);
                                 }
                             translate([
                               -length/6,
@@ -584,6 +590,9 @@ module poly_keycap(height=9.0, length=18, width=18,
                                     translate([0,0,-clip_height/1.333])
                                         rotate([45,0,0])
                                             cube([length,10,clip_height], center=true);
+                                    translate([clip_width,0,clip_width/2])
+                                        rotate([0,-key_rotation[1],0])
+                                            cube([clip_height,clip_height*2,clip_width], center=true);
                                 }
                             // Mirror the clips on the other side
                             mirror([0,1,0]) {
@@ -596,6 +605,12 @@ module poly_keycap(height=9.0, length=18, width=18,
                                         translate([0,0,-clip_height/1.333])
                                             rotate([45,0,0])
                                                 cube([length,10,clip_height], center=true);
+                                        translate([clip_width,0,clip_width/2])
+                                            rotate([0,-key_rotation[1],0])
+                                                cube([
+                                                    clip_height,
+                                                    clip_height*2,
+                                                    clip_width], center=true);
                                     }
                                 translate([
                                   -length/6,
@@ -606,6 +621,12 @@ module poly_keycap(height=9.0, length=18, width=18,
                                         translate([0,0,-clip_height/1.333])
                                             rotate([45,0,0])
                                                 cube([length,10,clip_height], center=true);
+                                        translate([clip_width,0,clip_width/2])
+                                            rotate([0,-key_rotation[1],0])
+                                                cube([
+                                                    clip_height,
+                                                    clip_height*2,
+                                                    clip_width], center=true);
                                     }
                                 }
                         }
