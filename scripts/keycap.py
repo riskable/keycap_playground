@@ -3,13 +3,31 @@
 """
 Contains the Keycap class which makes it easy to script the generation of
 keycaps using the Keycap Playground.
+
+.. note::
+
+    This was made to be run on a Linux system but if you change the various
+    `Path(<whatever>)` variables it should work on anything.
 """
 
+import os
 import json
 from pathlib import Path
 
 KEY_UNIT = 19.05 # Square that makes up the entire space of a key
 BETWEENSPACE = 0.8 # Space between keycaps
+
+class OpenSCADException(Exception):
+    """
+    Raised when OpenSCAD can't be found or it's not working correctly.
+    """
+    pass
+
+class ColorscadException(Exception):
+    """
+    Raised when colorscad.sh can't be found or it's not working correctly.
+    """
+    pass
 
 class Keycap(object):
     """
@@ -62,18 +80,26 @@ class Keycap(object):
         retcode, output = getstatusoutput(str(tilde))
     """
     def __init__(self,
-            name=None, render=["keycap", "stem"],
+            name=None,
+            render=["keycap", "stem"],
             key_profile="riskeycap",
             key_length=KEY_UNIT-BETWEENSPACE,
             key_width=KEY_UNIT-BETWEENSPACE,
             key_rotation=[0,0,0],
             key_height=8,
             key_top_difference=5,
+            key_top_x=0,
+            key_top_y=0,
             wall_thickness=0.45*2.5,
             dish_thickness=1.0,
             dish_type="cylinder",
+            dish_x=0,
+            dish_y=0,
+            dish_z=0,
             dish_depth=1,
             dish_invert=False,
+            dish_invert_division_x=4,
+            dish_invert_division_y=1,
             dish_tilt=0,
             dish_tilt_curve=True,
             dish_fn=256,
@@ -86,6 +112,7 @@ class Keycap(object):
             corner_radius=1,
             corner_radius_curve=3,
             stem_type="box_cherry",
+            stem_height=4,
             stem_top_thickness=0.5,
             stem_inset=1,
             stem_inside_tolerance=0.2,
@@ -108,8 +135,10 @@ class Keycap(object):
             rotation=[[0,0,0]], rotation2=[[0,0,0]],
             scale=[[1,1,1]], underset=[[0,0,0]],
             legend_carved=False,
-            keycap_playground_path=Path("."),
+            keycap_playground_path=Path("./keycap_playground.scad"),
+            file_type="3mf",
             openscad_path=Path("/usr/bin/openscad"),
+            colorscad_path=Path(""),
             output_path=Path(".")):
         self.name = name
         self.output_path = output_path
@@ -119,6 +148,8 @@ class Keycap(object):
         self.key_width = key_width
         self.key_profile = key_profile
         self.key_top_difference = key_top_difference
+        self.key_top_x = key_top_x
+        self.key_top_y = key_top_y
         if not self.name:
             if legends and legends[0]:
                 self.name = legends[0]
@@ -128,7 +159,12 @@ class Keycap(object):
         self.wall_thickness = wall_thickness
         self.dish_thickness = dish_thickness
         self.dish_invert = dish_invert
+        self.dish_invert_division_x = dish_invert_division_x
+        self.dish_invert_division_y = dish_invert_division_y
         self.dish_type = dish_type
+        self.dish_x = dish_x
+        self.dish_y = dish_y
+        self.dish_z = dish_z
         self.dish_depth = dish_depth
         self.dish_tilt = dish_tilt
         self.dish_tilt_curve = dish_tilt_curve
@@ -142,6 +178,7 @@ class Keycap(object):
         self.corner_radius = corner_radius
         self.corner_radius_curve = corner_radius_curve
         self.stem_type = stem_type
+        self.stem_height = stem_height
         self.stem_top_thickness = stem_top_thickness
         self.stem_inset = stem_inset
         self.stem_inside_tolerance = stem_inside_tolerance
@@ -168,8 +205,12 @@ class Keycap(object):
         self.scale = scale
         self.underset = underset
         self.legend_carved = legend_carved
+        self.file_type = file_type
         self.keycap_playground_path = keycap_playground_path
+        self.colorscad_path = colorscad_path
         self.openscad_path = openscad_path
+        # This speeds things up considerably:
+        self.openscad_args = "--enable=fast-csg"
 
     # NOTE: This doesn't seem to work right for unknown reasons so you'll want
     #       to generate the quote keycap by hand on the command line.
@@ -197,7 +238,8 @@ class Keycap(object):
         return out + "]"
 
     def __repr__(self):
-        return f"""        name: {self.name}
+        return f"""
+        name: {self.name}
         render: {self.render}
         key_profile: {self.key_profile}
         legends: {self.legends}
@@ -212,24 +254,51 @@ class Keycap(object):
         """
         Returns the OpenSCAD command line to use to generate this keycap.
         """
+        first_part = (
+            f"{self.openscad_path} {self.openscad_args} -o "
+            f"'{self.output_path}'/'{self.name}.{self.file_type}' -D $'"
+        )
+        last_part = self.keycap_playground_path
+        render = self.render
+        if str(self.colorscad_path): # Use colorscad.sh
+            # Check to make sure it actually exists
+            if os.path.exists(self.colorscad_path):
+                # Add openscad to the $PATH variable so colorscad can find it
+                os.environ["PATH"] += f"{self.openscad_path.parent}"
+                first_part = (
+                    #f'PATH="${self.openscad_path.parent}:$PATH"; '
+                    f"{self.colorscad_path} -i {self.keycap_playground_path} "
+                    f"-o '{self.output_path}'/'{self.name}.{self.file_type}' "
+                    f"-p '{self.openscad_path}' "
+                    f"-- {self.openscad_args} -D $'"
+                )
+                last_part = ""
+                #render = ["keycap", "stem", "legends"]
+                render.append("legends")
         # NOTE: Since OpenSCAD requires double quotes I'm using the json module
         #       to encode things that need it:
         return (
-            f"{self.openscad_path} --enable=fast-csg -o "
-            f"'{self.output_path}'/'{self.name}.stl' -D $'"
-            f"RENDER={json.dumps(self.render)}; "
+            f"{first_part}"
+            f"RENDER={json.dumps(render)}; "
             f"KEY_PROFILE={json.dumps(self.key_profile)}; "
             f"KEY_LENGTH={round(self.key_length,2)}; "
             f"KEY_WIDTH={round(self.key_width,2)}; "
             f"KEY_TOP_DIFFERENCE={self.key_top_difference}; "
             f"KEY_ROTATION={self.key_rotation}; "
             f"KEY_HEIGHT={self.key_height}; "
+            f"KEY_TOP_X={self.key_top_x}; "
+            f"KEY_TOP_Y={self.key_top_y}; "
             f"WALL_THICKNESS={self.wall_thickness}; "
             f"UNIFORM_WALL_THICKNESS={json.dumps(self.uniform_wall_thickness)}; "
             f"DISH_THICKNESS={self.dish_thickness}; "
             f"DISH_INVERT={json.dumps(self.dish_invert)}; "
+            f"DISH_INVERT_DIVISION_X={self.dish_invert_division_x}; "
+            f"DISH_INVERT_DIVISION_Y={self.dish_invert_division_y}; "
             f"DISH_TYPE={json.dumps(self.dish_type)}; "
             f"DISH_DEPTH={self.dish_depth}; "
+            f"DISH_X={self.dish_x}; "
+            f"DISH_Y={self.dish_y}; "
+            f"DISH_Z={self.dish_z}; "
             f"DISH_TILT={self.dish_tilt}; "
             f"DISH_TILT_CURVE={json.dumps(self.dish_tilt_curve)}; "
             f"DISH_FN={self.dish_fn}; "
@@ -241,6 +310,7 @@ class Keycap(object):
             f"CORNER_RADIUS={self.corner_radius}; "
             f"CORNER_RADIUS_CURVE={json.dumps(self.corner_radius_curve)}; "
             f"STEM_TYPE={json.dumps(self.stem_type)}; "
+            f"STEM_HEIGHT={self.stem_height}; "
             f"STEM_TOP_THICKNESS={self.stem_top_thickness}; "
             f"STEM_INSET={self.stem_inset}; "
             f"STEM_INSIDE_TOLERANCE={self.stem_inside_tolerance}; "
@@ -267,8 +337,8 @@ class Keycap(object):
             f"LEGEND_SCALE={self.scale}; "
             f"LEGEND_UNDERSET={self.underset}; "
 # NOTE: For some reason I have to duplicate RENDER here for it to work properly:
-            f"RENDER={json.dumps(self.render)};' "
-            f"keycap_playground.scad"
+            f"RENDER={json.dumps(render)};' "
+            f"{last_part}"
         )
 
     def postinit(self, **kwargs):
