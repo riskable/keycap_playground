@@ -12,9 +12,22 @@ to use this script is from within the `keycap_playground` directory.
 
     Make sure you add the correct path to colorscad.sh if you want
     multi-material keycaps!
+
+Fonts used by this script:
+--------------------------
+
+ * Gotham Rounded:style=Bold
+ * Arial Black:style=Regular
+ * Aharoni
+ * FontAwesome
+ * Font Awesome 6 Free:style=Solid
+ * Hack
+ * Material Design Icons:style=Regular
+ * Code2000
+ * Agave
+ * DejaVu Sans:style=Bold
+ * Noto
 """
-
-
 
 # stdlib imports
 import os, sys
@@ -40,12 +53,14 @@ FILE_TYPE = "3mf" # 3mf or stl
 
 class riskeycap_base(Keycap):
     """
-    Base keycap definitions for Gotham Rounded
+    Base keycap definitions for the riskeycap profile + our personal prefs.
     """
     def __init__(self, **kwargs):
         self.openscad_path = OPENSCAD_PATH
         self.colorscad_path = COLORSCAD_PATH
-        super().__init__(**kwargs, openscad_path=self.openscad_path, colorscad_path=self.colorscad_path)
+        super().__init__(**kwargs,
+            openscad_path=self.openscad_path,
+            colorscad_path=self.colorscad_path)
         self.render = ["keycap", "stem"]
         self.file_type = FILE_TYPE
         self.key_profile = "riskeycap"
@@ -55,8 +70,8 @@ class riskeycap_base(Keycap):
         self.dish_thickness = 1.0 # Note: Not actually used
         self.dish_corner_fn = 40 # Save some rendering time
         self.polygon_layers = 4  # Ditto
-        self.stem_type = "alps"
-        # self.stem_type = "box_cherry"
+        # self.stem_type = "alps"
+        self.stem_type = "box_cherry"
         self.stem_walls_inset = 0
         self.stem_top_thickness = 0.65 # Note: Not actually used
         self.stem_inside_tolerance = 0.175
@@ -380,7 +395,7 @@ class riskeycap_fontawesome(riskeycap_alphas):
 
 class riskeycap_material_icons(riskeycap_alphas):
     """
-    For regular centered FontAwesome icon keycaps.
+    For regular centered Material Design icon keycaps.
     """
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -706,14 +721,41 @@ KEYCAPS = [
     riskeycap_fontawesome(name="ban", legends=[""]),
     riskeycap_fontawesome(name="lemon", legends=[""], font_sizes=[6]),
     riskeycap_material_icons(name="duck", legends=[""], font_sizes=[7]),
+    riskeycap_alphas(name="die_1", legends=["⚀"], font_sizes=[7], fonts=["DejaVu Sans:style=Bold"]), # Dice (number alternate)
+    riskeycap_alphas(name="die_2", legends=["⚁"], font_sizes=[7], fonts=["DejaVu Sans:style=Bold"]), # Dice (number alternate)
+    riskeycap_alphas(name="die_3", legends=["⚂"], font_sizes=[7], fonts=["DejaVu Sans:style=Bold"]), # Dice (number alternate)
+    riskeycap_alphas(name="die_4", legends=["⚃"], font_sizes=[7], fonts=["DejaVu Sans:style=Bold"]), # Dice (number alternate)
+    riskeycap_alphas(name="die_5", legends=["⚄"], font_sizes=[7], fonts=["DejaVu Sans:style=Bold"]), # Dice (number alternate)
+    riskeycap_alphas(name="die_6", legends=["⚅"], font_sizes=[7], fonts=["DejaVu Sans:style=Bold"]), # Dice (number alternate)
     riskeycap_1_U_text(name="RCtrl", legends=["Ctrl"]),
     riskeycap_1_U_text(legends=["Del"]),
     riskeycap_1_U_text(legends=["Ins"]),
     riskeycap_1_U_text(legends=["Esc"]),
     riskeycap_1_U_text(legends=["End"]),
+    riskeycap_1_U_text(legends=["BRB"], scale=[[0.75,1,3]]),
+    riskeycap_1_U_text(legends=["OMG"], font_sizes=[3.75], scale=[[0.75,1,3]]),
+    riskeycap_1_U_text(legends=["WTF"], font_sizes=[3.75], scale=[[0.75,1,3]]),
+    riskeycap_1_U_text(legends=["BBL"], scale=[[0.75,1,3]]),
+    riskeycap_1_U_text(legends=["CYA"], scale=[[0.75,1,3]]),
+    riskeycap_1_U_text(legends=["IDK"], scale=[[0.75,1,3]]),
+    riskeycap_1_U_text(legends=["ASS"], scale=[[0.75,1,3]]),
+    riskeycap_1_U_text(legends=["ANY", "", "KEY"], scale=[[0.75,1,3]], fonts = [
+            "Gotham Rounded:style=Bold",
+            "Gotham Rounded:style=Bold",
+            "Gotham Rounded:style=Bold",
+    ], font_sizes=[4, 4, 4.15]), # 4.15 here works around a minor slicing issue
+    riskeycap_1_U_text(legends=["OK"]),
+    riskeycap_1_U_text(legends=["NO"]),
+    riskeycap_1_U_text(legends=["Yes"]),
+    riskeycap_1_U_text(legends=["DO"]),
+    riskeycap_1_U_2_row_text(name="DO_NOT", legends=["DO", "NOT"],
+        trans=[[2.7,2.75,0],[2.7,-2,0]], font_sizes=[3.5, 3.5]),
+    riskeycap_1_U_text(legends=["FUBAR"], font_sizes=[3.25], scale=[[0.55,1,3]]),
     riskeycap_1_U_text(legends=["Home"], font_sizes=[2.75]),
-    riskeycap_1_U_2_row_text(name="PageUp", legends=["Page", "Up"], font_sizes=[2.75, 2.75]),
-    riskeycap_1_U_2_row_text(name="PageDown", legends=["Page", "Down"], font_sizes=[2.75, 2.75]),
+    riskeycap_1_U_2_row_text(name="PageUp",
+        legends=["Page", "Up"], font_sizes=[2.75, 2.75]),
+    riskeycap_1_U_2_row_text(name="PageDown",
+        legends=["Page", "Down"], font_sizes=[2.75, 2.75]),
     riskeycap_1_U_text(legends=["Pause"], font_sizes=[2.5]),
     riskeycap_1_U_2_row_text(name="ScrollLock", legends=["Scroll", "Lock"]),
     riskeycap_1_U_text(legends=["Sup"]),
@@ -865,16 +907,16 @@ def print_keycaps():
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        description="Render keycap STLs for all the Riskeyboard 70's switches.")
+        description="Render a full set of riskeycap keycaps.")
     parser.add_argument('--out',
         metavar='<filepath>', type=str, default=".",
-        help='Where the generated STL files will go.')
+        help='Where the generated files will go.')
     parser.add_argument('--force',
         required=False, action='store_true',
-        help='Forcibly re-render STL files even if they already exist.')
+        help='Forcibly re-render keycaps even if they already exist.')
     parser.add_argument('--legends',
         required=False, action='store_true',
-        help='If True, generate a separate set of STLs for legends.')
+        help=f'If True, generate a separate set of {FILE_TYPE} files for legends.')
     parser.add_argument('--keycaps',
         required=False, action='store_true',
         help='If True, prints out the names of all keycaps we can render.')
