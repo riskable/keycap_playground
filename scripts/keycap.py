@@ -336,7 +336,7 @@ class Keycap(object):
             f"LEGEND_ROTATION2={self.rotation2}; "
             f"LEGEND_SCALE={self.scale}; "
             f"LEGEND_UNDERSET={self.underset}; "
-# NOTE: For some reason I have to duplicate RENDER here for it to work properly:
+            # NOTE: For some reason I have to duplicate RENDER here for it to work properly:
             f"RENDER={json.dumps(render)};' "
             f"{last_part}"
         )

@@ -32,13 +32,12 @@ Fonts used by this script:
 # stdlib imports
 import os, sys
 from pathlib import Path
-import json
 import argparse
 from copy import deepcopy
 from subprocess import getstatusoutput
 # 3rd party stuff
-from colorama import Fore, Back, Style
-from colorama import init as color_init
+from colorama import Fore, Back, Style  # NOQA
+from colorama import init as color_init  # NOQA
 color_init()
 # Our own stuff
 from keycap import Keycap
@@ -76,7 +75,7 @@ class gem_base(Keycap):
         self.stem_side_supports = [0,0,0,0]
         self.stem_locations = [[0,0,0]]
         self.stem_walls_inset = 0
-        self.stem_sides_wall_thickness = 0.8; # Thick (good sound/feel)
+        self.stem_sides_wall_thickness = 0.8 # Thick (good sound/feel)
         # Because we do strange things we need legends bigger on the Z
         self.scale = [
             [1,1,3],
@@ -750,7 +749,7 @@ KEYCAPS = [
     gem_1_U_text(legends=["CYA"], scale=[[0.75,1,3]]),
     gem_1_U_text(legends=["IDK"], scale=[[0.75,1,3]]),
     gem_1_U_text(legends=["ASS"], scale=[[0.75,1,3]]),
-    gem_1_U_text(legends=["ANY", "", "KEY"], scale=[[0.75,1,3]], fonts = [
+    gem_1_U_text(legends=["ANY", "", "KEY"], scale=[[0.75,1,3]], fonts=[
             "Gotham Rounded:style=Bold",
             "Gotham Rounded:style=Bold",
             "Gotham Rounded:style=Bold",
@@ -899,7 +898,7 @@ def print_keycaps():
     Prints the names of all keycaps in KEYCAPS.
     """
     print(Style.BRIGHT +
-          f"Here's all the keycaps we can render:\n" + Style.RESET_ALL)
+          "Here's all the keycaps we can render:\n" + Style.RESET_ALL)
     keycap_names = ", ".join(a.name for a in KEYCAPS)
     print(f"{keycap_names}")
 

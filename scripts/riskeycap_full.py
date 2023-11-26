@@ -32,18 +32,17 @@ Fonts used by this script:
 # stdlib imports
 import os, sys
 from pathlib import Path
-import json
 import argparse
 from copy import deepcopy
-from subprocess import getstatusoutput
+# from subprocess import getstatusoutput
 import asyncio
 import subprocess
 from functools import partial
 from typing import Sequence, Any
 from asyncio import ensure_future
 # 3rd party stuff
-from colorama import Fore, Back, Style
-from colorama import init as color_init
+from colorama import Fore, Back, Style  # NOQA
+from colorama import init as color_init  # NOQA
 color_init()
 # Our own stuff
 from keycap import Keycap
@@ -147,7 +146,7 @@ class riskeycap_base(Keycap):
         self.stem_inside_tolerance = 0.175
         self.stem_side_supports = [0,0,0,0]
         self.stem_locations = [[0,0,0]]
-        self.stem_sides_wall_thickness = 0.8; # Thick (good sound/feel)
+        self.stem_sides_wall_thickness = 0.8 # Thick (good sound/feel)
         # Because we do strange things we need legends bigger on the Z
         self.scale = [
             [1,1,3],
@@ -809,7 +808,7 @@ KEYCAPS = [
     riskeycap_1_U_text(legends=["CYA"], scale=[[0.75,1,3]]),
     riskeycap_1_U_text(legends=["IDK"], scale=[[0.75,1,3]]),
     riskeycap_1_U_text(legends=["ASS"], scale=[[0.75,1,3]]),
-    riskeycap_1_U_text(legends=["ANY", "", "KEY"], scale=[[0.75,1,3]], fonts = [
+    riskeycap_1_U_text(legends=["ANY", "", "KEY"], scale=[[0.75,1,3]], fonts=[
             "Gotham Rounded:style=Bold",
             "Gotham Rounded:style=Bold",
             "Gotham Rounded:style=Bold",
@@ -961,7 +960,7 @@ KEYCAPS = [
     riskeycap_alphas(name="numpadstar", legends=["*"], font_sizes=[8.5]),
     # Default width of - is a bit too skinny so we scale/adjust it a bit:
     riskeycap_alphas(name="numpadminus", legends=["-"],
-        font_sizes=[6], scale=[[1.4,1,3]], trans = [[2.9,0,0]]),
+        font_sizes=[6], scale=[[1.4,1,3]], trans=[[2.9,0,0]]),
 ]
 
 def print_keycaps():
@@ -969,7 +968,7 @@ def print_keycaps():
     Prints the names of all keycaps in KEYCAPS.
     """
     print(Style.BRIGHT +
-          f"Here's all the keycaps we can render:\n" + Style.RESET_ALL)
+          "Here's all the keycaps we can render:\n" + Style.RESET_ALL)
     keycap_names = ", ".join(a.name for a in KEYCAPS)
     print(f"{keycap_names}")
 
