@@ -11,12 +11,11 @@ to use this script is from within the `keycap_playground` directory.
 
 # stdlib imports
 import os, sys
-import json
 import argparse
 from copy import deepcopy
 from subprocess import getstatusoutput
 # 3rd party stuff
-from colorama import Fore, Back, Style
+from colorama import Fore, Back, Style  # NOQA
 from colorama import init as color_init
 color_init()
 # Our own stuff
@@ -42,7 +41,7 @@ class riskeyboard70_base(Keycap):
         # Disabled stem side support because it seems it is unnecessary @0.16mm
         self.stem_side_supports = [0,0,0,0]
         self.stem_locations = [[0,0,0]]
-        self.stem_sides_wall_thickness = 0.8; # Thick (good sound/feel)
+        self.stem_sides_wall_thickness = 0.8 # Thick (good sound/feel)
         # Because we do strange things we need legends bigger on the Z
         self.scale = [
             [1,1,3],
@@ -608,7 +607,7 @@ def print_keycaps():
     Prints the names of all keycaps in KEYCAPS.
     """
     print(Style.BRIGHT +
-          f"Here's all the keycaps we can render:\n" + Style.RESET_ALL)
+          "Here's all the keycaps we can render:\n" + Style.RESET_ALL)
     keycap_names = ", ".join(a.name for a in KEYCAPS)
     print(f"{keycap_names}")
 
