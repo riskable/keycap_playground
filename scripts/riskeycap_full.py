@@ -63,6 +63,27 @@ MAX_RUNNERS = 8
 
 SEM = asyncio.Semaphore(MAX_RUNNERS)
 
+
+if hasattr(asyncio, 'coroutine'):
+    from asyncio import coroutine
+else:
+    # For compatibility with Python 3.10+
+    # define the coroutine wrapper
+    # References:
+    #     https://discuss.python.org/t/deprecation-of-asyncio-coroutine/4461/3
+    def coroutine(fn):
+        import inspect
+        import functools
+        if inspect.iscoroutinefunction(fn):
+            return fn
+
+        @functools.wraps(fn)
+        async def _wrapper(*args, **kwargs):
+            return fn(*args, **kwargs)
+
+        return _wrapper
+
+
 def run_command(cmd: str) -> str:
     """
     Run prepared behave command in shell and return its output.
@@ -84,7 +105,7 @@ def run_command(cmd: str) -> str:
     return output
 
 
-# @asyncio.coroutine
+# @coroutine
 async def run_command_on_loop(loop: asyncio.AbstractEventLoop, command: str) -> bool:
     """
     Run test for one particular feature, check its result and return report.
@@ -99,7 +120,7 @@ async def run_command_on_loop(loop: asyncio.AbstractEventLoop, command: str) -> 
         return output
 
 
-@asyncio.coroutine
+@coroutine
 def run_all_commands(command_list: Sequence[str] = COMMANDS) -> None:
     """
     Run all commands in a list
@@ -112,7 +133,7 @@ def run_all_commands(command_list: Sequence[str] = COMMANDS) -> None:
         ensure_future(process_result(result))
 
 
-@asyncio.coroutine
+@coroutine
 def process_result(result: Any):
     """
     Do something useful with result of the commands
