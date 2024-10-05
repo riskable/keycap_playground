@@ -269,7 +269,6 @@ class Keycap(object):
                     #f'PATH="${self.openscad_path.parent}:$PATH"; '
                     f"{self.colorscad_path} -i {self.keycap_playground_path} "
                     f"-o '{self.output_path}'/'{self.name}.{self.file_type}' "
-                    f"-p '{self.openscad_path}' "
                     f"-- {self.openscad_args} -D $'"
                 )
                 last_part = ""

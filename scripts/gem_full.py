@@ -6,7 +6,7 @@ to use this script is from within the `keycap_playground` directory.
 
 .. bash::
 
-    $ ./scripts/riskeycap_full.py --out /tmp/output_dir
+    $ ./scripts/gem_full.py --out /tmp/output_dir
 
 .. note::
 
