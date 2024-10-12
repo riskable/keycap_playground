@@ -233,7 +233,7 @@ class Keycap(object):
             elif legend == '"':
                 out += r'"\""'
             else:
-                out += json.dumps(legend) + ","
+                out += json.dumps(legend, ensure_ascii=False) + ","
         out = out.rstrip(',') # Get rid of trailing comma
         return out + "]"
 
