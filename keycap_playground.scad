@@ -229,6 +229,63 @@ LEGEND_UNDERSET = [ // This is a *very* special thing; see long note about it be
     Lastly, you'll want to set your DISH_THICKNESS to as thin as you can bear in order to minimize the amount of plastic that the light needs to pass through before it reaches the underside of the top of the keycap.
 */
 
+// EMBOSSED (RAISED) LEGENDS
+// Set LEGEND_EMBOSSED to true to make legends stand out *above* the keycap
+// dish instead of being carved into it.  Embossed legends are far easier to
+// highlight by hand-painting in a contrasting colour after printing -- paint
+// goes onto the raised top surface and any spill on the dish wipes off
+// cleanly, whereas filling a carved/recessed legend with paint without making
+// a mess is fiddly.
+//
+// When LEGEND_EMBOSSED is true the keycap is rendered *without* the usual
+// carved legends, and the strings in LEGENDS are extruded as raised text on
+// top of the dish, positioned by the same LEGEND_TRANS / LEGEND_ROTATION /
+// LEGEND_SCALE / LEGEND_FONTS / LEGEND_FONT_SIZES parameters used elsewhere.
+// LEGEND_UNDERSET is ignored in embossed mode (it makes no sense for a part
+// that sits on top of the keycap rather than buried inside it).
+LEGEND_EMBOSSED = false; // [true, false]
+LEGEND_EMBOSSED_HEIGHT = 0.7; // Total extrusion thickness of the raised text in mm.  Visible raised height = LEGEND_EMBOSSED_HEIGHT - LEGEND_EMBOSSED_BURIED.
+LEGEND_EMBOSSED_BURIED = 0.5; // How far to bury the bottom of the text into the keycap dish so the joint stays solid even on a curved/spherical top.  Increase this if you see gaps between the legend and the keycap surface in preview/render.
+
+// FLAT-TOP CONSTRAINT FOR EMBOSSED LEGENDS
+// Embossed legends are intended to be hand-painted in a contrasting colour by
+// rolling a paint roller across the top of the keycap so paint deposits only
+// on the raised letters.  A roller cannot follow a curved surface, so the
+// keycap top MUST be flat when LEGEND_EMBOSSED is true.
+//
+// "Flat" here means one of:
+//   (a) KEY_PROFILE = ""   AND   DISH_DEPTH = 0
+//   (b) KEY_PROFILE = ""   AND   DISH_TYPE is not "sphere"/"cylinder"/"inv_pyramid"
+//   (c) KEY_PROFILE = "xda"   (XDA is the only built-in flat-top profile)
+// The other built-in profiles (riskeycap, gem, dsa, dcs, dss, kat, kam) all
+// contour their tops internally, so they are rejected for embossing.
+//
+// The check below is a hard assertion: if LEGEND_EMBOSSED is true and the
+// configuration produces a dished/contoured top, OpenSCAD will halt with a
+// clear error message rather than silently producing an unpaintable keycap.
+function _emboss_flat_top_ok() =
+    KEY_PROFILE == "xda" ||
+    (KEY_PROFILE == "" && (
+        DISH_DEPTH == 0 ||
+        (DISH_TYPE != "sphere" && DISH_TYPE != "cylinder" && DISH_TYPE != "inv_pyramid")
+    ));
+
+assert(!LEGEND_EMBOSSED || _emboss_flat_top_ok(), str(
+    "\n\n",
+    "LEGEND_EMBOSSED=true requires a flat key top so a paint roller can run\n",
+    "cleanly across the raised legends.  The current configuration produces a\n",
+    "dished or contoured top.  Pick one of:\n",
+    "  (1) KEY_PROFILE=\"\"  and  DISH_DEPTH=0\n",
+    "  (2) KEY_PROFILE=\"\"  and  DISH_TYPE=\"flat\"  (or any non-dish value)\n",
+    "  (3) KEY_PROFILE=\"xda\"  (XDA is the only built-in flat-top profile)\n",
+    "Dished profiles (riskeycap, gem, dsa, dcs, dss, kat, kam) cannot be used\n",
+    "with embossed legends because paint applied with a roller would only\n",
+    "touch the high points of the curved dish, leaving the legends unpainted.\n",
+    "\n",
+    "Current settings:  KEY_PROFILE=\"", KEY_PROFILE, "\"",
+    "  DISH_TYPE=\"", DISH_TYPE, "\"",
+    "  DISH_DEPTH=", DISH_DEPTH, "\n"));
+
 // TODO: This injection molding thing...
 // If you want an internal support structure under the keycap (between stems) you can add them here:
 RIBS = [ // Useful for injection molding
@@ -1574,7 +1631,93 @@ module render_keycap(stuff_to_render) {
     }
 }
 
-render_keycap(RENDER);
+// =====================================================================
+// EMBOSSED-LEGEND SUPPORT (additive; existing render path is unchanged)
+// =====================================================================
+//
+// `emboss_legends_using_globals` extrudes raised text at the same trans /
+// rotation positions used by the existing carved-legend pipeline.
+// `render_keycap_with_emboss` is a thin wrapper that delegates to
+// render_keycap() unchanged when LEGEND_EMBOSSED == false, so toggling the
+// flag off restores the exact pre-existing behavior.
+
+module emboss_legends_using_globals(legends) {
+    _legends = legends ? legends : LEGENDS;
+    if (_legends && _legends[0]) {
+        // Match the same dish-tilt compensation that just_legends() applies
+        // so an embossed legend rotates the same way a carved one would on a
+        // tilted dish.
+        layer_tilt_adjust = DISH_TILT/POLYGON_LAYERS;
+        tilt_above_curved = DISH_TILT_CURVE ? layer_tilt_adjust * POLYGON_LAYERS : 0;
+        // Place the bottom of the raised text right at the dish surface, then
+        // bury LEGEND_EMBOSSED_BURIED downward so the join stays solid even
+        // on a curved/spherical dish where the surface dips below this plane.
+        emboss_z = KEY_HEIGHT + KEY_HEIGHT_EXTRA - DISH_DEPTH - LEGEND_EMBOSSED_BURIED;
+        rotate(KEY_ROTATION)
+        translate([0, 0, emboss_z])
+        for (i=[0:1:len(_legends)-1]) {
+            legend = _legends[i] ? _legends[i] : "";
+            if (legend) {
+                rotation = LEGEND_ROTATION[i] ? LEGEND_ROTATION[i] : (LEGEND_ROTATION[0] ? LEGEND_ROTATION[0] : [0,0,0]);
+                rotation2 = LEGEND_ROTATION2[i] ? LEGEND_ROTATION2[i] : (LEGEND_ROTATION2[0] ? LEGEND_ROTATION2[0] : [0,0,0]);
+                trans = LEGEND_TRANS[i] ? LEGEND_TRANS[i] : (LEGEND_TRANS[0] ? LEGEND_TRANS[0] : [0,0,0]);
+                trans2 = LEGEND_TRANS2[i] ? LEGEND_TRANS2[i] : (LEGEND_TRANS2[0] ? LEGEND_TRANS2[0] : [0,0,0]);
+                font_size = LEGEND_FONT_SIZES[i] ? LEGEND_FONT_SIZES[i] : LEGEND_FONT_SIZES[0];
+                font = LEGEND_FONTS[i] ? LEGEND_FONTS[i] : (LEGEND_FONTS[0] ? LEGEND_FONTS[0] : "Roboto");
+                l_scale = LEGEND_SCALE[i] ? LEGEND_SCALE[i] : LEGEND_SCALE[0];
+                color("#404040")
+                translate(trans2) rotate(rotation2) translate(trans) rotate(rotation)
+                    scale(l_scale) rotate([tilt_above_curved, 0, 0])
+                        linear_extrude(height=LEGEND_EMBOSSED_HEIGHT)
+                            text(legend, size=font_size, font=font,
+                                 halign="center", valign="center");
+            }
+        }
+    }
+}
+
+module render_keycap_with_emboss(stuff_to_render) {
+    if (LEGEND_EMBOSSED) {
+        for (what_to_render=stuff_to_render) {
+            if (what_to_render=="row") {
+                note("HAVE PATIENCE! Rendering all keycaps (embossed) in ROW variable...");
+                for (i=[0:1:len(ROW)-1]) {
+                    translate([ROW_SPACING*i, 0, 0]) {
+                        // Render keycap with empty legends so nothing is carved
+                        handle_render("keycap", legends=[]);
+                        // ...then add this key's legends as raised text
+                        emboss_legends_using_globals(legends=ROW[i]);
+                    }
+                }
+            } else if (what_to_render=="row_stems") {
+                // Stems are unaffected by embossing
+                for (i=[0:1:len(ROW)-1]) {
+                    translate([ROW_SPACING*i, 0, 0]) handle_render("stem", legends=ROW[i]);
+                }
+            } else if (what_to_render=="row_legends" || what_to_render=="row_underset_masks" ||
+                       what_to_render=="legends" || what_to_render=="underset_mask") {
+                // These render targets only make sense for carved/multi-material
+                // legends -- there is nothing meaningful to export for them in
+                // embossed mode (the legends ARE the keycap output instead).
+                note("Render target skipped because LEGEND_EMBOSSED is true.");
+            } else if (what_to_render=="keycap") {
+                handle_render("keycap", legends=[]);
+                emboss_legends_using_globals(legends=LEGENDS);
+            } else if (what_to_render=="%keycap") {
+                handle_render("%keycap", legends=[]);
+                %emboss_legends_using_globals(legends=LEGENDS);
+            } else {
+                // stem, custom, or any future target: pass straight through.
+                handle_render(what_to_render, legends=LEGENDS);
+            }
+        }
+    } else {
+        // Carved/flush legend mode -- delegate to the unchanged original.
+        render_keycap(stuff_to_render);
+    }
+}
+
+render_keycap_with_emboss(RENDER);
 
 /* CHANGELOG:
     1.10.1:
