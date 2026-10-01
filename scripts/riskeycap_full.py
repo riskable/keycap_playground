@@ -141,7 +141,7 @@ class riskeycap_base(Keycap):
         self.dish_corner_fn = 40 # Save some rendering time
         self.polygon_layers = 4  # Ditto
         # self.stem_type = "alps"
-        self.stem_type = "box_cherry"
+        self.stem_type = "round_cherry"
         self.stem_walls_inset = 0
         self.stem_top_thickness = 0.65 # Note: Not actually used
         self.stem_inside_tolerance = 0.175
